@@ -1,6 +1,7 @@
 import { z } from "astro/zod";
 
-export const localized = z.object({ ko: z.string().min(1), en: z.string().min(1) });
+// strictObject: 따옴표 없는 YAML 플로우 매핑의 쉼표가 만드는 잘못된 키를 빌드에서 잡는다
+export const localized = z.strictObject({ ko: z.string().min(1), en: z.string().min(1) });
 export type Localized = z.infer<typeof localized>;
 
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD");

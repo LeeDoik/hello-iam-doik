@@ -16,7 +16,9 @@ metrics:
   - label: { ko: 랜딩 외 페이지의 클라이언트 JS, en: Client JS on non-landing pages }
     after: "0"
     unit: KB
-    method: { ko: dist/projects, dist/colophon 아래 HTML에 script 태그가 없음을 grep으로 확인, en: grep confirms no script tags in HTML under dist/projects and dist/colophon }
+    method:
+      ko: "dist/projects, dist/colophon 아래 HTML에 script 태그가 없음을 grep으로 확인"
+      en: "grep confirms no script tags in HTML under dist/projects and dist/colophon"
 screens:
   - src: ./screens/01-home@desktop.png
     alt: { ko: 샘플 홈 화면, en: Sample home screen }
