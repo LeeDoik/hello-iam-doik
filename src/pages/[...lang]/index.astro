@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import "../../styles/global.css";
 import { localeFromParam, localeStaticPaths, otherLocale } from "../../i18n/locales";
 import { t } from "../../i18n/ui";
@@ -10,6 +11,7 @@ export function getStaticPaths() {
 
 const locale = localeFromParam(Astro.params.lang);
 const other = otherLocale(locale);
+const projects = await getCollection("projects");
 ---
 
 <html lang={locale}>
@@ -20,5 +22,6 @@ const other = otherLocale(locale);
   <body>
     <h1>{t(locale, "site.title")}</h1>
     <a href={swapLocale(Astro.url.pathname, other)} hreflang={other} lang={other}>{t(locale, "toggle.label")}</a>
+    <p data-projects={projects.length}>{projects.length} projects</p>
   </body>
 </html>

@@ -1,0 +1,9 @@
+name: { ko: 이도익, en: Doik Lee }
+tagline: { ko: 웹과 AI를 잇는 개발자, en: Developer bridging web and AI }
+bio:
+  ko: AI 도구로 만들면서 배웠고, 이제 "왜"를 배우는 중입니다. 이 사이트의 모든 결정은 docs/adr에 있습니다.
+  en: I learned by building with AI tools and am now learning the "why". Every decision on this site lives in docs/adr.
+location: { ko: 대한민국, en: South Korea }
+email: lee253628@gmail.com
+links:
+  github: https://github.com/LeeDoik
