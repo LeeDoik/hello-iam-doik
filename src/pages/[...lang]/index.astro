@@ -1,9 +1,13 @@
 ---
-import Base from "../../layouts/Base.astro";
+import ExperienceList from "../../components/ExperienceList.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import SkillsByProject from "../../components/SkillsByProject.astro";
 import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
 import { t } from "../../i18n/ui";
-import { getProfile, getProjects } from "../../lib/content";
+import Base from "../../layouts/Base.astro";
+import { getExperience, getProfile, getProjects, getSkills } from "../../lib/content";
 import { pick } from "../../lib/localized";
+import type { SkillRow } from "../../lib/skills";
 
 export function getStaticPaths() {
   return localeStaticPaths();
@@ -11,10 +15,51 @@ export function getStaticPaths() {
 const locale = localeFromParam(Astro.params.lang);
 const profile = await getProfile();
 const projects = await getProjects(locale);
+const experience = await getExperience();
+const skillRows: SkillRow[] = (await getSkills()).map((s) => ({
+  id: s.data.id,
+  name: s.data.name,
+  group: s.data.group,
+  builtWithIt: pick(s.data.builtWithIt, locale),
+  projectSlugs: s.data.projects.map((p) => (p as { id: string }).id),
+}));
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${Astro.site ?? ""}#me`,
+  name: pick(profile.name, locale),
+  email: profile.email,
+  sameAs: [profile.links.github, profile.links.linkedin].filter((x): x is string => typeof x === "string"),
+};
 ---
 
-<Base {locale} path="/" title={t(locale, "site.title")} description={pick(profile.tagline, locale)}>
-  <h1 class="mt-12 text-4xl font-bold">{pick(profile.name, locale)}</h1>
-  <p class="mt-2 text-lg">{pick(profile.tagline, locale)}</p>
-  <p data-projects={projects.length}>{projects.length}</p>
+<Base {locale} path="/" title={t(locale, "site.title")} description={pick(profile.tagline, locale)} {jsonLd}>
+  <section id="hero" class="py-16">
+    <h1 class="text-4xl font-bold">{pick(profile.name, locale)}</h1>
+    <p class="mt-3 text-xl">{pick(profile.tagline, locale)}</p>
+    <p class="mt-4 max-w-prose opacity-80">{pick(profile.bio, locale)}</p>
+    <a class="mt-6 inline-block underline" href="#projects">{t(locale, "hero.cta.projects")}</a>
+  </section>
+
+  <section id="projects" class="py-8">
+    <h2 class="text-2xl font-semibold">{t(locale, "section.projects")}</h2>
+    <div id="project-list" class="mt-4 grid gap-4">
+      {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
+    </div>
+  </section>
+
+  <section id="skills" class="py-8">
+    <h2 class="text-2xl font-semibold">{t(locale, "section.skills")}</h2>
+    <SkillsByProject rows={skillRows} locale={locale} />
+  </section>
+
+  <section id="experience" class="py-8">
+    <h2 class="text-2xl font-semibold">{t(locale, "section.experience")}</h2>
+    <ExperienceList items={experience} locale={locale} />
+  </section>
+
+  <section id="contact" class="py-8">
+    <h2 class="text-2xl font-semibold">{t(locale, "section.contact")}</h2>
+    <p class="mt-2"><a href={`mailto:${profile.email}`}>{profile.email}</a> · <a href={profile.links.github}>GitHub</a></p>
+  </section>
 </Base>

@@ -1,0 +1,28 @@
+---
+import type { ExperienceData } from "../content/schemas";
+import type { Locale } from "../i18n/locales";
+import { formatPeriod } from "../lib/dates";
+import { pick } from "../lib/localized";
+
+interface Props {
+  items: ExperienceData[];
+  locale: Locale;
+}
+const { items, locale } = Astro.props;
+---
+
+<ol class="mt-4 space-y-6">
+  {
+    items.map((e) => (
+      <li>
+        <p class="text-sm opacity-70">
+          {formatPeriod(e.from, e.to, locale)} · {e.kind}
+        </p>
+        <p class="font-semibold">
+          {pick(e.org, locale)} · {pick(e.role, locale)}
+        </p>
+        <ul class="mt-1 list-disc pl-5 text-sm">{e.bullets.map((b) => <li>{pick(b, locale)}</li>)}</ul>
+      </li>
+    ))
+  }
+</ol>

@@ -1,0 +1,31 @@
+---
+import type { Locale } from "../i18n/locales";
+import { localePath } from "../lib/urls";
+import { groupSkills, type SkillRow } from "../lib/skills";
+
+interface Props {
+  rows: SkillRow[];
+  locale: Locale;
+}
+const { rows, locale } = Astro.props;
+---
+
+{
+  groupSkills(rows).map(({ group, skills }) => (
+    <section class="mt-6">
+      <h3 class="text-sm uppercase tracking-wide opacity-60">{group}</h3>
+      <ul class="mt-2 space-y-2">
+        {skills.map((s) => (
+          <li>
+            <strong>{s.name}</strong> — {s.builtWithIt}
+            {s.projectSlugs.map((slug) => (
+              <a class="ml-2 text-sm underline" href={localePath(locale, `/projects/${slug}/`)}>
+                {slug}
+              </a>
+            ))}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))
+}
