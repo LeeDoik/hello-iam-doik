@@ -4,6 +4,7 @@ import ProjectCard from "../../components/ProjectCard.astro";
 import SkillsByProject from "../../components/SkillsByProject.astro";
 import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
 import { t } from "../../i18n/ui";
+import { ProjectFilter } from "../../islands/ProjectFilter";
 import Base from "../../layouts/Base.astro";
 import { getExperience, getProfile, getProjects, getSkills } from "../../lib/content";
 import { pick } from "../../lib/localized";
@@ -23,6 +24,21 @@ const skillRows: SkillRow[] = (await getSkills()).map((s) => ({
   builtWithIt: pick(s.data.builtWithIt, locale),
   projectSlugs: s.data.projects.map((p) => (p as { id: string }).id),
 }));
+const skillGroupById = new Map(skillRows.map((s) => [s.id, s.group]));
+const cards = projects.map((p) => ({
+  slug: p.slug,
+  groups: [
+    ...new Set(
+      p.data.stack
+        .map((id) => skillGroupById.get(id))
+        .filter((g): g is NonNullable<typeof g> => g !== undefined),
+    ),
+  ],
+}));
+const groupLabels = { frontend: "Frontend", ai: "AI", backend: "Backend", tooling: "Tooling" } as const;
+const filterGroups = (["frontend", "ai", "backend", "tooling"] as const)
+  .filter((g) => cards.some((c) => c.groups.includes(g)))
+  .map((g) => ({ id: g, label: groupLabels[g] }));
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -43,6 +59,13 @@ const jsonLd = {
 
   <section id="projects" class="py-8">
     <h2 class="text-2xl font-semibold">{t(locale, "section.projects")}</h2>
+    <ProjectFilter
+      client:visible
+      groups={filterGroups}
+      cards={cards}
+      labels={{ all: t(locale, "filter.all"), count: t(locale, "filter.count"), filterLabel: t(locale, "filter.label") }}
+      locale={locale}
+    />
     <div id="project-list" class="mt-4 grid gap-4">
       {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
     </div>

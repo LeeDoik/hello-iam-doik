@@ -5,5 +5,6 @@ export default getViteConfig({
   test: {
     include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.ts"],
     environment: "node",
+    setupFiles: ["./vitest.setup.ts"],
   },
 });
