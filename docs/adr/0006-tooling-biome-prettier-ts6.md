@@ -33,3 +33,8 @@ date: "2026-09-02"
 ## What I learned
 
 도구 선택은 "최고의 도구 하나"를 찾는 문제가 아니라 "지금 이 조합에서 각 도구가 커버하지 못하는 틈이 어디인지"를 파악하는 문제다. Biome처럼 빠르게 성장하는 도구는 지원 범위가 시점마다 다르므로, 되돌리는 조건을 명시해두면 나중에 재평가할 신호를 놓치지 않는다.
+
+## Amendment 2026-09-02: sharp를 직접 devDependency로 고정
+
+Astro는 sharp를 optionalDependency로 가져오지만, pnpm의 엄격한 node_modules 구조(Windows)에서는 그 선택적 의존성이 빌드 시 해석되지 않아 `<Picture>` 이미지 생성이 실패했다. 그래서 `sharp 0.35.4`(Astro가 잠근 것과 같은 버전)를 package.json에 직접 적었다. `pnpm-workspace.yaml`의 `onlyBuiltDependencies`에 이미 sharp가 있으므로 바이너리 빌드는 허용된다.
+되돌리는 조건: Astro가 sharp를 일반 의존성으로 바꾸거나, pnpm이 optionalDependency 해석을 바꾸면 이 줄을 지운다.
