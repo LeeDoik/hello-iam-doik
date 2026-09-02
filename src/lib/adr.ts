@@ -28,7 +28,7 @@ export function parseAdrFrontmatter(md: string): {
   const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(md);
   if (!m) throw new Error("ADR is missing frontmatter");
   const fields = new Map<string, string>();
-  for (const line of m[1].split(/\r?\n/)) {
+  for (const line of (m[1] ?? "").split(/\r?\n/)) {
     const i = line.indexOf(":");
     if (i > 0) fields.set(line.slice(0, i).trim(), line.slice(i + 1).trim());
   }
