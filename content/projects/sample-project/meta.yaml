@@ -10,13 +10,13 @@ links:
   repo: https://github.com/LeeDoik/hello-iam-doik
   keyCommits:
     - label: { ko: 스키마 도입, en: Introduce schemas }
-      url: https://github.com/LeeDoik/hello-iam-doik/commit/0000000
+      url: https://github.com/LeeDoik/hello-iam-doik/commit/7407acc
       why: { ko: 콘텐츠 검증이 빌드에 들어온 지점, en: Where content validation entered the build }
 metrics:
-  - label: { ko: 클라이언트 JS, en: Client JS }
+  - label: { ko: 랜딩 외 페이지의 클라이언트 JS, en: Client JS on non-landing pages }
     after: "0"
     unit: KB
-    method: { ko: dist/_astro 의 .js 파일 합계, en: Sum of .js files under dist/_astro }
+    method: { ko: dist/projects, dist/colophon 아래 HTML에 script 태그가 없음을 grep으로 확인, en: grep confirms no script tags in HTML under dist/projects and dist/colophon }
 screens:
   - src: ./screens/01-home@desktop.png
     alt: { ko: 샘플 홈 화면, en: Sample home screen }

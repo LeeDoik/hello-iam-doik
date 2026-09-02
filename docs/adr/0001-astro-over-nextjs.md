@@ -32,3 +32,7 @@ date: "2026-09-02"
 ## What I learned
 
 정적 사이트 프레임워크를 고를 때 진짜 비교 대상은 "이름값"이 아니라 "필요한 결과를 만들기 위해 직접 조립해야 하는 부품 수"다. Next.js의 static export는 가능하지만 기본값이 아니라서, 콘텐츠 레이어·i18n·이미지 최적화·리다이렉트 같은 것들을 개별로 채워 넣어야 한다. Astro는 정적 우선을 기본값으로 설계했기 때문에 같은 요구사항에서 조립 비용이 낮다.
+
+## Amendment 2026-09-02: React 아일랜드 도입 이후의 Try it
+
+프로젝트 필터 아일랜드(`src/islands/ProjectFilter.tsx`)를 `client:visible`로 붙인 뒤에는 `pnpm build && ls dist/_astro`에 JS 청크가 생긴다. 기대 결과: `ProjectFilter.*.js`(약 2KB), `client.*.js`(React 하이드레이션 런타임, 약 184KB), `react.*.js`(약 8KB) 세 파일뿐이며, 이것이 사이트의 클라이언트 JS 전부다. 다른 페이지(`dist/projects/**`, `dist/colophon/**`)의 HTML에는 `<script`가 없어야 한다(이력서 페이지의 인쇄 버튼 한 줄 제외). 아일랜드가 아닌 곳에 JS가 생기면 경계가 깨진 것이다. 이 JS를 왜 감수하는지(국내 JD의 React 요구, 향후 채팅 UI 재사용)는 별도 ADR로 기록할 예정이다.

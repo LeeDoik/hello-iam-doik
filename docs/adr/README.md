@@ -6,6 +6,7 @@ ADR은 결정 하나를 날짜·번호와 함께 기록한 짧은 문서다. 수
 - 생성: `pnpm adr "제목"` → `NNNN-slug.md`, `status: proposed`
 - 채택되면 `status: accepted`로 바꾸는 것만 허용
 - 사이트의 `/colophon/`이 이 폴더를 그대로 렌더한다 (`src/content.config.ts`의 `adrs` 컬렉션)
+- 0005, 0008, 0009는 계획된 결정(스크린샷 파이프라인, hero 3D, OG 이미지)을 위해 예약되어 있다. `pnpm adr`는 현재 최대 번호+1로 매기므로, 예약된 번호는 그 파일명을 그대로 손으로 만든다.
 
 ## 템플릿 (MADR 4.0 minimal + Try it + What I learned)
 
