@@ -40,3 +40,8 @@ html {
     font-size: 0.8em;
   }
 }
+
+@page {
+  size: A4;
+  margin: 16mm;
+}
