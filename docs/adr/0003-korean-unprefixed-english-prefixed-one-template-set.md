@@ -1,7 +1,7 @@
 ---
 title: Korean unprefixed, English prefixed, one template set
 status: accepted
-date: 2026-09-02
+date: "2026-09-02"
 ---
 
 # Korean unprefixed, English prefixed, one template set

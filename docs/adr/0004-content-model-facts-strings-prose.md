@@ -1,7 +1,7 @@
 ---
 title: "Content model: facts, strings and prose in content/"
 status: accepted
-date: 2026-09-02
+date: "2026-09-02"
 ---
 
 # Content model: facts, strings and prose in content/
@@ -22,7 +22,7 @@ date: 2026-09-02
 
 **Step 5 스파이크 관찰 결과**: `src/content.config.ts`에서 `glob({ pattern: "*/meta.yaml", base: "./content/projects", generateId: ... })`와 `schema: ({ image }) => projectSchema(image)`로 배선한 뒤 `pnpm build`를 실행하자, `content/projects/sample-project/meta.yaml`의 `screens[].src: ./screens/01-home@desktop.png`가 `meta.yaml` 파일 기준 상대 경로로 정확히 해석되어 `content/projects/sample-project/screens/01-home@desktop.png`를 찾았다. 즉 `image()`와 `glob` 로더는 `src/` 밖의 `content/`에서도 별도 설정 없이 동작했고, `content/`를 옮기는 스펙 §5의 대안은 필요하지 않았다.
 
-다만 스파이크 도중 예상 밖의 문제를 하나 발견했다: Astro의 `glob`/`file` 로더는 YAML/frontmatter 파싱에 `js-yaml`을 쓰는데, `js-yaml`은 YAML core 스키마에 따라 인용부호 없는 `2026-09-02` 같은 스칼라를 문자열이 아니라 JS `Date` 객체로 자동 변환한다. 반면 Vitest/스크립트에서 원본 파일을 읽는 `src/lib/content-files.ts`의 `readYaml`은 `yaml` 패키지(`parse`)를 쓰는데, 이 패키지는 같은 값을 문자열로 남겨둔다. 그 결과 `isoDate = z.string().regex(...)` 스키마가 Astro 빌드에서는 `Date` 타입 불일치로 실패했다(`from`, `to`, `capturedAt`, `updatedAt`, ADR 프론트매터의 `date`). 해결: 이 태스크가 새로 만드는 `content/*.yaml`의 날짜 값은 `"2026-09-02"`처럼 명시적으로 인용부호를 붙여 두 파서 모두에서 문자열로 남게 했고, 이 태스크가 소유하지 않는 기존 ADR 프론트매터(0001~0003, 0006~0007)는 건드리지 않는 대신 `content.config.ts`의 `adrs` 컬렉션 스키마에서 `z.preprocess`로 `Date`를 다시 ISO 문자열로 되돌리는 변환을 추가했다.
+다만 스파이크 도중 예상 밖의 문제를 하나 발견했다: Astro의 `glob`/`file` 로더는 YAML/frontmatter 파싱에 `js-yaml`을 쓰는데, `js-yaml`은 YAML core 스키마에 따라 인용부호 없는 `2026-09-02` 같은 스칼라를 문자열이 아니라 JS `Date` 객체로 자동 변환한다. 반면 Vitest/스크립트에서 원본 파일을 읽는 `src/lib/content-files.ts`의 `readYaml`은 `yaml` 패키지(`parse`)를 쓰는데, 이 패키지는 같은 값을 문자열로 남겨둔다. 그 결과 `isoDate = z.string().regex(...)` 스키마가 Astro 빌드에서는 `Date` 타입 불일치로 실패했다(`from`, `to`, `capturedAt`, `updatedAt`, ADR 프론트매터의 `date`). 처음에는 `content/*.yaml`의 날짜만 인용부호로 고정하고, 이 태스크가 소유하지 않는 기존 ADR 프론트매터(0001~0003, 0006~0007)는 건드리지 않는 대신 `adrs` 컬렉션 스키마에 `z.preprocess`로 `Date`를 ISO 문자열로 되돌리는 변환을 추가했었다. 그런데 이 방식은 같은 실수(날짜에 인용부호를 빼먹는 것)를 `content/`에서는 빌드 실패로 시끄럽게 드러내면서 `docs/adr/`에서는 스키마가 조용히 고쳐주는 비대칭을 만든다 — 리뷰에서 지적된 문제다. 그래서 결정을 바꿨다: 모든 YAML 날짜는 따옴표로 쓴다; 스키마는 문자열만 받아 빌드가 시끄럽게 실패하게 둔다; 생성기(`pnpm adr`)가 따옴표를 붙인다. `adrs` 컬렉션의 `date`는 `z.string().regex(/^\d{4}-\d{2}-\d{2}$/)` 하나로 남기고 `z.preprocess`는 제거했으며, 기존 ADR 0001~0004, 0006~0007의 `date:` 값을 모두 `"2026-09-02"`처럼 인용부호로 고쳤다. `scripts/new-adr.ts`는 이제 `date:`와 `title:` 모두 인용부호를 붙여 생성하므로, 새 ADR은 처음부터 올바른 형태로 태어난다. 프론트매터를 파싱해 파일명을 만드는 `src/lib/adr.ts`의 `parseAdrFrontmatter`는 값의 앞뒤 큰따옴표를 벗겨 순수 문자열을 돌려주도록 맞췄다.
 
 ### Consequences
 

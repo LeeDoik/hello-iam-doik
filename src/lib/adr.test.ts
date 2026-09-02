@@ -27,6 +27,15 @@ test("parseAdrFrontmatter reads title/status/date", () => {
   });
 });
 
+test("parseAdrFrontmatter strips surrounding double quotes from field values", () => {
+  const md = `---\ntitle: "Astro over Next.js"\nstatus: accepted\ndate: "2026-09-02"\n---\n\n# body`;
+  expect(parseAdrFrontmatter(md)).toEqual({
+    title: "Astro over Next.js",
+    status: "accepted",
+    date: "2026-09-02",
+  });
+});
+
 test("parseAdrFrontmatter rejects unknown status", () => {
   expect(() => parseAdrFrontmatter(`---\ntitle: x\nstatus: maybe\ndate: 2026-01-01\n---`)).toThrow(
     /status/,

@@ -30,7 +30,14 @@ export function parseAdrFrontmatter(md: string): {
   const fields = new Map<string, string>();
   for (const line of (m[1] ?? "").split(/\r?\n/)) {
     const i = line.indexOf(":");
-    if (i > 0) fields.set(line.slice(0, i).trim(), line.slice(i + 1).trim());
+    if (i > 0) {
+      const value = line.slice(i + 1).trim();
+      const unquoted =
+        value.length >= 2 && value.startsWith('"') && value.endsWith('"')
+          ? value.slice(1, -1)
+          : value;
+      fields.set(line.slice(0, i).trim(), unquoted);
+    }
   }
   const title = fields.get("title");
   const status = fields.get("status");

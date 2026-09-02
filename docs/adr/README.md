@@ -11,9 +11,9 @@ ADR은 결정 하나를 날짜·번호와 함께 기록한 짧은 문서다. 수
 
 ```markdown
 ---
-title: <제목>
+title: "<제목>"
 status: proposed
-date: YYYY-MM-DD
+date: "YYYY-MM-DD"
 ---
 
 # <제목>

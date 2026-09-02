@@ -13,12 +13,13 @@ const n = nextAdrNumber(readdirSync(dir));
 const file = join(dir, adrFileName(n, title));
 if (existsSync(file)) throw new Error(`exists: ${file}`);
 const date = new Date().toISOString().slice(0, 10);
+const escapedTitle = title.replace(/"/g, '\\"');
 writeFileSync(
   file,
   `---
-title: ${title}
+title: "${escapedTitle}"
 status: proposed
-date: ${date}
+date: "${date}"
 ---
 
 # ${title}

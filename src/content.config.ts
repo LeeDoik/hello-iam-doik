@@ -36,21 +36,12 @@ const stories = defineCollection({
   schema: z.object({}).passthrough(),
 });
 
-// js-yaml (used internally by Astro's frontmatter parser) resolves an unquoted
-// YYYY-MM-DD scalar to a JS Date, not a string. Existing ADR frontmatter predates
-// this collection and is left as-is, so the date field accepts both and normalizes
-// to the ISO string our schema and downstream code expect.
-const adrDate = z.preprocess(
-  (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : v),
-  z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-);
-
 const adrs = defineCollection({
   loader: glob({ pattern: "[0-9][0-9][0-9][0-9]-*.md", base: "./docs/adr" }),
   schema: z.object({
     title: z.string(),
     status: z.enum(["proposed", "accepted", "deprecated", "superseded"]),
-    date: adrDate,
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   }),
 });
 

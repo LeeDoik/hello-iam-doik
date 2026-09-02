@@ -1,7 +1,7 @@
 ---
 title: Tooling — Biome, Prettier, TS 6
 status: accepted
-date: 2026-09-02
+date: "2026-09-02"
 ---
 
 # Tooling — Biome, Prettier, TS 6
