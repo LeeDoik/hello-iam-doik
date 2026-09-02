@@ -1,27 +1,20 @@
 ---
-import { getCollection } from "astro:content";
-import "../../styles/global.css";
-import { localeFromParam, localeStaticPaths, otherLocale } from "../../i18n/locales";
+import Base from "../../layouts/Base.astro";
+import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
 import { t } from "../../i18n/ui";
-import { swapLocale } from "../../lib/urls";
+import { getProfile, getProjects } from "../../lib/content";
+import { pick } from "../../lib/localized";
 
 export function getStaticPaths() {
   return localeStaticPaths();
 }
-
 const locale = localeFromParam(Astro.params.lang);
-const other = otherLocale(locale);
-const projects = await getCollection("projects");
+const profile = await getProfile();
+const projects = await getProjects(locale);
 ---
 
-<html lang={locale}>
-  <head>
-    <meta charset="utf-8" />
-    <title>{t(locale, "site.title")}</title>
-  </head>
-  <body>
-    <h1>{t(locale, "site.title")}</h1>
-    <a href={swapLocale(Astro.url.pathname, other)} hreflang={other} lang={other}>{t(locale, "toggle.label")}</a>
-    <p data-projects={projects.length}>{projects.length} projects</p>
-  </body>
-</html>
+<Base {locale} path="/" title={t(locale, "site.title")} description={pick(profile.tagline, locale)}>
+  <h1 class="mt-12 text-4xl font-bold">{pick(profile.name, locale)}</h1>
+  <p class="mt-2 text-lg">{pick(profile.tagline, locale)}</p>
+  <p data-projects={projects.length}>{projects.length}</p>
+</Base>

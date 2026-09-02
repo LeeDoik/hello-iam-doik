@@ -1,0 +1,56 @@
+---
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { LANG_TAG, type Locale, otherLocale } from "../i18n/locales";
+import { getProfile } from "../lib/content";
+import { getDeployInfo } from "../lib/deploy";
+import { alternates, canonical } from "../lib/seo";
+import { localePath } from "../lib/urls";
+
+interface Props {
+  locale: Locale;
+  path: string; // 로케일 없는 canonical path, 예: "/projects/x/"
+  title: string;
+  description: string;
+  ogImage?: string; // 절대 URL. 2차 계획에서 프로젝트별 OG가 채운다
+  jsonLd?: Record<string, unknown>;
+}
+const { locale, path, title, description, ogImage, jsonLd } = Astro.props;
+const site = Astro.site?.href ?? "https://hello-iam-doik.vercel.app";
+const profile = await getProfile();
+const REPO_URL = "https://github.com/LeeDoik/hello-iam-doik"; // 사이트 자체의 레포. 콘텐츠가 아니라 코드의 사실이므로 여기 상수로 둔다
+const deploy = getDeployInfo(REPO_URL);
+const pathname = localePath(locale, path);
+const og = ogImage ?? `${site.replace(/\/$/, "")}/og/${locale}.png`;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical(site, locale, path)} />
+    {alternates(site, path).map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical(site, locale, path)} />
+    <meta property="og:image" content={og} />
+    <meta property="og:locale" content={LANG_TAG[locale].replace("-", "_")} />
+    <meta property="og:locale:alternate" content={LANG_TAG[otherLocale(locale)].replace("-", "_")} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <Header {locale} {pathname} email={profile.email} github={profile.links.github} />
+    <main class="mx-auto max-w-3xl px-6">
+      <slot />
+    </main>
+    <Footer {locale} email={profile.email} github={profile.links.github} {deploy} />
+  </body>
+</html>
