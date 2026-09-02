@@ -19,6 +19,15 @@ html {
   }
 }
 
+@layer components {
+  .prose h2 {
+    @apply mt-8 text-xl font-semibold;
+  }
+  .prose p {
+    @apply mt-3;
+  }
+}
+
 @media print {
   header,
   footer,

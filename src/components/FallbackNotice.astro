@@ -1,0 +1,11 @@
+---
+import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<p role="note" class="my-4 rounded border-l-4 border-accent bg-black/5 p-3 text-sm">{t(locale, "story.fallbackNotice")}</p>

@@ -1,0 +1,41 @@
+---
+import type { MetricData } from "../content/schemas";
+import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+import { pick } from "../lib/localized";
+
+interface Props {
+  metrics: MetricData[];
+  locale: Locale;
+}
+const { metrics, locale } = Astro.props;
+---
+
+{
+  metrics.length > 0 && (
+    <dl class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4" aria-label={t(locale, "project.metrics")}>
+      {metrics.map((m) => (
+        <div class="rounded border p-3">
+          <dt class="text-xs opacity-70">{pick(m.label, locale)}</dt>
+          <dd class="text-lg font-semibold">
+            {m.before && <span class="opacity-60">{m.before} → </span>}
+            {m.after}
+            {m.unit && <span class="text-sm"> {m.unit}</span>}
+          </dd>
+          <dd class="mt-1 text-xs opacity-70">
+            {t(locale, "project.method")}: {pick(m.method, locale)}
+            {m.evidence && (
+              <>
+                {" "}
+                ·{" "}
+                <a class="underline" href={m.evidence}>
+                  {t(locale, "project.evidence")}
+                </a>
+              </>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  )
+}

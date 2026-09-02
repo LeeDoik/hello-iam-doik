@@ -1,0 +1,48 @@
+---
+import { Picture } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
+import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+import { pick } from "../lib/localized";
+
+interface Props {
+  screens: CollectionEntry<"projects">["data"]["screens"];
+  locale: Locale;
+}
+const { screens, locale } = Astro.props;
+// content/schemas.ts의 screenSchema는 `image: ImageValidator`(반환 타입 z.ZodTypeAny)를 받는
+// 비제네릭 함수라서, content.config.ts가 astro:content의 진짜 image()를 넘겨도
+// 추론된 타입은 항상 느슨하다(src: unknown). 콘텐츠 레이어는 실제로는 ImageMetadata를 만들어 준다.
+type Screen = Omit<(typeof screens)[number], "src"> & { src: ImageMetadata };
+const typedScreens = screens as unknown as Screen[];
+---
+
+<section class="mt-6">
+  <h2 class="text-lg font-semibold">{t(locale, "project.screens")}</h2>
+  <div class="mt-3 grid gap-4">
+    {
+      typedScreens.map((s) => (
+        <figure>
+          <Picture
+            src={s.src}
+            alt={pick(s.alt, locale)}
+            formats={["avif", "webp"]}
+            widths={[480, 960, 1440]}
+            sizes="(max-width: 768px) 100vw, 720px"
+            class="rounded border"
+          />
+          <figcaption class="mt-1 text-xs opacity-70">
+            {s.device} · {t(locale, "project.captured")} {s.capturedAt}
+            {s.commit && (
+              <>
+                {" "}
+                @ <code>{s.commit}</code>
+              </>
+            )}
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>
