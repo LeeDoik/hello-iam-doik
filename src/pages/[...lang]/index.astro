@@ -8,7 +8,7 @@ import { ProjectFilter } from "../../islands/ProjectFilter";
 import Base from "../../layouts/Base.astro";
 import { getExperience, getProfile, getProjects, getSkills } from "../../lib/content";
 import { pick } from "../../lib/localized";
-import type { SkillRow } from "../../lib/skills";
+import { GROUP_UI_KEY, type SkillRow } from "../../lib/skills";
 
 export function getStaticPaths() {
   return localeStaticPaths();
@@ -35,15 +35,9 @@ const cards = projects.map((p) => ({
     ),
   ],
 }));
-const groupKey = {
-  frontend: "group.frontend",
-  ai: "group.ai",
-  backend: "group.backend",
-  tooling: "group.tooling",
-} as const;
 const filterGroups = (["frontend", "ai", "backend", "tooling"] as const)
   .filter((g) => cards.some((c) => c.groups.includes(g)))
-  .map((g) => ({ id: g, label: t(locale, groupKey[g]) }));
+  .map((g) => ({ id: g, label: t(locale, GROUP_UI_KEY[g]) }));
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",

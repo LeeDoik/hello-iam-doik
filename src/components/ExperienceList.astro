@@ -1,6 +1,7 @@
 ---
 import type { ExperienceData } from "../content/schemas";
 import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
 import { formatPeriod } from "../lib/dates";
 import { pick } from "../lib/localized";
 
@@ -9,6 +10,11 @@ interface Props {
   locale: Locale;
 }
 const { items, locale } = Astro.props;
+const kindKey = {
+  work: "kind.work",
+  education: "kind.education",
+  bootcamp: "kind.bootcamp",
+} as const;
 ---
 
 <ol class="mt-4 space-y-6">
@@ -16,7 +22,7 @@ const { items, locale } = Astro.props;
     items.map((e) => (
       <li>
         <p class="text-sm opacity-70">
-          {formatPeriod(e.from, e.to, locale)} · {e.kind}
+          {formatPeriod(e.from, e.to, locale)} · {t(locale, kindKey[e.kind])}
         </p>
         <p class="font-semibold">
           {pick(e.org, locale)} · {pick(e.role, locale)}

@@ -15,7 +15,7 @@ const { locale, pathname, email, github } = Astro.props;
 
 <header class="flex items-center justify-between gap-4 px-6 py-4">
   <a href={localePath(locale, "/")} class="font-semibold">Doik</a>
-  <nav aria-label="main" class="flex gap-4 text-sm">
+  <nav aria-label={t(locale, "nav.aria")} class="flex gap-4 text-sm">
     <a href={localePath(locale, "/") + "#projects"}>{t(locale, "nav.projects")}</a>
     <a href={localePath(locale, "/resume/")}>{t(locale, "nav.resume")}</a>
     <a href={localePath(locale, "/colophon/")}>{t(locale, "nav.colophon")}</a>
