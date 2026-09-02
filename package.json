@@ -16,6 +16,7 @@
     "format": "biome check --write . && prettier --write \"src/**/*.astro\"",
     "test": "vitest run",
     "test:watch": "vitest",
+    "adr": "tsx scripts/new-adr.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "husky": "9.1.7",
     "prettier": "3.9.6",
     "prettier-plugin-astro": "0.14.1",
+    "tsx": "4.23.13",
     "typescript": "6.0.3",
     "vitest": "4.1.11"
   }
