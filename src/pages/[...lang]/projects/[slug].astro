@@ -1,0 +1,49 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import AiEvidence from "../../../components/AiEvidence.astro";
+import FallbackNotice from "../../../components/FallbackNotice.astro";
+import MetricStrip from "../../../components/MetricStrip.astro";
+import ProjectLinks from "../../../components/ProjectLinks.astro";
+import RoleBlock from "../../../components/RoleBlock.astro";
+import ScreenshotGallery from "../../../components/ScreenshotGallery.astro";
+import { localeFromParam, localeStaticPaths } from "../../../i18n/locales";
+import Base from "../../../layouts/Base.astro";
+import { getProject, getStory } from "../../../lib/content";
+import { formatPeriod } from "../../../lib/dates";
+import { pick } from "../../../lib/localized";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return localeStaticPaths().flatMap(({ params }) =>
+    projects.map((p) => ({ params: { lang: params.lang, slug: p.id } })),
+  );
+}
+
+const locale = localeFromParam(Astro.params.lang);
+const slug = Astro.params.slug;
+if (!slug) throw new Error("slug param missing");
+const project = await getProject(slug, locale);
+const { entry: story, isFallback } = await getStory(project.slug, locale);
+const { Content } = await render(story);
+// project.data는 ProjectData로 타입되어 있고, ProjectData의 image() 필드는 ZodTypeAny로 느슨하게 추론된다.
+// 스크린샷/AI 아키텍처 이미지를 렌더링하는 컴포넌트는 실제 ImageMetadata 타입이 필요하므로
+// 콘텐츠 컬렉션이 실제로 만들어내는 타입인 CollectionEntry<"projects">["data"]로 좁혀준다.
+const d = project.data as unknown as CollectionEntry<"projects">["data"];
+---
+
+<Base {locale} path={`/projects/${project.slug}/`} title={pick(d.title, locale)} description={pick(d.summary, locale)}>
+  <article data-story-fallback={String(isFallback)}>
+    <h1 class="mt-12 text-3xl font-bold">{pick(d.title, locale)}</h1>
+    <p class="mt-1 text-sm opacity-70">{formatPeriod(d.period.from, d.period.to, locale)}</p>
+    <p class="mt-3 text-lg">{pick(d.summary, locale)}</p>
+    <MetricStrip metrics={d.metrics} {locale} />
+    <RoleBlock role={d.role} {locale} />
+    <ScreenshotGallery screens={d.screens} {locale} />
+    {isFallback && <FallbackNotice {locale} />}
+    <div class="prose mt-8 max-w-none">
+      <Content />
+    </div>
+    {d.ai && <AiEvidence ai={d.ai} {locale} />}
+    <ProjectLinks links={d.links} {locale} />
+  </article>
+</Base>

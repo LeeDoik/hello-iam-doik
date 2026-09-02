@@ -1,0 +1,63 @@
+---
+import ExperienceList from "../../components/ExperienceList.astro";
+import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
+import { t } from "../../i18n/ui";
+import Base from "../../layouts/Base.astro";
+import { getExperience, getFeaturedProjects, getProfile } from "../../lib/content";
+import { formatPeriod } from "../../lib/dates";
+import { pick } from "../../lib/localized";
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+const locale = localeFromParam(Astro.params.lang);
+const profile = await getProfile();
+const projects = await getFeaturedProjects(locale);
+const experience = await getExperience();
+---
+
+<Base
+  {locale}
+  path="/resume/"
+  title={`${t(locale, "nav.resume")} · ${pick(profile.name, locale)}`}
+  description={pick(profile.tagline, locale)}
+>
+  <article class="py-10 print:py-0">
+    <header class="flex items-start justify-between">
+      <div>
+        <h1 class="text-3xl font-bold">{pick(profile.name, locale)}</h1>
+        <p>{pick(profile.tagline, locale)}</p>
+        <p class="text-sm">{profile.email} · {profile.links.github} · {pick(profile.location, locale)}</p>
+      </div>
+      <button data-print class="no-print rounded border px-3 py-1 text-sm" type="button">
+        {t(locale, "resume.print")}
+      </button>
+    </header>
+
+    <h2 class="mt-8 text-xl font-semibold">{t(locale, "section.projects")}</h2>
+    <ul class="mt-2 space-y-3">
+      {
+        projects.map((p) => (
+          <li>
+            <p class="font-semibold">
+              {pick(p.data.title, locale)}{" "}
+              <span class="text-sm font-normal opacity-70">
+                {formatPeriod(p.data.period.from, p.data.period.to, locale)}
+              </span>
+            </p>
+            <p class="text-sm">
+              {pick(p.data.summary, locale)} — {pick(p.data.role.owned, locale)}
+            </p>
+            <p class="text-sm">{p.data.links.repo}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 class="mt-8 text-xl font-semibold">{t(locale, "section.experience")}</h2>
+    <ExperienceList items={experience} {locale} />
+  </article>
+  <script>
+    document.querySelector<HTMLButtonElement>("[data-print]")?.addEventListener("click", () => window.print());
+  </script>
+</Base>

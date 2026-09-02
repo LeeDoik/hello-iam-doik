@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hello-iam-doik.vercel.app/sitemap-index.xml

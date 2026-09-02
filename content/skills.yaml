@@ -1,0 +1,12 @@
+- id: astro
+  name: Astro
+  group: frontend
+  builtWithIt: { ko: 이 포트폴리오 사이트를 정적으로 만들었습니다, en: Built this portfolio as a static site }
+  projects: [sample-project]
+  since: 2026
+- id: react
+  name: React
+  group: frontend
+  builtWithIt: { ko: 프로젝트 필터 아일랜드를 만들었습니다, en: Built the project filter island }
+  projects: [sample-project]
+  since: 2024

@@ -1,0 +1,29 @@
+title: { ko: 샘플 프로젝트, en: Sample Project }
+summary: { ko: 콘텐츠 모델을 검증하기 위한 예시 항목입니다., en: An example entry that exercises the content model. }
+status: wip
+period: { from: "2026-09-01" }
+role:
+  teamSize: 1
+  owned: { ko: 전체 설계와 구현, en: Whole design and implementation }
+stack: [astro, react]
+links:
+  repo: https://github.com/LeeDoik/hello-iam-doik
+  keyCommits:
+    - label: { ko: 스키마 도입, en: Introduce schemas }
+      url: https://github.com/LeeDoik/hello-iam-doik/commit/7407acc
+      why: { ko: 콘텐츠 검증이 빌드에 들어온 지점, en: Where content validation entered the build }
+metrics:
+  - label: { ko: 랜딩 외 페이지의 클라이언트 JS, en: Client JS on non-landing pages }
+    after: "0"
+    unit: KB
+    method:
+      ko: "dist/projects, dist/colophon 아래 HTML에 script 태그가 없음을 grep으로 확인"
+      en: "grep confirms no script tags in HTML under dist/projects and dist/colophon"
+screens:
+  - src: ./screens/01-home@desktop.png
+    alt: { ko: 샘플 홈 화면, en: Sample home screen }
+    device: desktop
+    capturedAt: "2026-09-02"
+featured: true
+order: 1
+updatedAt: "2026-09-02"

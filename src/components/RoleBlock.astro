@@ -1,0 +1,18 @@
+---
+import type { ProjectData } from "../content/schemas";
+import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+import { pick } from "../lib/localized";
+
+interface Props {
+  role: ProjectData["role"];
+  locale: Locale;
+}
+const { role, locale } = Astro.props;
+---
+
+<section class="mt-6">
+  <h2 class="text-lg font-semibold">{t(locale, "project.role")}</h2>
+  <p class="mt-1 text-sm">{t(locale, "project.teamSize")}: {role.teamSize}</p>
+  <p class="mt-1">{t(locale, "project.owned")}: {pick(role.owned, locale)}</p>
+</section>

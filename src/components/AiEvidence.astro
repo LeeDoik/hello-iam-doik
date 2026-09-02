@@ -1,0 +1,93 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
+import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+import { pick } from "../lib/localized";
+
+interface Props {
+  ai: NonNullable<CollectionEntry<"projects">["data"]["ai"]>;
+  locale: Locale;
+}
+const { ai, locale } = Astro.props;
+// aiSchema도 screenSchema와 같은 이유로 architecture 필드가 느슨하게(unknown) 추론된다.
+// 콘텐츠 레이어가 실제로 만들어 주는 값은 ImageMetadata다.
+const architecture = ai.architecture as unknown as ImageMetadata | undefined;
+---
+
+<section class="mt-8 rounded border p-5">
+  <h2 class="text-lg font-semibold">{t(locale, "ai.title")}</h2>
+  <p class="mt-2 text-sm">
+    {t(locale, "ai.models")}: {ai.models.map((m) => <code class="mr-2">{m}</code>)}
+  </p>
+  {
+    ai.promptFile && (
+      <p class="text-sm">
+        <a class="underline" href={ai.promptFile}>
+          {t(locale, "ai.prompt")}
+        </a>
+      </p>
+    )
+  }
+  {architecture && (
+    <Image src={architecture} alt={t(locale, "ai.architectureAlt")} class="mt-3" />
+  )}
+  {
+    ai.evals.length > 0 && (
+      <table class="mt-3 w-full text-sm">
+        <caption class="sr-only">{t(locale, "ai.evals")}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{t(locale, "ai.evals")}</th>
+            <th scope="col">n</th>
+            <th scope="col">baseline</th>
+            <th scope="col">final</th>
+            <th scope="col">{t(locale, "ai.judge")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ai.evals.map((e) => (
+            <tr>
+              <td>
+                {e.name} ({e.metric})
+              </td>
+              <td>{e.n}</td>
+              <td>{e.baseline}</td>
+              <td>{e.final}</td>
+              <td>{e.judge}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )
+  }
+  <p class="mt-2 text-sm">
+    {
+      ai.costPerRequest && (
+        <>
+          {t(locale, "ai.cost")}: {ai.costPerRequest} ·{" "}
+        </>
+      )
+    }
+    {ai.latencyP50 && <>{t(locale, "ai.latency")}: {ai.latencyP50}</>}
+  </p>
+  {
+    ai.rejectedTradeoff && (
+      <p class="mt-2 text-sm">
+        <strong>{t(locale, "ai.rejected")}:</strong> {pick(ai.rejectedTradeoff.option, locale)} —{" "}
+        {pick(ai.rejectedTradeoff.reasonWithNumbers, locale)}
+      </p>
+    )
+  }
+  {
+    ai.failureModes.length > 0 && (
+      <>
+        <h3 class="mt-3 text-sm font-semibold">{t(locale, "ai.failureModes")}</h3>
+        <ul class="list-disc pl-5 text-sm">
+          {ai.failureModes.map((f) => <li>{pick(f, locale)}</li>)}
+        </ul>
+      </>
+    )
+  }
+</section>

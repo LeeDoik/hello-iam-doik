@@ -1,0 +1,24 @@
+---
+import type { Locale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+import type { DeployInfo } from "../lib/deploy";
+
+interface Props {
+  locale: Locale;
+  email: string;
+  github: string;
+  deploy: DeployInfo;
+}
+const { locale, email, github, deploy } = Astro.props;
+---
+
+<footer class="mt-16 flex flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm opacity-80">
+  <div class="flex gap-4">
+    <a href={github} rel="me">GitHub</a>
+    <a href={`mailto:${email}`}>{email}</a>
+  </div>
+  <p>
+    {t(locale, "footer.deployed")} {deploy.date} ·
+    <a href={deploy.commitUrl}><code>{deploy.shortSha}</code></a>
+  </p>
+</footer>

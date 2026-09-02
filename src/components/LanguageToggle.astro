@@ -1,0 +1,16 @@
+---
+import { type Locale, otherLocale } from "../i18n/locales";
+import { t } from "../i18n/ui";
+import { swapLocale } from "../lib/urls";
+
+interface Props {
+  locale: Locale;
+  pathname: string;
+}
+const { locale, pathname } = Astro.props;
+const other = otherLocale(locale);
+---
+
+<a href={swapLocale(pathname, other)} hreflang={other} lang={other} aria-label={t(locale, "toggle.aria")} class="underline">
+  {t(locale, "toggle.label")}
+</a>

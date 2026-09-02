@@ -1,0 +1,28 @@
+---
+import AdrList from "../../components/AdrList.astro";
+import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
+import { t } from "../../i18n/ui";
+import Base from "../../layouts/Base.astro";
+import { getAdrs } from "../../lib/content";
+import { REPO_URL } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+const locale = localeFromParam(Astro.params.lang);
+const adrs = await getAdrs();
+---
+
+<Base {locale} path="/colophon/" title={t(locale, "colophon.title")} description={t(locale, "colophon.adrs")}>
+  <h1 class="mt-12 text-3xl font-bold">{t(locale, "colophon.title")}</h1>
+  <section class="prose mt-6">
+    <p>
+      {t(locale, "colophon.intro")}{" "}
+      <a class="underline" href={`${REPO_URL}/blob/main/docs/how-this-was-built.md`}>
+        {t(locale, "colophon.howBuilt")}
+      </a>
+    </p>
+  </section>
+  <h2 class="mt-10 text-2xl font-semibold">{t(locale, "colophon.adrs")}</h2>
+  <AdrList {adrs} {locale} />
+</Base>

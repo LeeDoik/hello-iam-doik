@@ -1,0 +1,45 @@
+---
+import { render } from "astro:content";
+import { localeFromParam, localeStaticPaths } from "../../../i18n/locales";
+import { t } from "../../../i18n/ui";
+import Base from "../../../layouts/Base.astro";
+import { getAdrs } from "../../../lib/content";
+import { localePath, REPO_URL } from "../../../lib/urls";
+
+export async function getStaticPaths() {
+  const adrs = await getAdrs();
+  return localeStaticPaths().flatMap(({ params }) =>
+    adrs.map((a) => ({ params: { lang: params.lang, id: a.id } })),
+  );
+}
+
+const locale = localeFromParam(Astro.params.lang);
+const id = Astro.params.id;
+if (!id) throw new Error("id param missing");
+const adrs = await getAdrs();
+const adr = adrs.find((a) => a.id === id);
+if (!adr) throw new Error(`Unknown ADR: ${id}`);
+const { Content } = await render(adr);
+---
+
+<Base
+  {locale}
+  path={`/colophon/${id}/`}
+  title={adr.data.title}
+  description={`${adr.data.status} · ${adr.data.date}`}
+>
+  <a class="mt-12 inline-block underline" href={localePath(locale, "/colophon/")}>
+    {t(locale, "nav.colophon")}
+  </a>
+  <p class="mt-4 text-sm opacity-70">
+    {adr.data.status} · {adr.data.date}
+  </p>
+  <p class="mt-1">
+    <a class="underline" href={`${REPO_URL}/blob/main/docs/adr/${id}.md`}>
+      {t(locale, "colophon.viewSource")}
+    </a>
+  </p>
+  <article class="prose">
+    <Content />
+  </article>
+</Base>

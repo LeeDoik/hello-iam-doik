@@ -1,0 +1,8 @@
+- id: sample-bootcamp
+  kind: bootcamp
+  org: { ko: 예시 부트캠프, en: Example Bootcamp }
+  role: { ko: 수료생, en: Graduate }
+  from: "2025-01-01"
+  to: "2025-06-30"
+  bullets:
+    - { ko: 예시 항목. 실제 내용은 3차 계획에서 채웁니다., en: Placeholder bullet. Real content arrives in plan 3. }
