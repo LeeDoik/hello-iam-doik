@@ -35,5 +35,9 @@ test("resume has a print button and colophon lists ADRs", async ({ page }) => {
   await page.goto("/resume/");
   await expect(page.locator("[data-print]")).toBeVisible();
   await page.goto("/colophon/");
-  await expect(page.locator("article[id^='000']").first()).toBeVisible();
+  const adrLinks = page.locator('a[href*="/colophon/000"]');
+  expect(await adrLinks.count()).toBeGreaterThanOrEqual(6);
+  await adrLinks.first().click();
+  await expect(page.locator("article h1")).toHaveCount(1);
+  await expect(page.locator("h1")).toHaveCount(1);
 });

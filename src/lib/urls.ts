@@ -1,5 +1,8 @@
 import { DEFAULT_LOCALE, isLocale, type Locale } from "../i18n/locales";
 
+// 사이트 자체의 레포. 콘텐츠가 아니라 코드의 사실이므로 여기 상수로 둔다.
+export const REPO_URL = "https://github.com/LeeDoik/hello-iam-doik";
+
 function assertCanonicalPath(path: string): void {
   if (!path.startsWith("/") || !path.endsWith("/")) {
     throw new Error(`path must start and end with "/": ${path}`);

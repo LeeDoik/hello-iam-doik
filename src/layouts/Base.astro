@@ -6,7 +6,7 @@ import { LANG_TAG, type Locale, otherLocale } from "../i18n/locales";
 import { getProfile } from "../lib/content";
 import { getDeployInfo } from "../lib/deploy";
 import { alternates, canonical } from "../lib/seo";
-import { localePath } from "../lib/urls";
+import { localePath, REPO_URL } from "../lib/urls";
 
 interface Props {
   locale: Locale;
@@ -19,7 +19,6 @@ interface Props {
 const { locale, path, title, description, ogImage, jsonLd } = Astro.props;
 const site = Astro.site?.href ?? "https://hello-iam-doik.vercel.app";
 const profile = await getProfile();
-const REPO_URL = "https://github.com/LeeDoik/hello-iam-doik"; // 사이트 자체의 레포. 콘텐츠가 아니라 코드의 사실이므로 여기 상수로 둔다
 const deploy = getDeployInfo(REPO_URL);
 const pathname = localePath(locale, path);
 const og = ogImage ?? `${site.replace(/\/$/, "")}/og/${locale}.png`;

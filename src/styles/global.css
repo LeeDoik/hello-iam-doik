@@ -20,11 +20,36 @@ html {
 }
 
 @layer components {
+  .prose h1 {
+    @apply mt-8 text-2xl font-bold;
+  }
   .prose h2 {
     @apply mt-8 text-xl font-semibold;
   }
+  .prose h3 {
+    @apply mt-6 text-lg font-semibold;
+  }
   .prose p {
     @apply mt-3;
+  }
+  .prose ul {
+    @apply mt-3 list-disc pl-6;
+  }
+  .prose ol {
+    @apply mt-3 list-decimal pl-6;
+  }
+  .prose li {
+    @apply mt-1;
+  }
+  .prose pre {
+    @apply mt-3 overflow-x-auto rounded p-3 text-sm;
+  }
+  .prose table {
+    @apply mt-3 w-full text-sm;
+  }
+  .prose th,
+  .prose td {
+    @apply border px-2 py-1 text-left;
   }
 }
 
