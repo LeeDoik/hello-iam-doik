@@ -35,10 +35,15 @@ const cards = projects.map((p) => ({
     ),
   ],
 }));
-const groupLabels = { frontend: "Frontend", ai: "AI", backend: "Backend", tooling: "Tooling" } as const;
+const groupKey = {
+  frontend: "group.frontend",
+  ai: "group.ai",
+  backend: "group.backend",
+  tooling: "group.tooling",
+} as const;
 const filterGroups = (["frontend", "ai", "backend", "tooling"] as const)
   .filter((g) => cards.some((c) => c.groups.includes(g)))
-  .map((g) => ({ id: g, label: groupLabels[g] }));
+  .map((g) => ({ id: g, label: t(locale, groupKey[g]) }));
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",

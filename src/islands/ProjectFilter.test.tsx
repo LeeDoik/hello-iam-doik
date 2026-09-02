@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, expect, test } from "vitest";
 import { ProjectFilter } from "./ProjectFilter";
@@ -35,6 +35,15 @@ test("selecting AI hides card a and updates hash", async () => {
   expect(document.querySelector('[data-slug="b"]')).not.toHaveAttribute("hidden");
   expect(window.location.hash).toBe("#stack=ai");
   expect(screen.getByRole("status")).toHaveTextContent("1 projects");
+});
+
+test("does not rewrite the URL before any interaction", async () => {
+  window.location.hash = "#stack=ai";
+  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} locale="en" />);
+  await waitFor(() =>
+    expect(screen.getByRole("radio", { name: "AI" })).toHaveAttribute("aria-checked", "true"),
+  );
+  expect(window.location.hash).toBe("#stack=ai");
 });
 
 test("keyboard: arrow keys move between radios", async () => {
