@@ -52,7 +52,9 @@ export async function getSkills(): Promise<CollectionEntry<"skills">[]> {
 
 export async function getExperience(): Promise<ExperienceData[]> {
   const entries = await getCollection("experience");
-  return entries.map((e) => e.data).sort((a, b) => (a.from < b.from ? 1 : -1));
+  return entries
+    .map((e) => e.data)
+    .sort((a, b) => (a.from < b.from ? 1 : a.from > b.from ? -1 : 0));
 }
 
 export async function getAdrs(): Promise<CollectionEntry<"adrs">[]> {

@@ -23,6 +23,7 @@ const REPO_URL = "https://github.com/LeeDoik/hello-iam-doik"; // 사이트 자�
 const deploy = getDeployInfo(REPO_URL);
 const pathname = localePath(locale, path);
 const og = ogImage ?? `${site.replace(/\/$/, "")}/og/${locale}.png`;
+const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, "\\u003c") : undefined;
 ---
 
 <!doctype html>
@@ -44,7 +45,7 @@ const og = ogImage ?? `${site.replace(/\/$/, "")}/og/${locale}.png`;
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}
   </head>
   <body>
     <Header {locale} {pathname} email={profile.email} github={profile.links.github} />
