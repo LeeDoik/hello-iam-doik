@@ -15,6 +15,8 @@ const projects = slugs.map((slug) => ({
   data: projectSchema(asString).parse(readYaml(join(projectDir(slug), "meta.yaml"))),
 }));
 
+test("there is at least one project", () => expect(slugs.length).toBeGreaterThan(0));
+
 describe("every project", () => {
   test.each(slugs)("%s has ko.md with the four required headings", (slug) => {
     const p = storyPath(slug, "ko");

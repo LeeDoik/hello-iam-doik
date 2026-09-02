@@ -4,7 +4,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { LANG_TAG, type Locale, otherLocale } from "../i18n/locales";
 import { getProfile } from "../lib/content";
-import { getDeployInfo } from "../lib/deploy";
+import { cachedDeployInfo } from "../lib/deploy-cache";
 import { alternates, canonical } from "../lib/seo";
 import { localePath, REPO_URL } from "../lib/urls";
 
@@ -19,9 +19,8 @@ interface Props {
 const { locale, path, title, description, ogImage, jsonLd } = Astro.props;
 const site = Astro.site?.href ?? "https://hello-iam-doik.vercel.app";
 const profile = await getProfile();
-const deploy = getDeployInfo(REPO_URL);
+const deploy = cachedDeployInfo(REPO_URL);
 const pathname = localePath(locale, path);
-const og = ogImage ?? `${site.replace(/\/$/, "")}/og/${locale}.png`;
 const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, "\\u003c") : undefined;
 ---
 
@@ -38,10 +37,10 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, "\\u003c") : un
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical(site, locale, path)} />
-    <meta property="og:image" content={og} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
     <meta property="og:locale" content={LANG_TAG[locale].replace("-", "_")} />
     <meta property="og:locale:alternate" content={LANG_TAG[otherLocale(locale)].replace("-", "_")} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}

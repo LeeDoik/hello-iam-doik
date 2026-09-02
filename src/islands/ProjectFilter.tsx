@@ -1,5 +1,4 @@
 import { useEffect, useId, useMemo, useState } from "react";
-import type { Locale } from "../i18n/locales";
 import { parseHashGroup, toHash, visibleSlugs } from "../lib/filter";
 
 type Group = { id: string; label: string };
@@ -8,7 +7,6 @@ type Props = {
   groups: Group[];
   cards: Card[];
   labels: { all: string; count: string; filterLabel: string };
-  locale: Locale;
 };
 
 export function ProjectFilter({ groups, cards, labels }: Props) {

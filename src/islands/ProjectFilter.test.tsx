@@ -23,13 +23,13 @@ beforeEach(() => {
 });
 
 test("renders one button per group plus All, and announces the count", () => {
-  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} locale="en" />);
+  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} />);
   expect(screen.getAllByRole("radio")).toHaveLength(3);
   expect(screen.getByRole("status")).toHaveTextContent("2 projects");
 });
 
 test("selecting AI hides card a and updates hash", async () => {
-  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} locale="en" />);
+  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} />);
   await userEvent.click(screen.getByRole("radio", { name: "AI" }));
   expect(document.querySelector('[data-slug="a"]')).toHaveAttribute("hidden");
   expect(document.querySelector('[data-slug="b"]')).not.toHaveAttribute("hidden");
@@ -39,7 +39,7 @@ test("selecting AI hides card a and updates hash", async () => {
 
 test("does not rewrite the URL before any interaction", async () => {
   window.location.hash = "#stack=ai";
-  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} locale="en" />);
+  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} />);
   await waitFor(() =>
     expect(screen.getByRole("radio", { name: "AI" })).toHaveAttribute("aria-checked", "true"),
   );
@@ -47,7 +47,7 @@ test("does not rewrite the URL before any interaction", async () => {
 });
 
 test("keyboard: arrow keys move between radios", async () => {
-  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} locale="en" />);
+  render(<ProjectFilter groups={[...groups]} cards={cards} labels={labels} />);
   const all = screen.getByRole("radio", { name: "All" });
   all.focus();
   await userEvent.keyboard("{ArrowRight}");

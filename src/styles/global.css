@@ -58,6 +58,7 @@ html {
   footer,
   nav,
   .no-print {
+    /* biome-ignore lint/complexity/noImportantStyles: print reset must beat utility specificity */
     display: none !important;
   }
   a[href^="http"]::after {

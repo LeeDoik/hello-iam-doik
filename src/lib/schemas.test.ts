@@ -83,6 +83,9 @@ describe("skillSchema", () => {
     };
     expect(() => s.parse({ ...base, projects: [] })).toThrow();
     expect(s.parse({ ...base, projects: ["sample-project"] }).id).toBe("react");
+    expect(() =>
+      s.parse({ ...base, builtWithIt: undefined, projects: ["sample-project"] }),
+    ).toThrow();
   });
 });
 

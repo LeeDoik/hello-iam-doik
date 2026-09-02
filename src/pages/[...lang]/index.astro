@@ -63,7 +63,6 @@ const jsonLd = {
       groups={filterGroups}
       cards={cards}
       labels={{ all: t(locale, "filter.all"), count: t(locale, "filter.count"), filterLabel: t(locale, "filter.label") }}
-      locale={locale}
     />
     <div id="project-list" class="mt-4 grid gap-4">
       {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
