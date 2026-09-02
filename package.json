@@ -18,6 +18,7 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "adr": "tsx scripts/new-adr.ts",
+    "content:status": "tsx scripts/content-status.ts",
     "prepare": "husky"
   },
   "dependencies": {
