@@ -16,6 +16,7 @@
     "format": "biome check --write . && prettier --write \"src/**/*.astro\"",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:build": "vitest run --config vitest.build.config.ts",
     "e2e": "playwright test",
     "adr": "tsx scripts/new-adr.ts",
     "capture": "tsx scripts/capture-screens.ts",
