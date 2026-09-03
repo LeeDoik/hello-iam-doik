@@ -94,9 +94,15 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
     expect(tag).toBe("CANVAS");
   }
 
-  await toggle.click(); // high → low
-  await expect(toggle).toHaveText(/낮음/);
-  await toggle.click(); // low → off
+  // 시작 품질은 기기 신호에 따라 high 또는 low(CI 러너는 코어 수가 적어 low)다.
+  // 그래서 고정 순서 대신 "끔"이 될 때까지 순환하며, 클릭마다 라벨이 바뀌는지 확인한다.
+  for (let i = 0; i < 3; i++) {
+    const before = await toggle.textContent();
+    if (before && /끔/.test(before)) break;
+    await toggle.click();
+    await expect(toggle).not.toHaveText(before ?? "");
+  }
+  await expect(toggle).toHaveText(/끔/);
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
   await p2.reload();
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off"); // localStorage
