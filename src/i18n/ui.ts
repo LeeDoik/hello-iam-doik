@@ -63,6 +63,11 @@ const ko = {
   "colophon.howBuilt": "제작 과정 문서",
   "colophon.viewSource": "원문 보기",
   "footer.deployed": "마지막 배포",
+  "quality.label": "배경 효과",
+  "quality.high": "높음",
+  "quality.low": "낮음",
+  "quality.off": "끔",
+  "hero.canvasHint": "마우스를 움직이거나 스크롤하면 배경이 반응합니다",
 } as const;
 
 export type UIKey = keyof typeof ko;
@@ -130,6 +135,11 @@ const en = {
   "colophon.howBuilt": "How this was built",
   "colophon.viewSource": "View source",
   "footer.deployed": "Last deployed",
+  "quality.label": "Background effect",
+  "quality.high": "High",
+  "quality.low": "Low",
+  "quality.off": "Off",
+  "hero.canvasHint": "Move the pointer or scroll to see the background react",
 } satisfies Record<UIKey, string>;
 
 export const ui: Record<Locale, Record<UIKey, string>> = { ko, en };

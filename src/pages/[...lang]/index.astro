@@ -4,6 +4,7 @@ import ProjectCard from "../../components/ProjectCard.astro";
 import SkillsByProject from "../../components/SkillsByProject.astro";
 import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
 import { t } from "../../i18n/ui";
+import { Hero3D } from "../../islands/Hero3D";
 import { ProjectFilter } from "../../islands/ProjectFilter";
 import Base from "../../layouts/Base.astro";
 import { getExperience, getProfile, getProjects, getSkills } from "../../lib/content";
@@ -58,11 +59,15 @@ const jsonLd = {
   ogImage={ogImageUrl(site, locale)}
   {jsonLd}
 >
-  <section id="hero" class="py-16">
-    <h1 class="text-4xl font-bold">{pick(profile.name, locale)}</h1>
-    <p class="mt-3 text-xl">{pick(profile.tagline, locale)}</p>
-    <p class="mt-4 max-w-prose opacity-80">{pick(profile.bio, locale)}</p>
-    <a class="mt-6 inline-block underline" href="#projects">{t(locale, "hero.cta.projects")}</a>
+  <section id="hero" class="relative overflow-hidden bg-[oklch(20%_0.05_260)] py-24">
+    <Hero3D client:visible />
+    <div class="relative text-paper">
+      <h1 class="text-4xl font-bold">{pick(profile.name, locale)}</h1>
+      <p class="mt-3 text-xl">{pick(profile.tagline, locale)}</p>
+      <p class="mt-4 max-w-prose opacity-80">{pick(profile.bio, locale)}</p>
+      <a class="mt-6 inline-block underline" href="#projects">{t(locale, "hero.cta.projects")}</a>
+      <p class="mt-2 text-xs opacity-60">{t(locale, "hero.canvasHint")}</p>
+    </div>
   </section>
 
   <section id="projects" class="py-8">

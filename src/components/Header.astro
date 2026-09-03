@@ -1,6 +1,7 @@
 ---
 import type { Locale } from "../i18n/locales";
 import { t } from "../i18n/ui";
+import { QualityToggle } from "../islands/QualityToggle";
 import { localePath } from "../lib/urls";
 import LanguageToggle from "./LanguageToggle.astro";
 
@@ -21,6 +22,15 @@ const { locale, pathname, email, github } = Astro.props;
     <a href={localePath(locale, "/colophon/")}>{t(locale, "nav.colophon")}</a>
     <a href={github} rel="me">GitHub</a>
     <a href={`mailto:${email}`}>Email</a>
+    <QualityToggle
+      client:idle
+      labels={{
+        label: t(locale, "quality.label"),
+        high: t(locale, "quality.high"),
+        low: t(locale, "quality.low"),
+        off: t(locale, "quality.off"),
+      }}
+    />
     <LanguageToggle {locale} {pathname} />
   </nav>
 </header>

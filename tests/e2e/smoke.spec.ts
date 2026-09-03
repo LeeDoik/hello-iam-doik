@@ -41,3 +41,23 @@ test("resume has a print button and colophon lists ADRs", async ({ page }) => {
   await expect(page.locator("article h1")).toHaveCount(1);
   await expect(page.locator("h1")).toHaveCount(1);
 });
+
+test("hero canvas respects reduced motion and the quality toggle", async ({ browser }) => {
+  const reduced = await browser.newContext({ reducedMotion: "reduce" });
+  const p1 = await reduced.newPage();
+  await p1.goto("/");
+  await expect(p1.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
+  await reduced.close();
+
+  const normal = await browser.newContext({ reducedMotion: "no-preference" });
+  const p2 = await normal.newPage();
+  await p2.goto("/");
+  await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", /high|low/);
+  const toggle = p2.getByRole("button", { name: /배경 효과/ });
+  await toggle.click(); // high → low
+  await toggle.click(); // low → off
+  await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
+  await p2.reload();
+  await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off"); // localStorage
+  await normal.close();
+});
