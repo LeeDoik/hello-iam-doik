@@ -35,3 +35,19 @@ test("sitemap has both locales for every page", async ({ baseURL }) => {
   const ko = paths.filter((p) => !p.startsWith("/en/"));
   for (const p of ko) expect(paths, p).toContain(`/en${p}`);
 });
+
+test("every page's og:image resolves to a png", async ({ page, request, baseURL }) => {
+  const base = baseURL ?? "http://localhost:4321";
+  for (const path of await sitemapPaths(base)) {
+    await page.goto(path);
+    const ogLocator = page.locator('meta[property="og:image"]');
+    // resume/colophon 페이지는 og:image 메타 태그 자체가 없다. locator.getAttribute()는
+    // 요소가 나타나길 auto-wait하므로, count()로 존재 여부를 먼저 확인해 타임아웃을 피한다.
+    if ((await ogLocator.count()) === 0) continue;
+    const og = await ogLocator.getAttribute("content");
+    if (!og) continue;
+    const res = await request.get(new URL(og).pathname);
+    expect(res.status(), `${path} → ${og}`).toBe(200);
+    expect(res.headers()["content-type"]).toContain("image/png");
+  }
+});

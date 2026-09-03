@@ -11,6 +11,7 @@ import Base from "../../../layouts/Base.astro";
 import { getProject, getStory } from "../../../lib/content";
 import { formatPeriod } from "../../../lib/dates";
 import { pick } from "../../../lib/localized";
+import { ogImageUrl } from "../../../lib/seo";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -29,9 +30,16 @@ const { Content } = await render(story);
 // 스크린샷/AI 아키텍처 이미지를 렌더링하는 컴포넌트는 실제 ImageMetadata 타입이 필요하므로
 // 콘텐츠 컬렉션이 실제로 만들어내는 타입인 CollectionEntry<"projects">["data"]로 좁혀준다.
 const d = project.data as unknown as CollectionEntry<"projects">["data"];
+const site = Astro.site?.href ?? "https://hello-iam-doik.vercel.app";
 ---
 
-<Base {locale} path={`/projects/${project.slug}/`} title={pick(d.title, locale)} description={pick(d.summary, locale)}>
+<Base
+  {locale}
+  path={`/projects/${project.slug}/`}
+  title={pick(d.title, locale)}
+  description={pick(d.summary, locale)}
+  ogImage={ogImageUrl(site, locale, project.slug)}
+>
   <article data-story-fallback={String(isFallback)}>
     <h1 class="mt-12 text-3xl font-bold">{pick(d.title, locale)}</h1>
     <p class="mt-1 text-sm opacity-70">{formatPeriod(d.period.from, d.period.to, locale)}</p>

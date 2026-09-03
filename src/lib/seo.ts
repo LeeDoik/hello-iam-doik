@@ -24,3 +24,11 @@ export function alternates(site: string, path: string): { hreflang: string; href
     { hreflang: "x-default", href: abs(site, localePath("ko", path)) },
   ];
 }
+
+export function ogImagePath(locale: Locale, slug?: string): string {
+  return slug ? `/og/projects/${slug}/${locale}.png` : `/og/${locale}.png`;
+}
+
+export function ogImageUrl(site: string, locale: Locale, slug?: string): string {
+  return abs(site, ogImagePath(locale, slug));
+}
