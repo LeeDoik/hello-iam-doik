@@ -24,5 +24,6 @@ jobs:
         env: { CI: "1" }
       - uses: gitleaks/gitleaks-action@v2
         env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
-      - if: github.event_name == 'pull_request'
+      # Dependabot의 자동 커밋 제목("Bump …")은 subject-case 규칙에 걸리므로 봇 PR만 건너뛴다
+      - if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
         run: pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}
