@@ -99,7 +99,17 @@ try {
   console.log(metaYamlSnippet(shots, today, sourceCommit));
 } finally {
   await browser.close();
-  server?.kill();
+  stopServer(server);
+}
+
+function stopServer(child: ReturnType<typeof spawn> | undefined): void {
+  if (!child?.pid) return;
+  if (process.platform === "win32") {
+    // shell:true → cmd.exe가 자식, 실제 서버는 손자. /T로 트리 전체를 끝낸다.
+    execSync(`taskkill /pid ${child.pid} /T /F`, { stdio: "ignore" });
+  } else {
+    child.kill();
+  }
 }
 
 async function waitForServer(url: string): Promise<void> {

@@ -27,6 +27,7 @@ CI에 자동 캡처를 넣지 않은 이유는 스크린샷이 매 커밋 갱신
 - 좋은 점: 누구나 `pnpm capture <slug>`로 같은 뷰포트·같은 설정으로 같은 화면을 다시 찍을 수 있다(재현 가능성). 스크린샷이 "언제 찍었는지"를 더 이상 기억이 아니라 sidecar 파일이 갖고, 계약 테스트가 그 사실을 `meta.yaml`과 계속 대조한다. `capture.yaml`의 `login.steps[].value`는 시드 데모 계정 값만 허용하고, `${ADMIN_PASSWORD}` 같은 환경변수 모양의 값은 스키마(`captureSchema`)가 파싱 단계에서 거부해, 실제 비밀번호가 레포에 커밋될 여지를 줄인다.
 - 나쁜 점 / 감수한 것: `capture.yaml`과 sidecar JSON이 프로젝트마다 늘어나 파일 수가 증가한다. Playwright Chromium이 로컬에 설치돼 있어야 캡처를 실행할 수 있다(CI에는 없음 — 캡처는 사람이 로컬에서 수동으로 돌린다). sidecar 없는 PNG는 경고만 하므로, 규율을 지키지 않으면 조용히 낡은 스크린샷이 남을 수 있다.
 - 되돌리는 조건(deletion trigger): 프로젝트 수가 많아져 매번 수동 재캡처가 감당 안 되면, `--stale` 리포트를 CI 알림(예: 주간 이슈 생성)으로 자동화하거나, 캡처 자체를 배포 파이프라인에 편입하는 방향으로 이 ADR을 supersede한다.
+- Windows에서는 shell 자식 프로세스 트리를 taskkill /T로 끝내야 로컬 서버가 남지 않는다 (scripts/capture-screens.ts stopServer).
 
 ## Try it (5분 실험)
 
