@@ -36,3 +36,7 @@ date: "2026-09-02"
 ## Amendment 2026-09-02: React 아일랜드 도입 이후의 Try it
 
 프로젝트 필터 아일랜드(`src/islands/ProjectFilter.tsx`)를 `client:visible`로 붙인 뒤에는 `pnpm build && ls dist/_astro`에 JS 청크가 생긴다. 기대 결과: `ProjectFilter.*.js`(약 2KB), `client.*.js`(React 하이드레이션 런타임, 약 184KB), `react.*.js`(약 8KB) 세 파일뿐이며, 이것이 사이트의 클라이언트 JS 전부다. 다른 페이지(`dist/projects/**`, `dist/colophon/**`)의 HTML에는 `<script`가 없어야 한다(이력서 페이지의 인쇄 버튼 한 줄 제외). 아일랜드가 아닌 곳에 JS가 생기면 경계가 깨진 것이다. 이 JS를 왜 감수하는지(국내 JD의 React 요구, 향후 채팅 UI 재사용)는 별도 ADR로 기록할 예정이다.
+
+## Amendment 2026-09-03: 헤더 아일랜드 이후
+
+위 Try it은 더 이상 성립하지 않는다. `QualityToggle`이 헤더(`src/components/Header.astro`)에 `client:idle`로 들어가면서, 이제는 랜딩이 아닌 페이지(프로젝트, 콜로폰, 이력서 포함 모든 페이지)도 React 런타임을 받는다. 현재 청크 목록과 실측 gzip 수치는 [ADR-0010](./0010-what-react-islands-cost.md)의 표(2026-09-03 빌드 기준 합계 187.0KB)를 참고한다. 이 시점에도 여전히 성립하는 불변식은 "three.js 청크(`hero-scene`)는 랜딩 HTML에서만 참조된다"는 것뿐이며, 이는 `tests/build/js-budget.test.ts`가 강제한다.
