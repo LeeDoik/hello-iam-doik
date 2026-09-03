@@ -24,11 +24,11 @@ ADR-0001은 "정적 콘텐츠 사이트 + 위젯 두세 개에는 Astro가 유�
 | `client.*.js` | React 19 하이드레이션 런타임 | 56.0KB |
 | `react.*.js` | React 코어(공유 청크) | 2.8KB |
 | `ProjectFilter.*.js` | 프로젝트 필터 아일랜드 | 1.0KB |
-| `QualityToggle.*.js` | 히어로 품질 토글 아일랜드 | 0.4KB |
-| `Hero3D.*.js` | 히어로 3D 아일랜드(로더) | 1.5KB |
+| `QualityToggle.*.js` | 히어로 품질 토글 아일랜드 | 0.5KB |
+| `Hero3D.*.js` | 히어로 3D 아일랜드(로더) | 1.6KB |
 | `hero-scene.*.js` | three.js 신(동적 import, 랜딩 전용) | 124.6KB |
 | `jsx-runtime.*.js` / `motion-prefs.*.js` | 공유 런타임/순수 로직 | 0.3KB / 0.2KB |
-| **합계** | | **186.9KB** (예산 250KB) |
+| **합계** | | **187.0KB** (예산 250KB) |
 
 React 런타임 자체(`client` + `react`)는 약 58.8KB gzip이고, 아일랜드 3개의 고유 코드는 합쳐서 약 3KB(three 제외)다. React 런타임 58.8KB는 아일랜드가 하나든 셋이든 한 번만 로드되므로, 아일랜드를 늘릴수록 "고정비 대비 한계비용"은 낮아진다.
 

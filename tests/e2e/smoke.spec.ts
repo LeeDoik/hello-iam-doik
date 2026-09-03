@@ -42,6 +42,12 @@ test("resume has a print button and colophon lists ADRs", async ({ page }) => {
   await expect(page.locator("h1")).toHaveCount(1);
 });
 
+test("llms.txt is served as plain text starting with a heading", async ({ request }) => {
+  const res = await request.get("/llms.txt");
+  expect(res.status()).toBe(200);
+  expect((await res.text()).startsWith("# ")).toBe(true);
+});
+
 test("hero canvas respects reduced motion and the quality toggle", async ({ browser }) => {
   const reduced = await browser.newContext({ reducedMotion: "reduce" });
   const p1 = await reduced.newPage();
