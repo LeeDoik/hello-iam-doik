@@ -38,6 +38,7 @@ export function sidecarPath(pngPath: string): string {
 
 const DAY = 86_400_000;
 
+// 경계는 포함(>=)이므로 --stale 0은 오늘 찍은 캡처도 낡은 것으로 보고한다.
 export function isStale(capturedAt: string, today: string, maxDays: number): boolean {
   return (Date.parse(today) - Date.parse(capturedAt)) / DAY >= maxDays;
 }

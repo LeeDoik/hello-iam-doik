@@ -24,7 +24,11 @@ const staleIdx = flags.indexOf("--stale");
 const today = new Date().toISOString().slice(0, 10);
 
 if (staleIdx >= 0) {
-  const days = Number(flags[staleIdx + 1] ?? "90");
+  const days = Number(flags[staleIdx + 1]);
+  if (!Number.isFinite(days) || days < 0) {
+    console.error("usage: --stale <days>");
+    process.exit(1);
+  }
   const meta = readYaml<{ screens: { src: string; capturedAt: string }[] }>(join(dir, "meta.yaml"));
   const report = staleReport(
     meta.screens.map((s) => ({ file: s.src, capturedAt: s.capturedAt })),
@@ -106,7 +110,11 @@ function stopServer(child: ReturnType<typeof spawn> | undefined): void {
   if (!child?.pid) return;
   if (process.platform === "win32") {
     // shell:true → cmd.exe가 자식, 실제 서버는 손자. /T로 트리 전체를 끝낸다.
-    execSync(`taskkill /pid ${child.pid} /T /F`, { stdio: "ignore" });
+    try {
+      execSync(`taskkill /pid ${child.pid} /T /F`, { stdio: "ignore" });
+    } catch {
+      // 서버가 이미 종료됐을 수 있다(예: dev 서버가 스스로 크래시). 무시한다.
+    }
   } else {
     child.kill();
   }

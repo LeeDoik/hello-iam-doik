@@ -20,6 +20,7 @@ describe("captureSchema", () => {
     expect(() =>
       captureSchema.parse({
         base: "https://x.dev",
+        // biome-ignore lint/suspicious/noTemplateCurlyInString: fixture for the env-placeholder refine
         login: { path: "/login", steps: [{ fill: "#pw", value: "${ADMIN_PASSWORD}" }] },
         shots: [{ name: "01-a", route: "/", devices: ["desktop"] }],
       }),

@@ -1,6 +1,5 @@
 export type Quality = "off" | "low" | "high";
 export const QUALITY_KEY = "hero-quality";
-export const QUALITIES: readonly Quality[] = ["high", "low", "off"];
 export const SETTLED_KEY = "__heroQualitySettled";
 
 export type DeviceSignals = {

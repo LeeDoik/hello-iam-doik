@@ -91,13 +91,20 @@ export function Hero3D() {
       visible = entry?.isIntersecting ?? true;
     });
     io.observe(canvas);
+    // getBoundingClientRect() is a layout read; cache it and only refresh on the events that can
+    // actually change it (resize, scroll) instead of on every pointermove.
+    let rect = canvas.getBoundingClientRect();
     const onMove = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      scene?.setPointer((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+      scene?.setPointer((e.clientX - rect.left) / rect.width, (e.clientY - rect.top) / rect.height);
     };
-    const onScroll = () =>
+    const onScroll = () => {
+      rect = canvas.getBoundingClientRect();
       scene?.setScroll(Math.min(window.scrollY / Math.max(window.innerHeight, 1), 1));
-    const onResize = () => scene?.resize();
+    };
+    const onResize = () => {
+      rect = canvas.getBoundingClientRect();
+      scene?.resize();
+    };
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
