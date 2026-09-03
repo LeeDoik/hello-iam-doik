@@ -4,6 +4,7 @@ import {
   frameInterval,
   QUALITY_KEY,
   type Quality,
+  rememberSettled,
   renderScale,
 } from "../lib/motion-prefs";
 
@@ -44,10 +45,14 @@ export function Hero3D() {
     } catch {}
     const decided = decideQuality(readSignals(), stored);
     setQuality(decided);
+    rememberSettled(decided);
     window.dispatchEvent(new CustomEvent<Quality>("hero-quality-settled", { detail: decided }));
     const onQuality = (e: Event) => {
       const q = (e as CustomEvent<Quality>).detail;
-      setQuality(readSignals().reducedMotion ? "off" : q);
+      const resolved = readSignals().reducedMotion ? "off" : q;
+      setQuality(resolved);
+      rememberSettled(resolved);
+      window.dispatchEvent(new CustomEvent<Quality>("hero-quality-settled", { detail: resolved }));
     };
     window.addEventListener("hero-quality", onQuality);
     return () => window.removeEventListener("hero-quality", onQuality);

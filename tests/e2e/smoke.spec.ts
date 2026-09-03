@@ -56,6 +56,7 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
   await p1.goto("/");
   await expect(p1.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
   expect(requestedUrls.some((u) => /hero-scene/.test(u))).toBe(false);
+  await expect(p1.getByRole("button", { name: /배경 효과/ })).toBeDisabled();
   await reduced.close();
 
   const normal = await browser.newContext({ reducedMotion: "no-preference" });
@@ -64,6 +65,22 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", /high|low/);
   const toggle = p2.getByRole("button", { name: /배경 효과/ });
   await expect(toggle).toHaveText(/높음|낮음|끔/);
+
+  // 포인터가 제목 위에 있어도 글로우 아래에서 텍스트 대비가 유지되는지, 어두운 스크림으로 확인한다.
+  const h1 = p2.getByRole("heading", { level: 1 });
+  const h1Box = await h1.boundingBox();
+  if (h1Box) {
+    await p2.mouse.move(h1Box.x + h1Box.width / 2, h1Box.y + h1Box.height / 2);
+    await p2.waitForTimeout(300);
+    await h1.screenshot();
+    const scrimBg = await p2.evaluate(() => {
+      const heading = document.querySelector("#hero h1");
+      const scrim = heading?.parentElement;
+      return scrim ? getComputedStyle(scrim).backgroundColor : "";
+    });
+    expect(scrimBg).not.toBe("rgba(0, 0, 0, 0)");
+    expect(scrimBg).not.toBe("");
+  }
 
   // 캔버스가 섹션 배경 위에 그려지는지(스택 컨텍스트) 히트테스트로 검증한다.
   const box = await p2.locator("#hero canvas").boundingBox();

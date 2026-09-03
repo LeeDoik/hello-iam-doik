@@ -1,6 +1,7 @@
 export type Quality = "off" | "low" | "high";
 export const QUALITY_KEY = "hero-quality";
 export const QUALITIES: readonly Quality[] = ["high", "low", "off"];
+export const SETTLED_KEY = "__heroQualitySettled";
 
 export type DeviceSignals = {
   reducedMotion: boolean;
@@ -31,4 +32,17 @@ export function frameInterval(q: Quality): number {
 
 export function nextQuality(q: Quality): Quality {
   return q === "high" ? "low" : q === "low" ? "off" : "high";
+}
+
+// Hero3D dispatches "hero-quality-settled" before QualityToggle (client:idle) can
+// subscribe. Stash the value on window so a late-mounting toggle can still read it.
+export function rememberSettled(q: Quality): void {
+  if (typeof window === "undefined") return;
+  (window as unknown as Record<string, unknown>)[SETTLED_KEY] = q;
+}
+
+export function readSettled(): Quality | undefined {
+  if (typeof window === "undefined") return undefined;
+  const v = (window as unknown as Record<string, unknown>)[SETTLED_KEY];
+  return v === "off" || v === "low" || v === "high" ? v : undefined;
 }
