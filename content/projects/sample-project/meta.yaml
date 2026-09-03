@@ -21,9 +21,9 @@ metrics:
       en: "grep confirms no script tags in HTML under dist/projects and dist/colophon"
 screens:
   - src: ./screens/01-home@desktop.png
-    alt: { ko: 샘플 홈 화면, en: Sample home screen }
+    alt: { ko: "포트폴리오 랜딩 페이지", en: "Portfolio landing page" }
     device: desktop
-    capturedAt: "2026-09-02"
+    capturedAt: "2026-09-03"
 featured: true
 order: 1
 updatedAt: "2026-09-02"
