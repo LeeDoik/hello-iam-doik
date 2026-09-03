@@ -45,8 +45,11 @@ test("resume has a print button and colophon lists ADRs", async ({ page }) => {
 test("hero canvas respects reduced motion and the quality toggle", async ({ browser }) => {
   const reduced = await browser.newContext({ reducedMotion: "reduce" });
   const p1 = await reduced.newPage();
+  const requestedUrls: string[] = [];
+  p1.on("request", (req) => requestedUrls.push(req.url()));
   await p1.goto("/");
   await expect(p1.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
+  expect(requestedUrls.some((u) => /hero-scene/.test(u))).toBe(false);
   await reduced.close();
 
   const normal = await browser.newContext({ reducedMotion: "no-preference" });
@@ -54,7 +57,22 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
   await p2.goto("/");
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", /high|low/);
   const toggle = p2.getByRole("button", { name: /배경 효과/ });
+  await expect(toggle).toHaveText(/높음|낮음|끔/);
+
+  // 캔버스가 섹션 배경 위에 그려지는지(스택 컨텍스트) 히트테스트로 검증한다.
+  const box = await p2.locator("#hero canvas").boundingBox();
+  if (box) {
+    const x = box.x + box.width - 20;
+    const y = box.y + box.height - 20;
+    const tag = await p2.evaluate(
+      ([px, py]: [number, number]) => document.elementFromPoint(px, py)?.tagName,
+      [x, y] as [number, number],
+    );
+    expect(tag).toBe("CANVAS");
+  }
+
   await toggle.click(); // high → low
+  await expect(toggle).toHaveText(/낮음/);
   await toggle.click(); // low → off
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
   await p2.reload();

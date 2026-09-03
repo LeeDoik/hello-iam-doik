@@ -59,7 +59,10 @@ const jsonLd = {
   ogImage={ogImageUrl(site, locale)}
   {jsonLd}
 >
-  <section id="hero" class="relative overflow-hidden bg-[oklch(20%_0.05_260)] py-24">
+  <section
+    id="hero"
+    class="relative isolate overflow-hidden bg-[oklch(20%_0.05_260)] px-6 py-24 sm:px-10"
+  >
     <Hero3D client:visible />
     <div class="relative text-paper">
       <h1 class="text-4xl font-bold">{pick(profile.name, locale)}</h1>

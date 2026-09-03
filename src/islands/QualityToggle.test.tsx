@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, expect, test } from "vitest";
 import { QUALITY_KEY } from "../lib/motion-prefs";
@@ -27,4 +27,12 @@ test("reads the stored value on mount", () => {
   localStorage.setItem(QUALITY_KEY, "off");
   render(<QualityToggle labels={labels} />);
   expect(screen.getByRole("button")).toHaveTextContent("Off");
+});
+
+test("syncs to the hero's settled quality", async () => {
+  render(<QualityToggle labels={labels} />);
+  const btn = screen.getByRole("button", { name: /Background effect/ });
+  expect(btn).toHaveTextContent("High");
+  window.dispatchEvent(new CustomEvent("hero-quality-settled", { detail: "off" }));
+  await waitFor(() => expect(btn).toHaveTextContent("Off"));
 });

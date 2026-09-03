@@ -7,11 +7,18 @@ import {
   renderScale,
 } from "../lib/motion-prefs";
 
+let webglSupported: boolean | undefined;
+
 function hasWebgl(): boolean {
+  if (webglSupported !== undefined) return webglSupported;
   try {
     const c = document.createElement("canvas");
-    return Boolean(c.getContext("webgl2") ?? c.getContext("webgl"));
+    const ctx = c.getContext("webgl2") ?? c.getContext("webgl");
+    webglSupported = Boolean(ctx);
+    (ctx as WebGLRenderingContext | null)?.getExtension("WEBGL_lose_context")?.loseContext();
+    return webglSupported;
   } catch {
+    webglSupported = false;
     return false;
   }
 }
@@ -35,7 +42,9 @@ export function Hero3D() {
     try {
       stored = localStorage.getItem(QUALITY_KEY);
     } catch {}
-    setQuality(decideQuality(readSignals(), stored));
+    const decided = decideQuality(readSignals(), stored);
+    setQuality(decided);
+    window.dispatchEvent(new CustomEvent<Quality>("hero-quality-settled", { detail: decided }));
     const onQuality = (e: Event) => {
       const q = (e as CustomEvent<Quality>).detail;
       setQuality(readSignals().reducedMotion ? "off" : q);
@@ -54,17 +63,24 @@ export function Hero3D() {
     const interval = frameInterval(quality);
     const cancelled = { current: false };
 
-    import("../lib/hero-scene").then(({ createHeroScene }) => {
-      if (cancelled.current) return;
-      scene = createHeroScene(canvas, renderScale(quality));
-      const loop = (t: number) => {
+    import("../lib/hero-scene")
+      .then(({ createHeroScene }) => {
+        if (cancelled.current) return;
+        try {
+          scene = createHeroScene(canvas, renderScale(quality));
+        } catch {
+          setQuality("off");
+          return;
+        }
+        const loop = (t: number) => {
+          raf = requestAnimationFrame(loop);
+          if (!visible || document.hidden || t - last < interval) return;
+          last = t;
+          scene?.frame(t);
+        };
         raf = requestAnimationFrame(loop);
-        if (!visible || document.hidden || t - last < interval) return;
-        last = t;
-        scene?.frame(t);
-      };
-      raf = requestAnimationFrame(loop);
-    });
+      })
+      .catch(() => setQuality("off"));
 
     const io = new IntersectionObserver(([entry]) => {
       visible = entry?.isIntersecting ?? true;

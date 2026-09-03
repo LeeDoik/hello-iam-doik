@@ -15,6 +15,11 @@ function readStored(): Quality {
 export function QualityToggle({ labels }: Props) {
   const [q, setQ] = useState<Quality>("high"); // SSR과 첫 렌더는 항상 high
   useEffect(() => setQ(readStored()), []);
+  useEffect(() => {
+    const onSettled = (e: Event) => setQ((e as CustomEvent<Quality>).detail);
+    window.addEventListener("hero-quality-settled", onSettled);
+    return () => window.removeEventListener("hero-quality-settled", onSettled);
+  }, []);
   function cycle() {
     const next = nextQuality(q);
     setQ(next);

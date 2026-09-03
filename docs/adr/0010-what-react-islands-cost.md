@@ -35,7 +35,7 @@ React 런타임 자체(`client` + `react`)는 약 58.8KB gzip이고, 아일랜�
 ### Consequences
 
 - 좋은 점: 세 아일랜드가 하나의 React 런타임을 공유하므로 아일랜드를 추가할 때마다 드는 한계비용이 작다(예: `QualityToggle`은 0.4KB). 국내 채용 공고 대부분이 React를 요구하므로, 실제로 동작하는 React 코드(하이드레이션, 이벤트, 상태)가 저장소에 있다.
-- 나쁜 점 / 감수한 것: `QualityToggle`이 헤더(모든 페이지)에 있어서, 랜딩이 아닌 페이지도 React 하이드레이션 런타임(약 59KB)을 받는다. `pnpm adr`가 아니라 vanilla script로 짰다면 이 58.8KB는 0이었을 것이다.
+- 나쁜 점 / 감수한 것: `QualityToggle`이 헤더(모든 페이지)에 있어서, 랜딩이 아닌 페이지도 React 하이드레이션 런타임(약 59KB)을 받는다. React 아일랜드가 아니라 vanilla script로 짰다면 이 58.8KB는 0이었을 것이다.
 - 되돌리는 조건(deletion trigger): 아일랜드가 하나로 줄어들거나(React를 유지할 이유가 약해짐), 국내 채용 시장에서 React 요구가 유의미하게 사라질 때.
 
 ## Try it (5분 실험)
