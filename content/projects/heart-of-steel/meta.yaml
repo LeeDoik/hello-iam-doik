@@ -1,8 +1,8 @@
 title: { ko: "코드네임: 태엽새 · HEART OF STEEL", en: "Heart of Steel (Codename: Clockbird)" }
 summary:
   {
-    ko: "대화만으로 동료를 찾고 신분을 위조해 탈출하는 AI 잠입 게임. 네 구간의 클리어 조건을 스크립트가 아니라 LLM이 판정한다.",
-    en: "An AI infiltration game where you find allies and forge an identity through free-text dialogue; every stage's win condition is judged live by an LLM.",
+    ko: "대화만으로 동료를 찾고 신분을 위조해 탈출하는 AI 잠입 게임. 네 구간의 클리어 조건을 스크립트가 아니라 LLM이 판정했다.",
+    en: "An AI infiltration game where you find allies and forge an identity through free-text dialogue; every stage's win condition was judged live by an LLM.",
   }
 status: archived
 period: { from: "2026-07-17", to: "2026-08-12" }
@@ -101,7 +101,7 @@ ai:
   failureModes:
     - {
         ko: '힌트를 "더 직접적으로" 만들라는 프롬프트 한 줄이 중복률을 83~100%로 올려 퍼즐이 무너졌다.',
-        en: 'One prompt line asking for "more direct" hints pushed the overlap rate to 83-100% and collapsed the puzzle.',
+        en: 'One prompt line asking for "more direct" hints pushed the overlap rate to 83–100% and collapsed the puzzle.',
       }
     - {
         ko: "저택 판정 프롬프트에 호감도 숫자를 넣자 모델이 그 숫자를 대사에 그대로 말했다. 숫자를 말로 치환했다.",

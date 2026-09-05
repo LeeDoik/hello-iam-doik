@@ -38,7 +38,11 @@
 - id: astro
   name: Astro
   group: frontend
-  builtWithIt: { ko: 이 포트폴리오 사이트를 정적으로 만들었습니다, en: Built this portfolio as a static site }
+  builtWithIt:
+    {
+      ko: "이 포트폴리오 사이트(github.com/LeeDoik/hello-iam-doik)를 정적으로 만들었습니다",
+      en: "Built this portfolio site (github.com/LeeDoik/hello-iam-doik) as a static site",
+    }
   projects: [pixelarious]
   since: 2026
 - id: anthropic-sdk
@@ -87,7 +91,7 @@
   name: Zod
   group: backend
   builtWithIt: { ko: LLM 출력과 콘텐츠를 스키마로 검증했습니다, en: Validated LLM output and content with schemas }
-  projects: [heart-of-steel, pixelarious]
+  projects: [heart-of-steel]
   since: 2026
 - id: cpp
   name: C++
@@ -155,8 +159,8 @@
   group: tooling
   builtWithIt:
     {
-      ko: 세 프로젝트 모두 AI 보조로 개발하고 검토·테스트로 검증했습니다,
-      en: "Built all three projects with AI assistance, verified by review and tests",
+      ko: "세 프로젝트를 Claude Code와 함께 만들었고, 무엇을 맡겼는지와 어떻게 검증했는지를 각 케이스 스터디에 적었습니다",
+      en: "Built all three projects with Claude Code; each case study says what was delegated and how it was verified",
     }
   projects: [heart-of-steel, pixelarious, aetheria-online]
-  since: 2025
+  since: 2026

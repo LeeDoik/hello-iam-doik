@@ -16,6 +16,12 @@ test("project page exists in both locales and keeps the page across toggle", asy
   await page.getByRole("link", { name: "영어로 보기" }).click();
   await expect(page).toHaveURL(/\/en\/projects\/heart-of-steel\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Heart of Steel");
+
+  // 비공개 레포는 링크 대신 상태 문구로, 공개 데모 영상은 실제 링크로 드러나야 한다.
+  await page.goto("/projects/pixelarious/");
+  await expect(page.getByText("저장소 비공개").first()).toBeVisible();
+  await page.goto("/projects/heart-of-steel/");
+  await expect(page.locator('a[href*="youtu.be"]').first()).toBeVisible();
 });
 
 test("filter island hides non-matching cards and is shareable via hash", async ({ page }) => {

@@ -16,7 +16,7 @@ Color drift was solved by moving the renderer into code. The logic that draws th
 
 For the game side of the chores I added a Chrome side-panel extension that carries a freshly exported build through to redeployment without leaving the browser: the same move the editor made for content.
 
-Deployment is on Vercel, and Claude Code was used as an assistant during development. Nothing calls an LLM at runtime; the site only reads static assets and JSON records and renders them. The editor, because it touches local files and git, opens only on the dev server and does not exist in the deployed build. The domain still carries the earlier name, neo-kido.
+Deployment is on Vercel, and Claude Code was used as an assistant during development. Nothing calls an LLM at runtime; the site only reads static assets and JSON records and renders them. The editor, because it touches local files and git, opens only on the dev server and does not exist in the deployed build. The domain still carries the earlier name, neo-kido. The site was already running under that earlier name before the rename, which is why the analytics window for the visitor numbers (2026-08-03 to 09-01) starts before the project start date given here.
 
 ## Result
 

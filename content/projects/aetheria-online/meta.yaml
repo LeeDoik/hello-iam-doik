@@ -1,8 +1,8 @@
 title: { ko: "Aetheria Online — IOCP MMORPG 서버", en: "Aetheria Online — an IOCP MMORPG server" }
 summary:
   {
-    ko: "IOCP 비동기 서버에 NPC AI(Lua), A* 길찾기, 타이머, MSSQL 영속화를 통합한 미니 MMORPG. 단일 머신에서 설계 상한 10,000 동접을 채우고 이동 왕복 지연 약 20ms를 기록했다.",
-    en: "A from-scratch IOCP MMORPG server with Lua NPC AI, A* pathfinding, timers and MSSQL persistence. On one machine it filled the 10,000-connection design cap at ~20 ms move round-trip.",
+    ko: "IOCP 비동기 서버에 NPC AI(Lua), A* 길찾기, 타이머, MSSQL 영속화를 통합한 미니 MMORPG. 단일 머신에서 설계 상한 10,000 동접을 채우고 이동 왕복 지연 약 20ms를 기록했다(localhost 측정).",
+    en: "A from-scratch IOCP MMORPG server with Lua NPC AI, A* pathfinding, timers and MSSQL persistence. On one machine it filled the 10,000-connection design cap at ~20 ms move round-trip (measured on localhost).",
   }
 status: archived
 period: { from: "2026-05-06", to: "2026-06-14" }
@@ -53,7 +53,7 @@ metrics:
       ko: "10,000 CCU 상태에서 서버 로그의 이동 왕복 delay(localhost, 서버와 부하 클라가 같은 PC)"
       en: "Server-logged move round-trip at 10,000 CCU (localhost; server and load client on one PC)"
   - label: { ko: "NPC 수", en: "NPCs" }
-    after: "200,000"
+    after: "약 200,000"
     method:
       ko: "4 바이옴 × 4 종족 × 12,500 + 보스 4, Lazy AI로 활성 AI는 동접에 비례"
       en: "4 biomes × 4 species × 12,500 + 4 bosses; lazy AI keeps active AIs proportional to players"
