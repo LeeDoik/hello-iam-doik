@@ -35,6 +35,15 @@ const { links, locale } = Astro.props;
       )
     }
     {
+      links.demoVideo && (
+        <li>
+          <a class="underline" href={links.demoVideo}>
+            {t(locale, "project.demoVideo")}
+          </a>
+        </li>
+      )
+    }
+    {
       links.demoCredentials && (
         <li>
           {t(locale, "project.demoCredentials")}: <code>{links.demoCredentials.id}</code> / <code>{links.demoCredentials.password}</code>

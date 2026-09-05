@@ -8,7 +8,7 @@
   name: React
   group: frontend
   builtWithIt: { ko: 프로젝트 필터 아일랜드를 만들었습니다, en: Built the project filter island }
-  projects: [sample-project]
+  projects: [sample-project, pixelarious]
   since: 2024
 - id: phaser
   name: Phaser 3
@@ -49,5 +49,49 @@
   name: Zod
   group: backend
   builtWithIt: { ko: LLM 출력과 콘텐츠를 스키마로 검증했습니다, en: Validated LLM output and content with schemas }
-  projects: [heart-of-steel]
+  projects: [heart-of-steel, pixelarious]
+  since: 2026
+- id: nextjs
+  name: Next.js
+  group: frontend
+  builtWithIt:
+    { ko: PIXELARIOUS 사이트와 내장 편집기를 만들었습니다, en: Built the PIXELARIOUS site and its built-in editor }
+  projects: [pixelarious]
+  since: 2026
+- id: typescript
+  name: TypeScript
+  group: frontend
+  builtWithIt:
+    {
+      ko: PIXELARIOUS와 이 사이트를 타입 검사가 게이트인 구조로 썼습니다,
+      en: Wrote PIXELARIOUS and this site with type checking as a gate,
+    }
+  projects: [pixelarious]
+  since: 2025
+- id: godot
+  name: Godot
+  group: tooling
+  builtWithIt:
+    { ko: 아케이드용 2D 게임 3종을 웹으로 익스포트했습니다, en: Exported three 2D games to the web for the arcade }
+  projects: [pixelarious]
+  since: 2026
+- id: vitest
+  name: Vitest
+  group: tooling
+  builtWithIt:
+    {
+      ko: 콘텐츠 레지스트리와 브랜드 렌더러를 단위 테스트했습니다,
+      en: Unit-tested the content registry and the brand renderer,
+    }
+  projects: [pixelarious]
+  since: 2026
+- id: vercel
+  name: Vercel
+  group: tooling
+  builtWithIt:
+    {
+      ko: PIXELARIOUS와 이 사이트를 배포하고 애널리틱스를 붙였습니다,
+      en: "Deployed PIXELARIOUS and this site, with analytics",
+    }
+  projects: [pixelarious]
   since: 2026
