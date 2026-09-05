@@ -19,6 +19,13 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm build
+      - run: pnpm test:build
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 1
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm e2e
         env: { CI: "1" }

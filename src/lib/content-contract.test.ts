@@ -4,6 +4,7 @@ import { z } from "astro/zod";
 import { describe, expect, test } from "vitest";
 import { experienceSchema, profileSchema, projectSchema, skillSchema } from "../content/schemas";
 import { LOCALES } from "../i18n/locales";
+import { sidecarPath } from "./capture";
 import { CONTENT_ROOT, listProjectSlugs, projectDir, readYaml, storyPath } from "./content-files";
 import { missingHeadings } from "./story";
 
@@ -36,6 +37,27 @@ describe("every project", () => {
       expect(statSync(file).size, `${file} too large`).toBeLessThanOrEqual(MAX_SCREEN_BYTES);
     }
   });
+});
+
+test.each(projects)("$slug sidecars agree with meta.yaml", ({ slug, data }) => {
+  for (const s of data.screens) {
+    const png = join(projectDir(slug), s.src as string);
+    const side = sidecarPath(png);
+    if (!existsSync(side)) {
+      console.info(`no sidecar for ${png} (captured outside the script)`);
+      continue;
+    }
+    const meta = JSON.parse(readFileSync(side, "utf8")) as {
+      capturedAt: string;
+      sourceCommit?: string;
+    };
+    expect(meta.capturedAt, side).toBe(s.capturedAt);
+    if (s.commit && meta.sourceCommit)
+      expect(
+        meta.sourceCommit.startsWith(s.commit) || s.commit.startsWith(meta.sourceCommit),
+        side,
+      ).toBe(true);
+  }
 });
 
 describe("skills.yaml", () => {

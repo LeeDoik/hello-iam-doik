@@ -62,7 +62,14 @@ const ko = {
     '이 사이트는 Claude Code와 함께 만들었습니다. 제약을 정하고, 설계안 3개를 비교해 고르고, 매 단계에서 "왜"를 물었으며, 각 ADR의 "What I learned"를 직접 썼고, 테스트와 빌드로 검증했습니다.',
   "colophon.howBuilt": "제작 과정 문서",
   "colophon.viewSource": "원문 보기",
+  "colophon.adrLangNote": "설계 결정 기록은 한국어로만 작성되어 있습니다.",
   "footer.deployed": "마지막 배포",
+  "quality.label": "배경 효과",
+  "quality.high": "높음",
+  "quality.low": "낮음",
+  "quality.off": "끔",
+  "quality.reducedMotion": "시스템의 동작 줄이기 설정을 따릅니다",
+  "hero.canvasHint": "마우스를 움직이거나 스크롤하면 배경이 반응합니다",
 } as const;
 
 export type UIKey = keyof typeof ko;
@@ -129,7 +136,14 @@ const en = {
     'This site was built with Claude Code. I set the constraints, compared three designs, asked "why" at every step, wrote the "What I learned" of each ADR myself, and verified with tests and builds.',
   "colophon.howBuilt": "How this was built",
   "colophon.viewSource": "View source",
+  "colophon.adrLangNote": "Architecture decision records are written in Korean only.",
   "footer.deployed": "Last deployed",
+  "quality.label": "Background effect",
+  "quality.high": "High",
+  "quality.low": "Low",
+  "quality.off": "Off",
+  "quality.reducedMotion": "Following your system's reduced-motion setting",
+  "hero.canvasHint": "Move the pointer or scroll to see the background react",
 } satisfies Record<UIKey, string>;
 
 export const ui: Record<Locale, Record<UIKey, string>> = { ko, en };

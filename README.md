@@ -3,6 +3,7 @@
 웹·AI 개발자 이도익의 포트폴리오. https://hello-iam-doik.vercel.app
 
 ![landing](content/projects/sample-project/screens/01-home@desktop.png)
+_captured by `pnpm capture`_
 
 ## 실행
 
@@ -25,3 +26,4 @@ pnpm build && pnpm preview
 ## 품질
 
 `pnpm check` 타입 · `pnpm lint` Biome/Prettier · `pnpm test` 콘텐츠 계약 테스트 · `pnpm e2e` Playwright smoke/axe/SEO. CI가 이 전부를 PR마다 돌린다.
+`pnpm test:build` 히어로 아일랜드 JS 예산(청크/총합) 검증. `pnpm capture` 프로젝트 스크린샷 재캡처(sidecar로 stale 감지). `pnpm fonts:vendor` OG 렌더링용 폰트를 로컬에 내려받는다.
