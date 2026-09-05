@@ -69,6 +69,10 @@ describe("projectSchema", () => {
   test("localized strings must be present in both languages", () => {
     expect(() => schema.parse({ ...validProject, title: { ko: "만" } })).toThrow();
   });
+  test("repo is optional", () =>
+    expect(
+      schema.parse({ ...validProject, links: { live: "https://x.dev" } }).links.repo,
+    ).toBeUndefined());
 });
 
 describe("skillSchema", () => {

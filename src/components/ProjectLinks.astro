@@ -14,11 +14,17 @@ const { links, locale } = Astro.props;
 <section class="mt-8">
   <h2 class="text-lg font-semibold">{t(locale, "project.links")}</h2>
   <ul class="mt-2 space-y-1 text-sm">
-    <li>
-      <a class="underline" href={links.repo}>
-        {t(locale, "project.repo")}
-      </a>
-    </li>
+    {
+      links.repo ? (
+        <li>
+          <a class="underline" href={links.repo}>
+            {t(locale, "project.repo")}
+          </a>
+        </li>
+      ) : (
+        <li>{t(locale, "project.repoPrivate")}</li>
+      )
+    }
     {
       links.live && (
         <li>
