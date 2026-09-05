@@ -39,4 +39,4 @@ date: "2026-09-02"
 
 ## Amendment 2026-09-03: 헤더 아일랜드 이후
 
-위 Try it은 더 이상 성립하지 않는다. `QualityToggle`이 헤더(`src/components/Header.astro`)에 `client:idle`로 들어가면서, 이제는 랜딩이 아닌 페이지(프로젝트, 콜로폰, 이력서 포함 모든 페이지)도 React 런타임을 받는다. 현재 청크 목록과 실측 gzip 수치는 [ADR-0010](./0010-what-react-islands-cost.md)의 표(2026-09-03 빌드 기준 합계 187.0KB)를 참고한다. 이 시점에도 여전히 성립하는 불변식은 "three.js 청크(`hero-scene`)는 랜딩 HTML에서만 참조된다"는 것뿐이며, 이는 `tests/build/js-budget.test.ts`가 강제한다.
+위 Try it은 더 이상 성립하지 않는다. `QualityToggle`이 헤더(`src/components/Header.astro`)에 `client:idle`로 들어가면서, 이제는 랜딩이 아닌 페이지(프로젝트, 콜로폰, 이력서 포함 모든 페이지)도 React 런타임을 받는다. 현재 청크 목록과 실측 gzip 수치는 [ADR-0010](/colophon/0010-what-react-islands-cost/)의 표(2026-09-03 빌드 기준 합계 187.0KB)를 참고한다. 이 시점에도 여전히 성립하는 불변식은 "three.js 청크(`hero-scene`)는 랜딩 HTML에서만 참조된다"는 것뿐이며, 이는 `tests/build/js-budget.test.ts`가 강제한다.
