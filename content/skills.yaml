@@ -10,3 +10,44 @@
   builtWithIt: { ko: 프로젝트 필터 아일랜드를 만들었습니다, en: Built the project filter island }
   projects: [sample-project]
   since: 2024
+- id: phaser
+  name: Phaser 3
+  group: frontend
+  builtWithIt:
+    { ko: 태엽새의 스테이지 4구간과 대화 UI를 만들었습니다, en: Built all four stages and the dialogue UI of Heart of Steel }
+  projects: [heart-of-steel]
+  since: 2026
+- id: vite
+  name: Vite
+  group: frontend
+  builtWithIt: { ko: 게임 클라이언트 번들과 개발 서버를 구성했습니다, en: Bundled the game client and set up the dev server }
+  projects: [heart-of-steel]
+  since: 2026
+- id: anthropic-sdk
+  name: Anthropic SDK
+  group: ai
+  builtWithIt:
+    {
+      ko: 태엽새의 LLM 호출 7종을 structured outputs로 구현했습니다,
+      en: Implemented the seven LLM call sites of Heart of Steel with structured outputs,
+    }
+  projects: [heart-of-steel]
+  since: 2026
+- id: express
+  name: Express
+  group: backend
+  builtWithIt: { ko: API 키를 서버에만 두는 게임 서버를 만들었습니다, en: Built the game server that keeps the API key server-side }
+  projects: [heart-of-steel]
+  since: 2026
+- id: node
+  name: Node.js
+  group: backend
+  builtWithIt: { ko: 태엽새 서버와 이 사이트의 스크립트를 썼습니다, en: Wrote the Heart of Steel server and this site's scripts }
+  projects: [heart-of-steel]
+  since: 2025
+- id: zod
+  name: Zod
+  group: backend
+  builtWithIt: { ko: LLM 출력과 콘텐츠를 스키마로 검증했습니다, en: Validated LLM output and content with schemas }
+  projects: [heart-of-steel]
+  since: 2026

@@ -1,0 +1,112 @@
+title: { ko: "코드네임: 태엽새 · HEART OF STEEL", en: "Heart of Steel (Codename: Clockbird)" }
+summary:
+  {
+    ko: "대화만으로 동료를 찾고 신분을 위조해 탈출하는 AI 잠입 게임. 네 구간의 클리어 조건을 스크립트가 아니라 LLM이 판정한다.",
+    en: "An AI infiltration game where you find allies and forge an identity through free-text dialogue; every stage's win condition is judged live by an LLM.",
+  }
+status: archived
+period: { from: "2026-07-17", to: "2026-08-12" }
+role:
+  teamSize: 2
+  owned:
+    {
+      ko: "클라이언트·서버 전량(Phaser 3, Vite, Express 5), 스테이지 4구간 콘텐츠 구현, LLM 호출 7종과 심문 이중 판정의 정보 격리, 프롬프트 스튜디오, LLM 스모크·정적 검사 파이프라인",
+      en: "All client and server code (Phaser 3, Vite, Express 5), all four stages, the seven LLM call sites incl. the information-isolated dual interrogation judge, the prompt studio, and the LLM smoke + static check pipeline",
+    }
+stack: [phaser, vite, express, anthropic-sdk, zod, node]
+links:
+  repo: https://github.com/LeeDoik/codename-clockbird
+  demoVideo: https://youtu.be/HMJo2wnLqyc
+  keyCommits:
+    - label: { ko: "동료 NPC 자유 대화", en: "Free-text dialogue with ally NPCs" }
+      url: https://github.com/LeeDoik/codename-clockbird/commit/08723ff
+      why:
+        {
+          ko: "게임의 핵심 상호작용이 처음 동작한 지점",
+          en: "Where the core interaction of the game first worked",
+        }
+    - label: { ko: "정답 코드를 서버에만 남기는 비유출 원칙", en: "Keeping the secret code server-side only" }
+      url: https://github.com/LeeDoik/codename-clockbird/commit/f1b79dd
+      why:
+        {
+          ko: "이후 모든 판정이 따르는 정보 격리의 기준선",
+          en: "The information-isolation baseline every later judge follows",
+        }
+    - label: { ko: "심문 이중 판정(시스템은 알고 로봇은 모른다)", en: "Dual interrogation judge (the system knows, the robot does not)" }
+      url: https://github.com/LeeDoik/codename-clockbird/commit/507228f
+      why: { ko: "핵심 설계 원칙이 코드가 된 지점", en: "Where the core design principle became code" }
+    - label: { ko: "부채꼴 시야 순찰 로봇과 발각 게이지", en: "Cone-of-vision patrol robots and the detection gauge" }
+      url: https://github.com/LeeDoik/codename-clockbird/commit/8d75fd9
+      why: { ko: "스테이지 3 잠입 메커닉의 뼈대", en: "The skeleton of the stage 3 infiltration mechanic" }
+metrics:
+  - label: { ko: "연상 단어 중복률", en: "Clue-word overlap" }
+    before: "83–100%"
+    after: "42–50%"
+    method:
+      ko: "npm run exp:diff 스크립트로 프롬프트 변경 전후 실측(기준 60% 이하)"
+      en: "Measured before/after prompt changes with the npm run exp:diff script (target ≤60%)"
+    evidence: https://github.com/LeeDoik/codename-clockbird#readme
+  - label: { ko: "5인 연상 단어 생성 지연", en: "Clue generation latency (5 allies)" }
+    before: "33초"
+    after: "17초"
+    method:
+      ko: "Sonnet thinking 비활성화 전후 서버 로그 실측"
+      en: "Server-log timing before/after disabling Sonnet thinking"
+  - label: { ko: "커밋", en: "Commits" }
+    after: "232"
+    method: { ko: "GitHub 커밋 수(26일)", en: "GitHub commit count over 26 days" }
+    evidence: https://github.com/LeeDoik/codename-clockbird/commits/master
+screens:
+  - src: ./screens/03-banner@desktop.png
+    alt:
+      {
+        ko: "게임 타이틀 배너: 굴뚝 연기와 시계탑이 늘어선 증기기관 시대 도시의 픽셀아트 원경, 고가 철교 위를 증기기관차가 지난다",
+        en: "Game title banner: a pixel-art skyline of a steam-age city of smokestacks and clock towers, with a steam train crossing an elevated viaduct",
+      }
+    device: desktop
+    capturedAt: "2026-08-12"
+ai:
+  models: ["claude-sonnet-5", "claude-haiku-4-5"]
+  architecture: ./screens/architecture.png
+  promptFile: https://github.com/LeeDoik/codename-clockbird/tree/master/src/data/prompts
+  evals:
+    - name: clue-overlap
+      metric: duplicate rate
+      n: 5
+      baseline: "83–100%"
+      final: "42–50%"
+      judge: exact
+    - name: interrogation-judge
+      metric: pass/fail per question
+      n: 8
+      baseline: "n/a"
+      final: "dual judge (system knows identity, robot does not)"
+      judge: llm-judge
+  rejectedTradeoff:
+    option: { ko: "출력 필터로 정답 단어 유출 차단", en: "Block code-word leaks with an output filter" }
+    reasonWithNumbers:
+      {
+        ko: "스트리밍에서는 필터가 잡은 시점에 이미 화면에 찍힌다. 대신 모델에 정답을 아예 주지 않는 정보 격리로 바꿨고, 7개 호출 지점 전부에 적용했다.",
+        en: "With streaming, the filter fires after the text is already on screen. We switched to information isolation (the model never receives the secret) across all 7 call sites.",
+      }
+  latencyP50: "약 17초 (5인 병렬 생성, 동시성 3)"
+  failureModes:
+    - {
+        ko: '힌트를 "더 직접적으로" 만들라는 프롬프트 한 줄이 중복률을 83~100%로 올려 퍼즐이 무너졌다.',
+        en: 'One prompt line asking for "more direct" hints pushed the overlap rate to 83-100% and collapsed the puzzle.',
+      }
+    - {
+        ko: "저택 판정 프롬프트에 호감도 숫자를 넣자 모델이 그 숫자를 대사에 그대로 말했다. 숫자를 말로 치환했다.",
+        en: "Feeding the affinity number into the mansion judge made the model speak the number out loud in dialogue; we replaced it with words.",
+      }
+    - {
+        ko: "?stage2&key 클라이언트 플래그가 서버 세션과 어긋나 열쇠 상태가 불일치했다. 상태 변경은 서버 요청에 실어 보내는 규칙으로 바꿨다.",
+        en: "The ?stage2&key client flag drifted from the server session and desynced the key state; state changes now travel on a server request.",
+      }
+    - {
+        ko: "5개 동시 호출에서 529 Overloaded가 났다. 동시성 3 제한과 maxRetries 5, 폴백 텍스트를 두었다.",
+        en: "Five concurrent calls returned 529 Overloaded; we capped concurrency at 3, set maxRetries to 5 and added fallback text.",
+      }
+featured: true
+order: 1
+updatedAt: "2026-09-06"
