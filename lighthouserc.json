@@ -5,8 +5,8 @@
       "url": [
         "http://localhost/index.html",
         "http://localhost/en/index.html",
-        "http://localhost/projects/sample-project/index.html",
-        "http://localhost/en/projects/sample-project/index.html"
+        "http://localhost/projects/heart-of-steel/index.html",
+        "http://localhost/en/projects/heart-of-steel/index.html"
       ],
       "numberOfRuns": 1,
       "settings": { "preset": "desktop" }

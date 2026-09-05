@@ -86,9 +86,9 @@ describe("skillSchema", () => {
       since: 2024,
     };
     expect(() => s.parse({ ...base, projects: [] })).toThrow();
-    expect(s.parse({ ...base, projects: ["sample-project"] }).id).toBe("react");
+    expect(s.parse({ ...base, projects: ["heart-of-steel"] }).id).toBe("react");
     expect(() =>
-      s.parse({ ...base, builtWithIt: undefined, projects: ["sample-project"] }),
+      s.parse({ ...base, builtWithIt: undefined, projects: ["heart-of-steel"] }),
     ).toThrow();
   });
 });

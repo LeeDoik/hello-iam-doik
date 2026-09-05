@@ -1,10 +1,10 @@
 import { expect, test } from "vitest";
 import { formatTable, statusRows } from "./content-status";
 
-test("statusRows reads the sample project", () => {
+test("statusRows reads heart-of-steel", () => {
   const rows = statusRows();
-  const s = rows.find((r) => r.slug === "sample-project");
-  expect(s).toMatchObject({ hasEn: true, screens: 1, metrics: 1, metricsWithEvidence: 0 });
+  const s = rows.find((r) => r.slug === "heart-of-steel");
+  expect(s).toMatchObject({ hasEn: true, screens: 2, metrics: 3, metricsWithEvidence: 2 });
 });
 
 test("formatTable is one line per project", () => {

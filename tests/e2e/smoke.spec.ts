@@ -11,24 +11,21 @@ test("korean root renders and toggles to english on the same page", async ({ pag
 });
 
 test("project page exists in both locales and keeps the page across toggle", async ({ page }) => {
-  await page.goto("/projects/sample-project/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("샘플 프로젝트");
+  await page.goto("/projects/heart-of-steel/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("코드네임: 태엽새");
   await page.getByRole("link", { name: "영어로 보기" }).click();
-  await expect(page).toHaveURL(/\/en\/projects\/sample-project\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Sample Project");
+  await expect(page).toHaveURL(/\/en\/projects\/heart-of-steel\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Heart of Steel");
 });
 
 test("filter island hides non-matching cards and is shareable via hash", async ({ page }) => {
-  // sample-project의 stack(astro, react)은 모두 frontend 그룹이므로 필터 버튼은 All + Frontend 두 개다
-  await page.goto("/en/#stack=frontend");
-  await expect(page.getByRole("radio", { name: "Frontend" })).toHaveAttribute(
-    "aria-checked",
-    "true",
-  );
+  // heart-of-steel만 ai 그룹 스택(anthropic-sdk 등)을 갖고 있으므로 #stack=ai는 카드 1장만 남긴다
+  await page.goto("/en/#stack=ai");
+  await expect(page.getByRole("radio", { name: "AI" })).toHaveAttribute("aria-checked", "true");
   await expect(page.locator("[data-project-card]:visible")).toHaveCount(1);
   await page.getByRole("radio", { name: "All" }).click();
   await expect(page).toHaveURL(/\/en\/$/);
-  await expect(page.locator("[data-project-card]:visible")).toHaveCount(1);
+  await expect(page.locator("[data-project-card]:visible")).toHaveCount(3);
 });
 
 test("resume has a print button and colophon lists ADRs", async ({ page }) => {

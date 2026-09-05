@@ -1,15 +1,3 @@
-- id: astro
-  name: Astro
-  group: frontend
-  builtWithIt: { ko: 이 포트폴리오 사이트를 정적으로 만들었습니다, en: Built this portfolio as a static site }
-  projects: [sample-project]
-  since: 2026
-- id: react
-  name: React
-  group: frontend
-  builtWithIt: { ko: 프로젝트 필터 아일랜드를 만들었습니다, en: Built the project filter island }
-  projects: [sample-project, pixelarious]
-  since: 2024
 - id: phaser
   name: Phaser 3
   group: frontend
@@ -23,6 +11,36 @@
   builtWithIt: { ko: 게임 클라이언트 번들과 개발 서버를 구성했습니다, en: Bundled the game client and set up the dev server }
   projects: [heart-of-steel]
   since: 2026
+- id: nextjs
+  name: Next.js
+  group: frontend
+  builtWithIt:
+    { ko: PIXELARIOUS 사이트와 내장 편집기를 만들었습니다, en: Built the PIXELARIOUS site and its built-in editor }
+  projects: [pixelarious]
+  since: 2026
+- id: react
+  name: React
+  group: frontend
+  builtWithIt:
+    { ko: PIXELARIOUS UI와 이 포트폴리오의 아일랜드를 만들었습니다, en: Built the PIXELARIOUS UI and this portfolio's islands }
+  projects: [pixelarious]
+  since: 2025
+- id: typescript
+  name: TypeScript
+  group: frontend
+  builtWithIt:
+    {
+      ko: PIXELARIOUS와 이 사이트를 타입 검사가 게이트인 구조로 썼습니다,
+      en: Wrote PIXELARIOUS and this site with type checking as a gate,
+    }
+  projects: [pixelarious]
+  since: 2025
+- id: astro
+  name: Astro
+  group: frontend
+  builtWithIt: { ko: 이 포트폴리오 사이트를 정적으로 만들었습니다, en: Built this portfolio as a static site }
+  projects: [pixelarious]
+  since: 2026
 - id: anthropic-sdk
   name: Anthropic SDK
   group: ai
@@ -30,6 +48,26 @@
     {
       ko: 태엽새의 LLM 호출 7종을 structured outputs로 구현했습니다,
       en: Implemented the seven LLM call sites of Heart of Steel with structured outputs,
+    }
+  projects: [heart-of-steel]
+  since: 2026
+- id: prompt-design
+  name: 프롬프트 설계
+  group: ai
+  builtWithIt:
+    {
+      ko: 프롬프트 10종을 파일로 분리하고 중복률을 실측하며 튜닝했습니다,
+      en: Separated ten prompts into files and tuned them against measured overlap rates,
+    }
+  projects: [heart-of-steel]
+  since: 2026
+- id: llm-eval
+  name: LLM 평가
+  group: ai
+  builtWithIt:
+    {
+      ko: 결정론적 정적 검사와 LLM 스모크로 확률적 시스템의 회귀를 잡았습니다,
+      en: Caught regressions in a probabilistic system with deterministic static checks plus LLM smoke tests,
     }
   projects: [heart-of-steel]
   since: 2026
@@ -50,50 +88,6 @@
   group: backend
   builtWithIt: { ko: LLM 출력과 콘텐츠를 스키마로 검증했습니다, en: Validated LLM output and content with schemas }
   projects: [heart-of-steel, pixelarious]
-  since: 2026
-- id: nextjs
-  name: Next.js
-  group: frontend
-  builtWithIt:
-    { ko: PIXELARIOUS 사이트와 내장 편집기를 만들었습니다, en: Built the PIXELARIOUS site and its built-in editor }
-  projects: [pixelarious]
-  since: 2026
-- id: typescript
-  name: TypeScript
-  group: frontend
-  builtWithIt:
-    {
-      ko: PIXELARIOUS와 이 사이트를 타입 검사가 게이트인 구조로 썼습니다,
-      en: Wrote PIXELARIOUS and this site with type checking as a gate,
-    }
-  projects: [pixelarious]
-  since: 2025
-- id: godot
-  name: Godot
-  group: tooling
-  builtWithIt:
-    { ko: 아케이드용 2D 게임 3종을 웹으로 익스포트했습니다, en: Exported three 2D games to the web for the arcade }
-  projects: [pixelarious]
-  since: 2026
-- id: vitest
-  name: Vitest
-  group: tooling
-  builtWithIt:
-    {
-      ko: 콘텐츠 레지스트리와 브랜드 렌더러를 단위 테스트했습니다,
-      en: Unit-tested the content registry and the brand renderer,
-    }
-  projects: [pixelarious]
-  since: 2026
-- id: vercel
-  name: Vercel
-  group: tooling
-  builtWithIt:
-    {
-      ko: PIXELARIOUS와 이 사이트를 배포하고 애널리틱스를 붙였습니다,
-      en: "Deployed PIXELARIOUS and this site, with analytics",
-    }
-  projects: [pixelarious]
   since: 2026
 - id: cpp
   name: C++
@@ -127,10 +121,7 @@
   name: MS SQL Server
   group: backend
   builtWithIt:
-    {
-      ko: ODBC로 플레이어 영속화를 붙이고 JSON 폴백을 두었습니다,
-      en: "Added player persistence over ODBC with a JSON fallback",
-    }
+    { ko: ODBC로 플레이어 영속화를 붙이고 JSON 폴백을 두었습니다, en: Added player persistence over ODBC with a JSON fallback }
   projects: [aetheria-online]
   since: 2026
 - id: sfml
@@ -139,3 +130,33 @@
   builtWithIt: { ko: 2D 클라이언트 렌더링과 오디오를 구현했습니다, en: Implemented the 2D client rendering and audio }
   projects: [aetheria-online]
   since: 2026
+- id: godot
+  name: Godot
+  group: tooling
+  builtWithIt: { ko: 아케이드용 2D 게임 3종을 웹으로 익스포트했습니다, en: Exported three 2D games to the web for the arcade }
+  projects: [pixelarious]
+  since: 2026
+- id: vitest
+  name: Vitest
+  group: tooling
+  builtWithIt:
+    { ko: 콘텐츠 레지스트리와 브랜드 렌더러를 단위 테스트했습니다, en: Unit-tested the content registry and the brand renderer }
+  projects: [pixelarious]
+  since: 2026
+- id: vercel
+  name: Vercel
+  group: tooling
+  builtWithIt:
+    { ko: PIXELARIOUS와 이 사이트를 배포하고 애널리틱스를 붙였습니다, en: "Deployed PIXELARIOUS and this site, with analytics" }
+  projects: [pixelarious]
+  since: 2026
+- id: claude-code
+  name: Claude Code
+  group: tooling
+  builtWithIt:
+    {
+      ko: 세 프로젝트 모두 AI 보조로 개발하고 검토·테스트로 검증했습니다,
+      en: "Built all three projects with AI assistance, verified by review and tests",
+    }
+  projects: [heart-of-steel, pixelarious, aetheria-online]
+  since: 2025

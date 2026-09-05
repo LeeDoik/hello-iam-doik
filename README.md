@@ -2,8 +2,8 @@
 
 웹·AI 개발자 이도익의 포트폴리오. https://hello-iam-doik.vercel.app
 
-![landing](content/projects/sample-project/screens/01-home@desktop.png)
-_captured by `pnpm capture`_
+![코드네임: 태엽새 타이틀 배너](content/projects/heart-of-steel/screens/03-banner@desktop.png)
+_코드네임: 태엽새의 타이틀 배너_
 
 ## 실행
 

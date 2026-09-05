@@ -65,6 +65,14 @@ screens:
       }
     device: desktop
     capturedAt: "2026-08-12"
+  - src: ./screens/02-prison-puzzle@desktop.png
+    alt:
+      {
+        ko: "감옥 탈출 미니게임: 배선표대로 단자를 잇는 전선 연결 퍼즐, 타이머와 실수 경고가 표시된다",
+        en: "Prison-escape minigame: a wire-connection puzzle with a timer and a mistake warning",
+      }
+    device: desktop
+    capturedAt: "2026-08-06"
 ai:
   models: ["claude-sonnet-5", "claude-haiku-4-5"]
   architecture: ./screens/architecture.png

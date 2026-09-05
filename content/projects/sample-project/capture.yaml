@@ -1,3 +1,0 @@
-base: "https://hello-iam-doik.vercel.app"
-shots:
-  - { name: "01-home", route: "/", devices: [desktop] }

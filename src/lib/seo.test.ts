@@ -5,7 +5,7 @@ const site = "https://hello-iam-doik.vercel.app";
 
 test("ogImagePath", () => {
   expect(ogImagePath("ko")).toBe("/og/ko.png");
-  expect(ogImagePath("en", "sample-project")).toBe("/og/projects/sample-project/en.png");
+  expect(ogImagePath("en", "heart-of-steel")).toBe("/og/projects/heart-of-steel/en.png");
   expect(ogImageUrl("https://x.dev/", "en", "a")).toBe("https://x.dev/og/projects/a/en.png");
 });
 

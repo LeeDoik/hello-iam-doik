@@ -10,7 +10,7 @@ Moving persistence from MySQL to MSSQL broke the very first save. A DELETE that 
 
 ## Approach
 
-The previous assignment, WP_GUNMAYHEM, was a three-player shooter built on Winsock2 with one thread per connection, and hitting the limit of threads growing in step with connections is what pointed this design at a single IOCP queue consuming socket, timer and DB completions together. With completion notifications arriving in one place, a worker only has to look at what finished, and the thread count is fixed by core count rather than by connection count.
+The previous assignment, WP_GUNMAYHEM, a 2025 team assignment, was a three-player shooter built on Winsock2 with one thread per connection, and hitting the limit of threads growing in step with connections is what pointed this design at a single IOCP queue consuming socket, timer and DB completions together. With completion notifications arriving in one place, a worker only has to look at what finished, and the thread count is fixed by core count rather than by connection count.
 
 Vision was cut into sectors. The map is a grid, and a player is only sent targets inside their own sector and the nine adjacent cells, so the server walks the neighbourhood instead of every connection. NPC AI was made lazy — only NPCs with a player nearby think — which is why 200,000 of them can sit on the map while the number of active AIs grows only in proportion to the players online. The AI scripts run in a separate Lua VM per worker, so no VM is shared across threads.
 

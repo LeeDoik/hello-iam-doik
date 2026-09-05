@@ -1,8 +1,8 @@
 name: { ko: 이도익, en: Doik Lee }
 tagline: { ko: 웹과 AI를 잇는 개발자, en: Developer bridging web and AI }
 bio:
-  ko: AI 도구로 만들면서 배웠고, 이제 "왜"를 배우는 중입니다. 이 사이트의 모든 결정은 docs/adr에 있습니다.
-  en: I learned by building with AI tools and am now learning the "why". Every decision on this site lives in docs/adr.
+  ko: 게임 클라이언트·서버에서 시작해 LLM을 게임 룰의 핵심으로 쓰는 웹 서비스까지 만들었습니다. AI 도구로 빠르게 만들고, 왜 그렇게 했는지를 ADR과 테스트로 남깁니다.
+  en: From game clients and servers to web products where an LLM is the core rule engine. I build fast with AI tools and leave the "why" in ADRs and tests.
 location: { ko: 대한민국, en: South Korea }
 email: lee253628@gmail.com
 links:
