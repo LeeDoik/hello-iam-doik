@@ -1,8 +1,31 @@
-- id: sample-bootcamp
-  kind: bootcamp
-  org: { ko: 예시 부트캠프, en: Example Bootcamp }
-  role: { ko: 수료생, en: Graduate }
-  from: "2025-01-01"
-  to: "2025-06-30"
+- id: education-1
+  kind: education
+  org: { ko: "[채워 주세요: 학교·전공]", en: "[Fill in: school, major]" }
+  role: { ko: "[채워 주세요: 학위/졸업예정]", en: "[Fill in: degree/expected]" }
+  from: "2022-03-01"
   bullets:
-    - { ko: 예시 항목. 실제 내용은 3차 계획에서 채웁니다., en: Placeholder bullet. Real content arrives in plan 3. }
+    - { ko: "[채워 주세요]", en: "[Fill in]" }
+- id: hackathon-nhn-2026
+  kind: work
+  org: { ko: "NAN 2026 · NHN GAME × AI 해커톤", en: "NAN 2026 · NHN GAME × AI Hackathon" }
+  role: { ko: "출품 (2인 팀, 개발 담당)", en: "Entrant (team of 2, developer)" }
+  from: "2026-07-15"
+  to: "2026-08-12"
+  bullets:
+    - {
+        ko: 대화만으로 진행되는 AI 잠입 게임을 26일간 개발해 상시 배포로 제출,
+        en: Built and shipped a dialogue-driven AI infiltration game in 26 days,
+      }
+    - { ko: "[채워 주세요: 수상 결과]", en: "[Fill in: result]" }
+- id: course-game-server
+  kind: education
+  org:
+    {
+      ko: "[채워 주세요: 게임 서버 프로그래밍 과목·학교]",
+      en: "[Fill in: game server programming course]",
+    }
+  role: { ko: "텀 프로젝트 Aetheria Online", en: "Term project Aetheria Online" }
+  from: "2026-05-06"
+  to: "2026-06-14"
+  bullets:
+    - { ko: "IOCP MMORPG 서버로 10,000 동접 도달", en: "Reached 10,000 CCU with an IOCP MMORPG server" }

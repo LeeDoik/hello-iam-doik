@@ -32,7 +32,7 @@ describe("client js budget (run after pnpm build)", () => {
     // whatever a page's own islands need. Pin the actual counts here so a regression that leaks
     // extra client JS onto a non-landing page fails loudly.
     const html = (p: string) => readFileSync(join(process.cwd(), "dist", p), "utf8");
-    expect((html("projects/sample-project/index.html").match(/<script/g) ?? []).length).toBe(2);
+    expect((html("projects/heart-of-steel/index.html").match(/<script/g) ?? []).length).toBe(2);
     expect((html("colophon/index.html").match(/<script/g) ?? []).length).toBe(2);
     // resume/index.html also carries its own inline print-button script (Task 4), so 2 + 1 = 3.
     expect((html("resume/index.html").match(/<script/g) ?? []).length).toBe(3);
@@ -55,7 +55,7 @@ describe("client js budget (run after pnpm build)", () => {
     const html = (p: string) => readFileSync(join(process.cwd(), "dist", p), "utf8");
     expect(html("index.html")).toContain(heroLoader);
     expect(html("en/index.html")).toContain(heroLoader);
-    expect(html("projects/sample-project/index.html")).not.toContain(heroLoader);
+    expect(html("projects/heart-of-steel/index.html")).not.toContain(heroLoader);
     expect(html("colophon/index.html")).not.toContain(heroLoader);
     expect(html("resume/index.html")).not.toContain(heroLoader);
   });

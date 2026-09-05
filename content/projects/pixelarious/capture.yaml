@@ -1,0 +1,5 @@
+base: "https://neo-kido.vercel.app"
+shots:
+  - { name: "01-home", route: "/", devices: [desktop, mobile] }
+  - { name: "02-starfall", route: "/play/starfall-drift", devices: [desktop] }
+  - { name: "03-last-login", route: "/play/last-login", devices: [desktop] }

@@ -64,7 +64,7 @@ export const projectSchema = (image: ImageValidator) =>
     role: z.object({ teamSize: z.number().int().min(1), owned: localized }),
     stack: z.array(z.string().min(1)).min(1),
     links: z.object({
-      repo: url,
+      repo: url.optional(),
       live: url.optional(),
       demoVideo: url.optional(),
       demoCredentials: z.object({ id: z.string(), password: z.string() }).optional(),

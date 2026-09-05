@@ -7,6 +7,7 @@
 5. (선택) `en.md`. 없으면 /en/에서 한국어 본문 + 안내문.
 6. `pnpm test` (계약 테스트) → `pnpm build` → PR.
 7. `pnpm content:status`로 누락 확인.
+8. 자리표시 목록 확인 `grep -rn '채워 주세요' content/`
 
 ## 지원 전 수동 체크
 

@@ -24,14 +24,29 @@ const typedScreens = screens as unknown as Screen[];
     {
       typedScreens.map((s) => (
         <figure>
-          <Picture
-            src={s.src}
-            alt={pick(s.alt, locale)}
-            formats={["avif", "webp"]}
-            widths={[480, 960, 1440]}
-            sizes="(max-width: 768px) 100vw, 720px"
-            class="rounded border"
-          />
+          {/* SVG는 래스터화 대상이 아니다: <Picture>에 넘기면 sharp가 UnsupportedImageFormat으로
+              빌드를 깬다(image.dangerouslyProcessSVG를 켜야 통과). 손으로 그린 구조도는 원본이
+              가장 선명하므로 변환 없이 <img>로 그대로 내보낸다. */}
+          {s.src.format === "svg" ? (
+            <img
+              src={s.src.src}
+              alt={pick(s.alt, locale)}
+              width={s.src.width}
+              height={s.src.height}
+              loading="lazy"
+              decoding="async"
+              class="rounded border"
+            />
+          ) : (
+            <Picture
+              src={s.src}
+              alt={pick(s.alt, locale)}
+              formats={["avif", "webp"]}
+              widths={[480, 960, 1440]}
+              sizes="(max-width: 768px) 100vw, 720px"
+              class="rounded border"
+            />
+          )}
           <figcaption class="mt-1 text-xs opacity-70">
             {s.device} · {t(locale, "project.captured")} {s.capturedAt}
             {s.commit && (

@@ -48,7 +48,7 @@ const experience = await getExperience();
             <p class="text-sm">
               {pick(p.data.summary, locale)} — {pick(p.data.role.owned, locale)}
             </p>
-            <p class="text-sm">{p.data.links.repo}</p>
+            <p class="text-sm">{p.data.links.repo ?? p.data.links.live ?? t(locale, "project.repoPrivate")}</p>
           </li>
         ))
       }

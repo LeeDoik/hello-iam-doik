@@ -1,0 +1,4 @@
+base: "https://web-production-6923e.up.railway.app"
+shots:
+  - { name: "01-title", route: "/", devices: [desktop, mobile] }
+  - { name: "02-play", route: "/?nointro", devices: [desktop] }

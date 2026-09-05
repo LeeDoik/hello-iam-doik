@@ -1,0 +1,74 @@
+title: { ko: "PIXELARIOUS", en: "PIXELARIOUS" }
+summary:
+  {
+    ko: "직접 만든 Godot 게임을 브라우저에서 바로 플레이하는 1인 픽셀 아케이드. 게임 추가는 JSON 레코드 하나이고, 내장 편집기에서 커밋·푸시·배포까지 한 번에 끝난다.",
+    en: "A one-person pixel arcade for my own Godot games. Adding a game is one JSON record, and the built-in editor commits, pushes and deploys in one click.",
+  }
+status: live
+period: { from: "2026-08-13" }
+role:
+  teamSize: 1
+  owned:
+    {
+      ko: "기획·개발·아트 파이프라인·배포 전부",
+      en: "Everything: design, code, art pipeline, deployment",
+    }
+stack: [nextjs, react, typescript, vitest, godot, vercel]
+links:
+  live: https://neo-kido.vercel.app
+  keyCommits: []
+metrics:
+  - label: { ko: "최근 30일 방문자", en: "Visitors, last 30 days" }
+    after: "67"
+    method:
+      { ko: "Vercel Analytics, 2026-08-03~09-01", en: "Vercel Analytics, 2026-08-03 to 09-01" }
+  - label: { ko: "페이지뷰", en: "Page views" }
+    after: "190"
+    method:
+      { ko: "Vercel Analytics, 2026-08-03~09-01", en: "Vercel Analytics, 2026-08-03 to 09-01" }
+  - label: { ko: "커밋", en: "Commits" }
+    after: "275"
+    method:
+      {
+        ko: "GitHub 커밋 수(3주, 비공개 레포)",
+        en: "GitHub commit count over 3 weeks (private repo)",
+      }
+  - label: { ko: "공개 게임", en: "Playable games" }
+    after: "2"
+    method: { ko: "content/games/*.json 중 공개 상태", en: "Public entries in content/games" }
+screens:
+  - src: ./screens/01-home@desktop.png
+    alt:
+      {
+        ko: "아케이드 첫 화면: 짙은 남색 배경에 픽셀 서체로 찍힌 PIXELARIOUS 로고와 노란 커서, 왼쪽 위에 NIGHT 팔레트 전환 버튼, 아래에 SCROLL TO SELECT 안내",
+        en: "Arcade landing screen: the PIXELARIOUS wordmark in a pixel typeface with a yellow cursor on deep navy, the NIGHT palette switcher at top left and a SCROLL TO SELECT hint below",
+      }
+    device: desktop
+    capturedAt: "2026-09-05"
+  - src: ./screens/01-home@mobile.png
+    alt:
+      {
+        ko: "같은 첫 화면의 모바일 폭: 픽셀 로고가 좌우로 잘려 나가고 SCROLL TO SELECT 안내가 두 줄로 접힌다",
+        en: "The same landing screen at mobile width: the wordmark overflows and is clipped at both edges and the SCROLL TO SELECT hint wraps onto two lines",
+      }
+    device: mobile
+    capturedAt: "2026-09-05"
+  - src: ./screens/02-starfall@desktop.png
+    alt:
+      {
+        ko: "게임 STARFALL DRIFT 실행 화면: 별이 흩뿌려진 밤하늘에 분홍·주황 행성과 로켓 스프라이트, 가운데 타이틀과 TAP TO DRIFT 안내, 위쪽에 0m 거리 표시와 아케이드로 돌아가는 BACK 버튼",
+        en: "The game STARFALL DRIFT running: pink and orange planets and a rocket sprite over a starfield, the title and a TAP TO DRIFT prompt in the centre, a 0m distance readout and a BACK button to the arcade",
+      }
+    device: desktop
+    capturedAt: "2026-09-05"
+  - src: ./screens/03-last-login@desktop.png
+    alt:
+      {
+        ko: "게임 LAST LOGIN 실행 화면: 검은 화면에 HANBYUL Computer BIOS v2.02와 메모리 테스트 문구가 한 줄씩 찍히는 부팅 연출, 위쪽에 BACK 버튼",
+        en: "The game LAST LOGIN running: a boot sequence typing HANBYUL Computer BIOS v2.02 and a memory-test line onto a black screen, with the BACK button above",
+      }
+    device: desktop
+    capturedAt: "2026-09-05"
+featured: true
+order: 2
+updatedAt: "2026-09-06"

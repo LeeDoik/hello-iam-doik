@@ -29,3 +29,21 @@ test("llmsTxt follows the llms.txt shape", () => {
   );
   expect(out.endsWith("\n")).toBe(true);
 });
+
+test("llmsTxt omits the repo parenthetical when repo is empty", () => {
+  const out = llmsTxt({
+    siteName: "Doik Lee",
+    site: "https://x.dev",
+    tagline: "Web & AI developer",
+    projects: [
+      {
+        title: "Sample",
+        summary: "One line",
+        url: "https://x.dev/en/projects/sample/",
+        repo: "",
+      },
+    ],
+    adrs: [],
+  });
+  expect(out).toContain("- [Sample](https://x.dev/en/projects/sample/): One line\n");
+});

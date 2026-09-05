@@ -64,6 +64,9 @@ describe("planShots", () => {
 test("sidecarPath", () =>
   expect(sidecarPath("screens/01-home@desktop.png")).toBe("screens/01-home@desktop.json"));
 
+test("sidecarPath appends .json for a non-png screen", () =>
+  expect(sidecarPath("screens/architecture.svg")).toBe("screens/architecture.svg.json"));
+
 describe("stale", () => {
   test("isStale by day difference", () => {
     expect(isStale("2026-06-01", "2026-09-03", 90)).toBe(true);

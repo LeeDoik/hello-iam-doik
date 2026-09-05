@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ site }) => {
       title: pick(p.data.title, "en"),
       summary: pick(p.data.summary, "en"),
       url: `${base}${localePath("en", `/projects/${p.id}/`)}`,
-      repo: p.data.links.repo,
+      repo: p.data.links.repo ?? "",
     })),
     adrs: adrs.map((a) => ({
       title: a.data.title,
