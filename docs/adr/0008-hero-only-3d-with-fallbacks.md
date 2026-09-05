@@ -18,7 +18,7 @@ date: "2026-09-03"
 
 ## Decision Outcome
 
-선택: 세 번째 옵션. `src/lib/hero-scene.ts`는 `Hero3D.tsx`의 `useEffect` 안에서 `import("../lib/hero-scene")`로만 로드되므로, three(청크 124.6KB gzip)는 필요한 사용자에게만 내려간다. 품질은 `src/lib/motion-prefs.ts`의 `decideQuality`가 순서대로 판정한다: OS의 `prefers-reduced-motion` → `"off"`(저장값도 무시), 저장된 사용자 선택(`localStorage["hero-quality"]`) → 그대로, WebGL 미지원 → `"off"`, 코어 ≤4 또는 메모리 ≤4(저사양) → `"low"`, 그 외 → `"high"`. 헤더의 `QualityToggle`(`client:idle`)로 사용자가 언제든 순환(`high → low → off`)할 수 있고, 선택은 `localStorage`에 남는다. `tests/build/js-budget.test.ts`가 청크당 200KB, 총 250KB 상한을 강제한다(2026-09-03 빌드: hero-scene 124.6KB, 총 187.0KB — [ADR-0010](./0010-what-react-islands-cost.md) 참고).
+선택: 세 번째 옵션. `src/lib/hero-scene.ts`는 `Hero3D.tsx`의 `useEffect` 안에서 `import("../lib/hero-scene")`로만 로드되므로, three(청크 124.6KB gzip)는 필요한 사용자에게만 내려간다. 품질은 `src/lib/motion-prefs.ts`의 `decideQuality`가 순서대로 판정한다: OS의 `prefers-reduced-motion` → `"off"`(저장값도 무시), 저장된 사용자 선택(`localStorage["hero-quality"]`) → 그대로, WebGL 미지원 → `"off"`, 코어 ≤4 또는 메모리 ≤4(저사양) → `"low"`, 그 외 → `"high"`. 헤더의 `QualityToggle`(`client:idle`)로 사용자가 언제든 순환(`high → low → off`)할 수 있고, 선택은 `localStorage`에 남는다. `tests/build/js-budget.test.ts`가 청크당 200KB, 총 250KB 상한을 강제한다(2026-09-03 빌드: hero-scene 124.6KB, 총 187.0KB — [ADR-0010](/colophon/0010-what-react-islands-cost/) 참고).
 
 ### Consequences
 
