@@ -48,8 +48,8 @@ screens:
   - src: ./screens/01-home@mobile.png
     alt:
       {
-        ko: "같은 첫 화면의 모바일 폭: 로고가 화면 폭에 맞춰 줄고 SCROLL TO SELECT 안내가 두 줄로 접힌다",
-        en: "The same landing screen at mobile width: the wordmark scales to the viewport and the SCROLL TO SELECT hint wraps onto two lines",
+        ko: "같은 첫 화면의 모바일 폭: 픽셀 로고가 좌우로 잘려 나가고 SCROLL TO SELECT 안내가 두 줄로 접힌다",
+        en: "The same landing screen at mobile width: the wordmark overflows and is clipped at both edges and the SCROLL TO SELECT hint wraps onto two lines",
       }
     device: mobile
     capturedAt: "2026-09-05"
