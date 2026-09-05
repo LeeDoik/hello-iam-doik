@@ -95,3 +95,47 @@
     }
   projects: [pixelarious]
   since: 2026
+- id: cpp
+  name: C++
+  group: backend
+  builtWithIt: { ko: IOCP MMORPG 서버와 클라이언트를 만들었습니다, en: Built the IOCP MMORPG server and client }
+  projects: [aetheria-online]
+  since: 2025
+- id: iocp
+  name: IOCP
+  group: backend
+  builtWithIt:
+    {
+      ko: 소켓·타이머·DB 완료를 한 큐에서 소비하는 서버를 만들었습니다,
+      en: "Built a server that consumes socket, timer and DB completions from one queue",
+    }
+  projects: [aetheria-online]
+  since: 2026
+- id: tbb
+  name: Intel TBB
+  group: backend
+  builtWithIt: { ko: concurrent_hash_map으로 락 경합을 줄였습니다, en: Reduced lock contention with concurrent_hash_map }
+  projects: [aetheria-online]
+  since: 2026
+- id: lua
+  name: Lua
+  group: backend
+  builtWithIt: { ko: NPC AI를 워커별 VM의 스크립트로 옮겼습니다, en: Moved NPC AI into per-worker Lua VMs }
+  projects: [aetheria-online]
+  since: 2026
+- id: mssql
+  name: MS SQL Server
+  group: backend
+  builtWithIt:
+    {
+      ko: ODBC로 플레이어 영속화를 붙이고 JSON 폴백을 두었습니다,
+      en: "Added player persistence over ODBC with a JSON fallback",
+    }
+  projects: [aetheria-online]
+  since: 2026
+- id: sfml
+  name: SFML
+  group: backend
+  builtWithIt: { ko: 2D 클라이언트 렌더링과 오디오를 구현했습니다, en: Implemented the 2D client rendering and audio }
+  projects: [aetheria-online]
+  since: 2026

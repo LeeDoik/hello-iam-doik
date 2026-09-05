@@ -32,8 +32,11 @@ export function planShots(config: CaptureConfig, baseUrl: string): PlannedShot[]
   );
 }
 
-export function sidecarPath(pngPath: string): string {
-  return pngPath.replace(/\.png$/, ".json");
+// 스크립트가 찍는 캡처는 항상 .png이지만 screens[]에는 손으로 그린 .svg도 들어온다.
+// 확장자를 갈아 끼우기만 하면 .svg가 자기 자신을 사이드카로 가리켜 JSON 파싱이 터지므로,
+// .png가 아닌 경로에는 확장자를 덧붙여 "존재하지 않는 사이드카"를 돌려준다.
+export function sidecarPath(shotPath: string): string {
+  return shotPath.endsWith(".png") ? shotPath.replace(/\.png$/, ".json") : `${shotPath}.json`;
 }
 
 const DAY = 86_400_000;

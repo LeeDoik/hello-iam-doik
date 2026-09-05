@@ -1,0 +1,14 @@
+# 예시 파일이다. `pnpm capture`는 `capture.yaml`만 읽으므로 이 파일은 무시된다.
+#
+# Aetheria Online은 상시 배포된 웹이 아니라 Windows 전용 실행 파일이다. 화면을 추가하려면
+#   1) 서버 저장소를 로컬에 클론해 Release 빌드를 만들고,
+#   2) 서버와 클라이언트를 직접 띄워 캡처할 장면까지 진행한 다음,
+#   3) 이 파일을 `capture.yaml`로 복사해 아래 값을 실제 경로로 채우고,
+#   4) `pnpm capture aetheria-online`을 돌린다.
+# 캡처된 파일과 사이드카가 생기면 meta.yaml의 screens에 붙여 넣고 alt를 채운다.
+#
+# local: { cwd: "<로컬 클론 경로>", command: "MMOSERVER_Termproject/x64/Release/MMOSERVER_Termproject.exe", port: 3500 }
+#
+# shots:
+#   - { name: "01-world", route: "/", devices: [desktop] }
+#   - { name: "02-boss", route: "/", devices: [desktop] }
