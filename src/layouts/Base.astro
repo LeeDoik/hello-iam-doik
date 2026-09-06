@@ -1,4 +1,5 @@
 ---
+import { GOOGLE_SITE_VERIFICATION, NAVER_SITE_VERIFICATION } from "astro:env/server";
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
@@ -32,6 +33,8 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, "\\u003c") : un
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical(site, locale, path)} />
+    {NAVER_SITE_VERIFICATION && <meta name="naver-site-verification" content={NAVER_SITE_VERIFICATION} />}
+    {GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />}
     {alternates(site, path).map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
