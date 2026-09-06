@@ -1,7 +1,7 @@
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 
 export default defineConfig({
   site: "https://hello-iam-doik.vercel.app",
@@ -21,4 +21,19 @@ export default defineConfig({
     sitemap({ i18n: { defaultLocale: "ko", locales: { ko: "ko-KR", en: "en-US" } } }),
   ],
   vite: { plugins: [tailwindcss()] },
+  // 검색 엔진 소유 확인 토큰. 값이 있을 때만 Base.astro가 <meta>를 렌더한다 (docs/launch-checklist.md).
+  env: {
+    schema: {
+      NAVER_SITE_VERIFICATION: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      GOOGLE_SITE_VERIFICATION: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+    },
+  },
 });

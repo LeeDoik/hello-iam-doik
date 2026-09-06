@@ -37,3 +37,7 @@ pnpm build && start dist/og/ko.png
 ## What I learned
 
 `new URL(x, import.meta.url)`이 "어디서 실행하든 같은 파일을 가리킨다"는 건 실행 환경이 소스 트리 그대로일 때의 이야기다. 번들러가 모듈을 물리적으로 다른 디렉터리로 옮기면(여기서는 Astro의 정적 엔드포인트 prerender 청크) 그 상대 경로는 번들 결과물 기준으로 재계산되고, 소스에 있던 자산은 함께 옮겨지지 않는다. Vite는 클라이언트 번들에서는 이 패턴을 에셋 임포트로 인식해 복사해 주지만, 이번처럼 Node에서 실행되는 SSR/prerender 청크에서는 그렇게 해주지 않았다. 빌드가 항상 같은 위치(프로젝트 루트)에서 실행된다는 더 강한 보장이 있다면, `import.meta.url` 대신 `process.cwd()` 기준 절대 경로가 더 안정적이다.
+
+## Amendment 2026-09-06
+
+"Try it"의 `dist/og/projects/sample-project/en.png`는 작성 당시의 샘플 slug이며, 지금은 `dist/og/projects/heart-of-steel/en.png`처럼 `content/projects/`의 실제 slug로 읽는다. 폰트 프리로드(`<link rel="preload">`)는 하지 않기로 했다: `public/fonts/pretendard/pretendard.css`는 동적 서브셋 woff2 92개를 각각 `unicode-range`로 선언하고, 페이지에 실제로 쓰인 글자에 해당하는 파일만 브라우저가 고르므로, 특정 파일을 프리로드하면 쓰이지 않을 파일까지 먼저 받게 되어 오히려 손해다. Lighthouse CI 예산(`lighthouserc.json`: 카테고리 0.95 이상, LCP 2500ms, TBT 200ms, CLS 0.1)이 프리로드 없이 통과하고 있어, 이 결정을 다시 볼 조건은 예산이 깨질 때로 둔다.

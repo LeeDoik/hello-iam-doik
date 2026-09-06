@@ -40,3 +40,7 @@ pnpm capture sample-project --stale 0
 ## What I learned
 
 스크린샷처럼 "이미지 파일 하나"로 보이는 산출물도 그 자체로는 언제·어떤 상태에서 만들어졌는지를 말해주지 않는다는 걸 이번에 구체적으로 다뤘다. PNG 옆에 작은 JSON 하나(sidecar)를 두고, 그 JSON을 다른 진실의 원천(`meta.yaml`)과 계약 테스트로 대조하게 만들면, "이 스크린샷 최신인가?"라는 질문에 사람의 기억이 아니라 파일 diff가 답할 수 있게 된다. 또한 로그인이 필요한 캡처 시나리오에서 "데모 계정만 허용, 환경변수 모양은 거부"라는 스키마 레벨의 정규식 검사(`noEnvPlaceholder`)가, 실수로 실제 비밀번호나 시크릿을 YAML에 적어 넣는 것을 코드 리뷰 이전에 막아준다는 것도 배웠다.
+
+## Amendment 2026-09-06
+
+"Try it"의 `sample-project`는 작성 당시의 샘플 slug이고, 그 프로젝트는 3차 계획에서 실제 프로젝트 3개로 교체되었다(ADR-0004 개정 참조). 지금은 `content/projects/` 아래의 실제 slug를 넣어 `pnpm capture pixelarious --stale 90`처럼 실행한다. `--stale` 판정과 종료 코드의 동작은 본문 설명 그대로다.
