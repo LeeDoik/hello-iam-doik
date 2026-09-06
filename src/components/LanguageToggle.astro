@@ -11,6 +11,6 @@ const { locale, pathname } = Astro.props;
 const other = otherLocale(locale);
 ---
 
-<a href={swapLocale(pathname, other)} hreflang={other} lang={other} aria-label={t(locale, "toggle.aria")} class="underline">
+<a href={swapLocale(pathname, other)} hreflang={other} lang={other} aria-label={t(locale, "toggle.aria")} class="decoration-accent underline-offset-4 hover:underline">
   {t(locale, "toggle.label")}
 </a>

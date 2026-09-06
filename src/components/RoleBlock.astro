@@ -11,8 +11,8 @@ interface Props {
 const { role, locale } = Astro.props;
 ---
 
-<section class="mt-6">
-  <h2 class="text-lg font-semibold">{t(locale, "project.role")}</h2>
-  <p class="mt-1 text-sm">{t(locale, "project.teamSize")}: {role.teamSize}</p>
-  <p class="mt-1">{t(locale, "project.owned")}: {pick(role.owned, locale)}</p>
+<section class="mt-16">
+  <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "project.role")}</h2>
+  <p class="text-ink-2 mt-4 text-sm">{t(locale, "project.teamSize")}: {role.teamSize}</p>
+  <p class="mt-2 max-w-[65ch]">{t(locale, "project.owned")}: {pick(role.owned, locale)}</p>
 </section>

@@ -30,8 +30,8 @@ export function ogElement(input: OgInput): SatoriNode {
         flexDirection: "column",
         justifyContent: "space-between",
         padding: 72,
-        background: "#0f172a",
-        color: "#f8fafc",
+        background: "#0f0d09",
+        color: "#ebe7df",
       },
       children: [
         text(input.kicker, { fontSize: 28, fontWeight: 400, opacity: 0.8 }),

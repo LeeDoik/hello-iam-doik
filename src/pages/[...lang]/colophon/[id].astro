@@ -28,20 +28,20 @@ const { Content } = await render(adr);
   title={adr.data.title}
   description={`${adr.data.status} · ${adr.data.date}`}
 >
-  <a class="mt-12 inline-block underline" href={localePath(locale, "/colophon/")}>
+  <a class="text-ink-2 mt-20 inline-block text-sm underline underline-offset-4 decoration-ink-2 hover:decoration-accent md:mt-24" href={localePath(locale, "/colophon/")}>
     {t(locale, "nav.colophon")}
   </a>
-  <p class="mt-4 text-sm opacity-70">
+  <p class="text-ink-2 mt-6 text-sm tabular-nums">
     {adr.data.status} · {adr.data.date}
   </p>
   <p class="mt-1">
-    <a class="underline" href={`${REPO_URL}/blob/main/docs/adr/${id}.md`}>
+    <a class="underline underline-offset-4 decoration-ink-2 hover:decoration-accent" href={`${REPO_URL}/blob/main/docs/adr/${id}.md`}>
       {t(locale, "colophon.viewSource")}
     </a>
   </p>
   {
     locale === "en" && (
-      <p role="note" class="my-4 rounded border-l-4 border-accent bg-black/5 p-3 text-sm">
+      <p role="note" class="border-line text-ink-2 my-6 max-w-[65ch] border-l-2 pl-4 text-sm">
         {t(locale, "colophon.adrLangNote")}
       </p>
     )

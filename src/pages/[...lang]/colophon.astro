@@ -14,15 +14,15 @@ const adrs = await getAdrs();
 ---
 
 <Base {locale} path="/colophon/" title={t(locale, "colophon.title")} description={t(locale, "colophon.adrs")}>
-  <h1 class="mt-12 text-3xl font-bold">{t(locale, "colophon.title")}</h1>
-  <section class="prose mt-6">
+  <h1 class="mt-20 text-4xl leading-[1.15] font-bold tracking-tight md:mt-24 md:text-5xl">{t(locale, "colophon.title")}</h1>
+  <section class="prose mt-8">
     <p>
       {t(locale, "colophon.intro")}{" "}
-      <a class="underline" href={`${REPO_URL}/blob/main/docs/how-this-was-built.md`}>
+      <a href={`${REPO_URL}/blob/main/docs/how-this-was-built.md`}>
         {t(locale, "colophon.howBuilt")}
       </a>
     </p>
   </section>
-  <h2 class="mt-10 text-2xl font-semibold">{t(locale, "colophon.adrs")}</h2>
+  <h2 class="mt-16 text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "colophon.adrs")}</h2>
   <AdrList {adrs} {locale} />
 </Base>

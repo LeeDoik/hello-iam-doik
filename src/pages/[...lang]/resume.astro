@@ -22,39 +22,44 @@ const experience = await getExperience();
   title={`${t(locale, "nav.resume")} · ${pick(profile.name, locale)}`}
   description={pick(profile.tagline, locale)}
 >
-  <article class="py-10 print:py-0">
-    <header class="flex items-start justify-between">
+  <article class="py-16 print:py-0 md:py-24">
+    <header class="flex items-start justify-between gap-6">
       <div>
-        <h1 class="text-3xl font-bold">{pick(profile.name, locale)}</h1>
-        <p>{pick(profile.tagline, locale)}</p>
-        <p class="text-sm">{profile.email} · {profile.links.github} · {pick(profile.location, locale)}</p>
+        <h1 class="text-4xl leading-[1.15] font-bold tracking-tight md:text-5xl print:text-3xl">{pick(profile.name, locale)}</h1>
+        <p class="mt-3 text-lg">{pick(profile.tagline, locale)}</p>
+        <p class="text-ink-2 mt-4 text-sm">{profile.email}</p>
+        <p class="text-ink-2 text-sm">{profile.links.github}</p>
+        <p class="text-ink-2 text-sm">{pick(profile.location, locale)}</p>
       </div>
-      <button data-print class="no-print rounded border px-3 py-1 text-sm" type="button">
+      <button
+        data-print
+        class="no-print bg-accent text-accent-ink inline-flex h-9 shrink-0 items-center rounded-sm px-3 text-sm font-medium"
+        type="button"
+      >
         {t(locale, "resume.print")}
       </button>
     </header>
 
-    <h2 class="mt-8 text-xl font-semibold">{t(locale, "section.projects")}</h2>
-    <ul class="mt-2 space-y-3">
+    <h2 class="mt-16 text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.projects")}</h2>
+    <ul class="mt-8 space-y-6">
       {
         projects.map((p) => (
           <li>
             <p class="font-semibold">
               {pick(p.data.title, locale)}{" "}
-              <span class="text-sm font-normal opacity-70">
+              <span class="text-ink-2 text-sm font-normal tabular-nums">
                 {formatPeriod(p.data.period.from, p.data.period.to, locale)}
               </span>
             </p>
-            <p class="text-sm">
-              {pick(p.data.summary, locale)} — {pick(p.data.role.owned, locale)}
-            </p>
-            <p class="text-sm">{p.data.links.repo ?? p.data.links.live ?? t(locale, "project.repoPrivate")}</p>
+            <p class="mt-1 max-w-[65ch] text-sm">{pick(p.data.summary, locale)}</p>
+            <p class="text-ink-2 mt-1 max-w-[65ch] text-sm">{pick(p.data.role.owned, locale)}</p>
+            <p class="text-ink-2 mt-1 text-sm">{p.data.links.repo ?? p.data.links.live ?? t(locale, "project.repoPrivate")}</p>
           </li>
         ))
       }
     </ul>
 
-    <h2 class="mt-8 text-xl font-semibold">{t(locale, "section.experience")}</h2>
+    <h2 class="mt-16 text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.experience")}</h2>
     <ExperienceList items={experience} {locale} />
   </article>
   <script>

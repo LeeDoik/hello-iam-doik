@@ -126,7 +126,7 @@ export function Hero3D() {
       ref={canvasRef}
       aria-hidden="true"
       data-quality={quality}
-      className="absolute inset-0 -z-10 h-full w-full"
+      className="absolute inset-0 -z-10 h-full w-full [@media(prefers-color-scheme:light)]:invert [@media(prefers-color-scheme:light)]:hue-rotate-180"
     />
   );
 }

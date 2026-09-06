@@ -7,5 +7,5 @@ function ym(iso: string): string {
 }
 
 export function formatPeriod(from: string, to: string | undefined, locale: Locale): string {
-  return `${ym(from)} – ${to ? ym(to) : PRESENT[locale]}`;
+  return `${ym(from)} ~ ${to ? ym(to) : PRESENT[locale]}`;
 }

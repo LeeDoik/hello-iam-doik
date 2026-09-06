@@ -11,22 +11,27 @@ interface Props {
 const { rows, locale } = Astro.props;
 ---
 
-{
-  groupSkills(rows).map(({ group, skills }) => (
-    <section class="mt-6">
-      <h3 class="text-sm uppercase tracking-wide opacity-60">{t(locale, GROUP_UI_KEY[group])}</h3>
-      <ul class="mt-2 space-y-2">
-        {skills.map((s) => (
-          <li>
-            <strong>{s.name}</strong> — {s.builtWithIt}
-            {s.projectSlugs.map((slug) => (
-              <a class="ml-2 text-sm underline" href={localePath(locale, `/projects/${slug}/`)}>
-                {slug}
-              </a>
-            ))}
-          </li>
-        ))}
-      </ul>
-    </section>
-  ))
-}
+<div class="mt-10 grid gap-x-12 gap-y-8 md:grid-cols-2">
+  {
+    groupSkills(rows).map(({ group, skills }) => (
+      <section>
+        <h3 class="text-base font-semibold leading-[1.5]">{t(locale, GROUP_UI_KEY[group])}</h3>
+        <ul class="mt-3 space-y-3">
+          {skills.map((s) => (
+            <li class="max-w-[65ch]">
+              <strong>{s.name}</strong> {s.builtWithIt}
+              {s.projectSlugs.map((slug) => (
+                <a
+                  class="text-ink-2 ml-2 text-sm underline underline-offset-4 decoration-ink-2 hover:decoration-accent"
+                  href={localePath(locale, `/projects/${slug}/`)}
+                >
+                  {slug}
+                </a>
+              ))}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>

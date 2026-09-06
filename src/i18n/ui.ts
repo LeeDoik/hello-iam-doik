@@ -71,7 +71,6 @@ const ko = {
   "quality.low": "낮음",
   "quality.off": "끔",
   "quality.reducedMotion": "시스템의 동작 줄이기 설정을 따릅니다",
-  "hero.canvasHint": "마우스를 움직이거나 스크롤하면 배경이 반응합니다",
 } as const;
 
 export type UIKey = keyof typeof ko;
@@ -147,7 +146,6 @@ const en = {
   "quality.low": "Low",
   "quality.off": "Off",
   "quality.reducedMotion": "Following your system's reduced-motion setting",
-  "hero.canvasHint": "Move the pointer or scroll to see the background react",
 } satisfies Record<UIKey, string>;
 
 export const ui: Record<Locale, Record<UIKey, string>> = { ko, en };

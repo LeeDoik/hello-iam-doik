@@ -59,14 +59,14 @@ export function ProjectFilter({ groups, cards, labels }: Props) {
   }
 
   return (
-    <div className="my-4">
-      <span id={labelId} className="text-sm opacity-70">
+    <div className="mt-8">
+      <span id={labelId} className="text-ink-2 text-sm">
         {labels.filterLabel}
       </span>
       <div
         role="radiogroup"
         aria-labelledby={labelId}
-        className="mt-2 flex flex-wrap gap-2"
+        className="mt-3 flex flex-wrap gap-2"
         onKeyDown={onKeyDown}
       >
         {options.map((o) => {
@@ -80,7 +80,7 @@ export function ProjectFilter({ groups, cards, labels }: Props) {
               aria-checked={checked}
               data-id={o.id}
               tabIndex={checked ? 0 : -1}
-              className={`rounded-full border px-3 py-1 text-sm ${checked ? "bg-ink text-paper" : ""}`}
+              className={`rounded-sm border px-3 py-1.5 text-sm ${checked ? "border-accent bg-accent text-accent-ink font-medium" : "border-ink-2/80 text-ink-2 hover:border-accent"}`}
               onClick={() => {
                 setTouched(true);
                 setSelected(o.id === "__all" ? null : o.id);
@@ -91,7 +91,7 @@ export function ProjectFilter({ groups, cards, labels }: Props) {
           );
         })}
       </div>
-      <p role="status" aria-live="polite" className="mt-2 text-sm opacity-70">
+      <p role="status" aria-live="polite" className="text-ink-2 mt-3 text-sm tabular-nums">
         {visible.length}
         {labels.count}
       </p>

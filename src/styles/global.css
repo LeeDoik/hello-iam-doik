@@ -1,59 +1,128 @@
 @import "tailwindcss";
 
+/* 다크 우선. @theme의 값이 기본(다크)이고, 아래 prefers-color-scheme: light 미디어 쿼리에서
+   같은 커스텀 프로퍼티를 다시 정의해 라이트 팔레트로 갈아끼운다. Tailwind 4의 테마 변수는
+   평범한 CSS 변수라 재정의가 그대로 유틸리티에 반영된다.
+   대비(다크): ink/paper 15.8:1, ink-2/paper 7.5:1, accent/paper 9.5:1, accent-ink/accent 8.9:1,
+   컨트롤 외곽선 border-ink-2/80 5.2:1. line(1.65:1)은 장식 구분선 전용이며 컨트롤 경계로 쓰지 않는다. */
 @theme {
   --font-sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
-  --color-ink: oklch(20% 0 0);
-  --color-paper: oklch(98% 0 0);
-  --color-accent: oklch(55% 0.18 250);
+
+  --color-paper: oklch(16% 0.008 80);
+  --color-paper-2: oklch(20% 0.009 80);
+  --color-ink: oklch(93% 0.012 85);
+  --color-ink-2: oklch(71% 0.014 80);
+  --color-line: oklch(34% 0.012 80);
+  --color-accent: oklch(78% 0.11 70);
+  --color-accent-ink: oklch(20% 0.03 65);
+
+  /* 사이트 전체 단일 반경 */
+  --radius-sm: 0.25rem;
+
+  /* 타이포: 한글 본문 행간(>= 1.5)을 클래스가 아니라 토큰에서 강제한다. */
+  --tracking-tight: -0.02em;
+  --text-sm--line-height: 1.6;
+  --text-base--line-height: 1.7;
+  --text-lg--line-height: 1.65;
+  --text-xl--line-height: 1.5;
+  --text-2xl--line-height: 1.35;
+  --text-3xl--line-height: 1.25;
+  --text-4xl--line-height: 1.15;
+  --text-5xl--line-height: 1.1;
+  --text-6xl--line-height: 1.05;
+  --text-7xl--line-height: 1.05;
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 }
+
+/* 라이트: 같은 색상(hue) 계열에서 명도만 뒤집는다.
+   대비: ink/paper 15.9:1, ink-2/paper 6.5:1, accent/paper 6.1:1, accent-ink/accent 6.1:1,
+   border-ink-2/80 4.1:1. accent의 L은 49%를 넘기면 accent-ink 대비가 4.5:1 아래로 떨어진다. */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --color-paper: oklch(97% 0.008 85);
+    --color-paper-2: oklch(94% 0.01 85);
+    --color-ink: oklch(22% 0.015 70);
+    --color-ink-2: oklch(46% 0.016 75);
+    --color-line: oklch(82% 0.012 85);
+    --color-accent: oklch(48% 0.12 70);
+    --color-accent-ink: oklch(97% 0.008 85);
+  }
+}
+
 html {
   font-family: var(--font-sans);
 }
+
 @layer base {
   body {
-    @apply bg-paper text-ink min-h-dvh;
+    /* overflow-x-clip: 히어로가 mx-[calc(50%_-_50vw)]로 100vw를 쓰므로 클래식 스크롤바 환경에서 가로 스크롤을 막는다. */
+    @apply bg-paper text-ink min-h-dvh overflow-x-clip;
+  }
+  :focus-visible {
+    @apply outline-accent outline-2 outline-offset-2;
+  }
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
   }
 }
 
 @layer components {
+  .prose {
+    @apply max-w-[65ch];
+  }
   .prose h1 {
-    @apply mt-8 text-2xl font-bold;
+    @apply mt-8 text-3xl leading-[1.2] font-bold tracking-tight md:text-4xl;
   }
   .prose h2 {
-    @apply mt-8 text-xl font-semibold;
+    @apply mt-12 text-2xl leading-[1.25] font-semibold tracking-tight md:text-3xl;
   }
   .prose h3 {
-    @apply mt-6 text-lg font-semibold;
+    @apply mt-8 text-lg leading-[1.4] font-semibold tracking-[-0.01em];
   }
   .prose p {
-    @apply mt-3;
+    @apply mt-4;
+  }
+  .prose a {
+    @apply decoration-ink-2 hover:decoration-accent underline underline-offset-4;
   }
   .prose ul {
-    @apply mt-3 list-disc pl-6;
+    @apply mt-4 list-disc pl-6;
   }
   .prose ol {
-    @apply mt-3 list-decimal pl-6;
+    @apply mt-4 list-decimal pl-6;
   }
   .prose li {
-    @apply mt-1;
+    @apply mt-1.5;
   }
   .prose pre {
-    @apply mt-3 overflow-x-auto rounded p-3 text-sm;
+    @apply bg-paper-2 border-line mt-4 overflow-x-auto rounded-sm border p-4 text-sm;
   }
   .prose table {
-    @apply mt-3 w-full text-sm;
+    @apply mt-4 w-full text-sm;
   }
   .prose th,
   .prose td {
-    @apply border px-2 py-1 text-left;
+    @apply border-line border-b px-2 py-2 text-left align-top;
   }
 }
 
 @media print {
+  /* 인쇄는 항상 라이트 팔레트 + 검정에 가까운 본문으로 고정한다. (ink/paper 19.7:1, accent 8.4:1) */
+  :root {
+    color-scheme: light;
+    --color-paper: oklch(99% 0 0);
+    --color-paper-2: oklch(96% 0 0);
+    --color-ink: oklch(12% 0 0);
+    --color-ink-2: oklch(35% 0 0);
+    --color-line: oklch(80% 0 0);
+    --color-accent: oklch(42% 0.1 70);
+    --color-accent-ink: oklch(99% 0 0);
+  }
   header,
   footer,
   nav,

@@ -17,17 +17,21 @@ const kindKey = {
 } as const;
 ---
 
-<ol class="mt-4 space-y-6">
+<ol class="mt-10">
   {
     items.map((e) => (
-      <li>
-        <p class="text-sm opacity-70">
+      <li class="border-line border-t py-8 first:border-t-0 first:pt-0">
+        <p class="text-ink-2 text-sm tabular-nums">
           {formatPeriod(e.from, e.to, locale)} · {t(locale, kindKey[e.kind])}
         </p>
-        <p class="font-semibold">
+        <p class="mt-1 font-semibold">
           {pick(e.org, locale)} · {pick(e.role, locale)}
         </p>
-        <ul class="mt-1 list-disc pl-5 text-sm">{e.bullets.map((b) => <li>{pick(b, locale)}</li>)}</ul>
+        <ul class="text-ink-2 mt-2 max-w-[65ch] list-disc pl-5 text-sm">
+          {e.bullets.map((b) => (
+            <li>{pick(b, locale)}</li>
+          ))}
+        </ul>
       </li>
     ))
   }
