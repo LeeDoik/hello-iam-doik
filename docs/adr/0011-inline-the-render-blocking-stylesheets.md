@@ -23,7 +23,7 @@ date: "2026-09-07"
 선택: 두 스타일시트 모두 인라인. `Base.astro`가 `public/fonts/pretendard/pretendard.css`를 Vite `?raw`로 읽어 `<style>`로 넣고, `astro.config.ts`의 `build.inlineStylesheets: "always"`가 Tailwind 결과를 인라인한다. 포트폴리오는 한 방문에 보는 페이지가 적고 첫 페이지의 첫 화면이 전부이므로, 페이지당 19KB보다 왕복 두 번을 없애는 쪽이 이 사이트에 맞다.
 
 ### Consequences
-- 좋은 점: 렌더 차단 요청 0개. 로컬 모바일 프로필에서 FCP 1065ms → 952ms, LCP 1665ms → 952ms. 라이브 수치는 아래 "Try it"에 있다.
+- 좋은 점: 렌더 차단 요청 0개. 로컬 모바일 프로필에서 FCP 1065ms → 952ms, LCP 1665ms → 952ms. 라이브 수치는 아래 "Try it"과 개정문에 있다.
 - 나쁜 점 / 감수한 것: `dist/index.html`이 gzip 7.3KB → 26.7KB. 폰트 CSS의 라이선스 주석까지 매 페이지에 실린다(OFL 고지이므로 남긴다). `pretendard.css` 파일은 `public/`에 그대로 두어 `vendor-fonts` 스크립트의 출력 위치를 바꾸지 않았다.
 - 되돌리는 조건(deletion trigger): 페이지 수가 늘어 방문당 여러 페이지를 보는 패턴이 되거나, HTML gzip이 50KB를 넘거나, Astro가 폰트 CSS를 자동으로 다루는 옵션을 제공할 때.
 
@@ -41,13 +41,10 @@ npx lighthouse https://hello-iam-doik.vercel.app/ --output=json --output-path=./
 | 페이지 | 시점 | 성능 | FCP | LCP |
 |---|---|---|---|---|
 | `/` | 인라인 전 (22175c5) | 82 | 3.2s | 3.4s |
-| `/` | 인라인 후 | AFTER_HOME |
 | `/en/` | 인라인 전 (22175c5) | 91 | 2.3s | 3.0s |
-| `/en/` | 인라인 후 | AFTER_EN |
 | `/projects/heart-of-steel/` | 인라인 전 (22175c5) | 84 | 3.5s | 3.5s |
-| `/projects/heart-of-steel/` | 인라인 후 | AFTER_HOS |
 
-1회 측정이라 ±5점 정도는 잡음이다. 방향이 바뀌지 않는지만 본다.
+프리뷰 배포는 Vercel 인증으로 보호되어 외부에서 잴 수 없으므로, "인라인 후" 수치는 main 병합 뒤 같은 방법으로 재서 이 문서 끝에 개정문으로 붙인다. 1회 측정이라 ±5점 정도는 잡음이다. 방향이 바뀌지 않는지만 본다.
 
 ## What I learned
 
