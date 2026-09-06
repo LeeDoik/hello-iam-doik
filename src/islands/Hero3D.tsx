@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { afterFirstPaint } from "../lib/after-first-paint";
 import {
   decideQuality,
   frameInterval,
@@ -67,14 +68,6 @@ export function Hero3D() {
   const [quality, setQuality] = useState<Quality>("off"); // SSR = off → 서버/클라 첫 렌더 동일
 
   useEffect(() => {
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem(QUALITY_KEY);
-    } catch {}
-    const decided = decideQuality(readSignals(), stored);
-    setQuality(decided);
-    rememberSettled(decided);
-    window.dispatchEvent(new CustomEvent<Quality>("hero-quality-settled", { detail: decided }));
     const onQuality = (e: Event) => {
       const q = (e as CustomEvent<Quality>).detail;
       const resolved = readSignals().reducedMotion ? "off" : q;
@@ -82,8 +75,23 @@ export function Hero3D() {
       rememberSettled(resolved);
       window.dispatchEvent(new CustomEvent<Quality>("hero-quality-settled", { detail: resolved }));
     };
-    window.addEventListener("hero-quality", onQuality);
-    return () => window.removeEventListener("hero-quality", onQuality);
+    // readSignals()의 WebGL 프로브와 그 뒤의 three.js 초기화는 첫 페인트 뒤로 미룬다. 하이드레이션이
+    // 첫 프레임보다 먼저 끝나는 빠른 로드에서 GPU 초기화가 첫 페인트를 2초 가까이 막았다(ADR-0008 개정).
+    const cancel = afterFirstPaint(() => {
+      let stored: string | null = null;
+      try {
+        stored = localStorage.getItem(QUALITY_KEY);
+      } catch {}
+      const decided = decideQuality(readSignals(), stored);
+      setQuality(decided);
+      rememberSettled(decided);
+      window.dispatchEvent(new CustomEvent<Quality>("hero-quality-settled", { detail: decided }));
+      window.addEventListener("hero-quality", onQuality);
+    });
+    return () => {
+      cancel();
+      window.removeEventListener("hero-quality", onQuality);
+    };
   }, []);
 
   useEffect(() => {
