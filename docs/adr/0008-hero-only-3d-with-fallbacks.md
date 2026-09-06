@@ -41,3 +41,9 @@ GitHub Actions의 헤드리스 Chrome(SwiftShader 소프트웨어 WebGL)에서 L
 그래서 소프트웨어 WebGL 렌더러(SwiftShader, llvmpipe 등)도 저사양 신호로 취급한다: `Hero3D.tsx`의 `hasWebgl()`이 컨텍스트를 얻은 뒤 `WEBGL_debug_renderer_info` 확장으로 `UNMASKED_RENDERER_WEBGL`을 읽어 렌더러 문자열이 `swiftshader|llvmpipe|software|mesa offscreen|microsoft basic render`에 매치하면 `softwareRenderer: true`를 `decideQuality`에 전달한다. `decideQuality`는 이 신호를 WebGL 미지원 검사 바로 다음, 코어/메모리 저사양 판정보다 앞에 두고 `"off"`를 반환한다 — 단, 저장된 사용자 선택(`localStorage["hero-quality"]`)이 있으면 그대로 존중한다(토글로 명시적으로 켠 사용자의 선택을 소프트웨어 렌더러 판정이 덮어쓰지 않는다).
 
 이 변경은 CI만을 위한 것이 아니다: 가상 머신, 원격 데스크톱, GPU 드라이버가 없는 환경 등 실제 사용자도 소프트웨어 WebGL로 렌더링되는 경우가 있고, 이들도 동일하게 보호된다.
+
+## Amendment 2026-09-07
+
+라이브 사이트를 Lighthouse 모바일 프로필로 반복 측정하자 같은 페이지가 두 갈래로 나뉘었다. 자원은 300ms 안에 다 받았는데 첫 페인트(observed FCP)가 180ms인 실행과 2,170ms인 실행이 섞였고, `--force-prefers-reduced-motion`으로 히어로를 끄면 4회 모두 180ms였다. 즉 느린 갈래는 네트워크가 아니라 히어로 아일랜드였다. 하이드레이션이 첫 프레임보다 먼저 끝나는 빠른 로드에서는 `readSignals()`의 WebGL 프로브와 이어지는 three.js 초기화가 GPU 프로세스를 먼저 깨우고, 브라우저는 그 초기화가 끝날 때까지 첫 프레임을 커밋하지 못했다.
+
+그래서 품질 판정(WebGL 프로브 포함)과 장면 생성을 `afterFirstPaint`(`src/lib/after-first-paint.ts`, 두 번 겹친 `requestAnimationFrame`) 뒤로 미룬다. 첫 프레임이 커밋된 다음에야 프로브가 돌고, `hero-quality-settled` 이벤트도 그때 발생한다. 토글(`QualityToggle`)은 이미 `rememberSettled`로 늦게 구독해도 마지막 값을 받으므로 동작이 바뀌지 않는다. 폴백 순서(감속 모션 → 저장된 선택 → WebGL 없음 → 소프트웨어 렌더러 → 저사양)는 그대로다. 측정 수치는 ADR-0011 개정문에 함께 적는다.
