@@ -19,6 +19,10 @@ describe("decideQuality", () => {
       decideQuality({ ...fast, hardwareConcurrency: undefined, deviceMemory: undefined }, null),
     ).toBe("high");
   });
+  test("software renderer with no stored preference → off", () =>
+    expect(decideQuality({ ...fast, softwareRenderer: true }, null)).toBe("off"));
+  test("software renderer with stored preference wins → high", () =>
+    expect(decideQuality({ ...fast, softwareRenderer: true }, "high")).toBe("high"));
 });
 
 test("renderScale / frameInterval", () => {

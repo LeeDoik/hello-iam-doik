@@ -62,9 +62,39 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
   await expect(p1.getByRole("button", { name: /배경 효과/ })).toBeDisabled();
   await reduced.close();
 
+  // Playwright's headless Chromium also runs on SwiftShader (software WebGL), so with no
+  // stored preference the new software-renderer signal must turn the hero off — the same
+  // way it does in Lighthouse CI. This is what actually proves the fix: no stored pref,
+  // no hero-scene chunk request.
+  const noPref = await browser.newContext({ reducedMotion: "no-preference" });
+  const p0 = await noPref.newPage();
+  const noPrefUrls: string[] = [];
+  p0.on("request", (req) => noPrefUrls.push(req.url()));
+  await p0.goto("/");
+  await expect(p0.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
+  expect(noPrefUrls.some((u) => /hero-scene/.test(u))).toBe(false);
+  await noPref.close();
+
+  // A user who explicitly opted into a quality via the toggle keeps it, even on software WebGL.
+  const opted = await browser.newContext({ reducedMotion: "no-preference" });
+  await opted.addInitScript(() => localStorage.setItem("hero-quality", "high"));
+  const pOpted = await opted.newPage();
+  const optedUrls: string[] = [];
+  pOpted.on("request", (req) => optedUrls.push(req.url()));
+  await pOpted.goto("/");
+  await expect(pOpted.locator("#hero canvas")).toHaveAttribute("data-quality", "high");
+  expect(optedUrls.some((u) => /hero-scene/.test(u))).toBe(true);
+  await opted.close();
+
+  // Note: addInitScript re-runs on every navigation in a context (including the reload below),
+  // so it's only used for the one-shot "opted" check above. Here the stored pref is set once via
+  // evaluate() after the first load, then a reload picks it up — later reloads (toggle cycle)
+  // are free to overwrite localStorage themselves without an init script fighting them.
   const normal = await browser.newContext({ reducedMotion: "no-preference" });
   const p2 = await normal.newPage();
   await p2.goto("/");
+  await p2.evaluate(() => localStorage.setItem("hero-quality", "high"));
+  await p2.reload();
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", /high|low/);
   const toggle = p2.getByRole("button", { name: /배경 효과/ });
   await expect(toggle).toHaveText(/높음|낮음|끔/);
