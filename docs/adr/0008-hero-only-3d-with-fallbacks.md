@@ -47,3 +47,7 @@ GitHub Actions의 헤드리스 Chrome(SwiftShader 소프트웨어 WebGL)에서 L
 라이브 사이트를 Lighthouse 모바일 프로필로 반복 측정하자 같은 페이지가 두 갈래로 나뉘었다. 자원은 300ms 안에 다 받았는데 첫 페인트(observed FCP)가 180ms인 실행과 2,170ms인 실행이 섞였고, `--force-prefers-reduced-motion`으로 히어로를 끄면 4회 모두 180ms였다. 즉 느린 갈래는 네트워크가 아니라 히어로 아일랜드였다. 하이드레이션이 첫 프레임보다 먼저 끝나는 빠른 로드에서는 `readSignals()`의 WebGL 프로브와 이어지는 three.js 초기화가 GPU 프로세스를 먼저 깨우고, 브라우저는 그 초기화가 끝날 때까지 첫 프레임을 커밋하지 못했다.
 
 그래서 품질 판정(WebGL 프로브 포함)과 장면 생성을 `afterFirstPaint`(`src/lib/after-first-paint.ts`, 두 번 겹친 `requestAnimationFrame`) 뒤로 미룬다. 첫 프레임이 커밋된 다음에야 프로브가 돌고, `hero-quality-settled` 이벤트도 그때 발생한다. 토글(`QualityToggle`)은 이미 `rememberSettled`로 늦게 구독해도 마지막 값을 받으므로 동작이 바뀌지 않는다. 폴백 순서(감속 모션 → 저장된 선택 → WebGL 없음 → 소프트웨어 렌더러 → 저사양)는 그대로다. 측정 수치는 ADR-0011 개정문에 함께 적는다.
+
+## Amendment 2026-09-07 (2)
+
+위 개정의 원인 추정은 절반만 맞았다. 히어로 초기화를 첫 페인트 뒤로 미룬 뒤에도 새 Chrome을 띄워 재는 방식에서는 9회 중 3회가 여전히 느렸고, 트레이스에서 렌더러의 첫 `Paint`(185ms)와 브라우저의 첫 프레임 제시(2,245ms) 사이가 비어 있었다. Chrome 인스턴스를 미리 띄워 두고 재면 9회 모두 정상이었다(ADR-0011 개정). 즉 문제의 대부분은 헤드리스 Chrome의 GPU 프로세스 첫 실행이라는 측정 환경 요인이었다. 감속 모션으로 히어로를 끈 4회가 모두 빨랐던 것은 WebGL 컨텍스트 생성이 그 지연을 키운다는 방증이지만, 4회 표본으로 단정하기는 어렵다. `afterFirstPaint` 지연은 원리상 옳고(첫 프레임 제출 전에 GPU를 깨우지 않는다) 비용이 없으므로 그대로 둔다.
