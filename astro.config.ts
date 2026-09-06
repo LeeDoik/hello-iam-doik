@@ -6,7 +6,8 @@ import { defineConfig, envField } from "astro/config";
 export default defineConfig({
   site: "https://hello-iam-doik.vercel.app",
   trailingSlash: "always",
-  build: { format: "directory" },
+  // 두 번째 렌더 차단 요청(Base.css)도 없앤다. 페이지당 gzip 약 5KB가 늘지만 첫 페인트가 문서 도착 직후로 당겨진다 (ADR-0011).
+  build: { format: "directory", inlineStylesheets: "always" },
   // github-dark's default comment color (#6a737d on #24292e) fails WCAG AA color-contrast
   // (3.04:1, needs 4.5:1) inside ADR code fences on /colophon/. github-dark-high-contrast is
   // Shiki's WCAG-tuned variant of the same palette family.

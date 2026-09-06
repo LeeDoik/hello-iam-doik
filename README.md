@@ -49,7 +49,7 @@ src/
   pages/            [...lang]/ 템플릿 한 벌, og/ 이미지 라우트, llms.txt
   styles/           global.css (디자인 토큰)
 docs/
-  adr/              결정 기록 0001~0010. /colophon/에 그대로 렌더
+  adr/              결정 기록 0001~0011. /colophon/에 그대로 렌더
   superpowers/      설계 스펙 1개와 구현 계획 4개
 scripts/            adr, capture, content:status, fonts:vendor
 tests/              build/ (JS 예산), e2e/ (Playwright)
