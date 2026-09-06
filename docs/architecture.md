@@ -17,4 +17,4 @@ content/  ──(Zod: src/content/schemas.ts)──▶  src/content.config.ts  �
 - 보안 헤더(`vercel.json`)의 CSP는 `script-src`와 `style-src`에 `'unsafe-inline'`을 여전히 허용한다. 이유: Astro가 아일랜드 하이드레이션 로더(`client:idle`, `client:visible`)와 `astro-island{display:contents}` 스타일, 그리고 이력서 인쇄 버튼처럼 작은 `<script>`를 HTML에 인라인으로 내보내며, 정적 호스팅이라 요청마다 nonce를 붙일 서버가 없다. 해시 목록으로 대체하면 Astro 업그레이드마다 깨질 수 있어 4차 계획에서도 그대로 두었다. 다시 볼 조건은 Astro가 인라인 없이 아일랜드를 싣는 옵션을 제공하거나, AI seam이 열려 서버가 생길 때다.
 - OG 이미지: `src/pages/og/[...path].png.ts`가 콘텐츠 컬렉션에서 페이지마다(랜딩 + 프로젝트 × 로케일) 정적 PNG를 렌더한다.
 - 스크린샷: `scripts/capture-screens.ts`(`pnpm capture`)가 `capture.yaml`을 읽어 실제 사이트를 캡처하고 sidecar로 stale 여부를 추적한다.
-- 폰트: Pretendard 동적 서브셋 woff2 92개를 `public/fonts/pretendard/`에 셀프호스팅하고 `pretendard.css`를 `<link rel="stylesheet">`로 싣는다. `unicode-range`로 브라우저가 필요한 파일만 고르므로 프리로드는 하지 않는다(ADR-0009 개정).
+- 폰트: Pretendard 동적 서브셋 woff2 92개를 `public/fonts/pretendard/`에 셀프호스팅한다. `pretendard.css`의 `@font-face` 92개는 `Base.astro`가 `?raw`로 읽어 `<style>`로 인라인하고, Tailwind 결과 CSS도 `build.inlineStylesheets: "always"`로 인라인해 렌더 차단 요청이 0개다(ADR-0011). `unicode-range`로 브라우저가 필요한 파일만 고르므로 프리로드는 하지 않는다(ADR-0009 개정).
