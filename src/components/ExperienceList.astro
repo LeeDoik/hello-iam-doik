@@ -24,9 +24,8 @@ const kindKey = {
         <p class="text-ink-2 text-sm tabular-nums">
           {formatPeriod(e.from, e.to, locale)} · {t(locale, kindKey[e.kind])}
         </p>
-        <p class="mt-1 font-semibold">
-          {pick(e.org, locale)} · {pick(e.role, locale)}
-        </p>
+        <p class="mt-1 font-semibold">{pick(e.org, locale)}</p>
+        <p class="text-ink-2 mt-1">{pick(e.role, locale)}</p>
         <ul class="text-ink-2 mt-2 max-w-[65ch] list-disc pl-5 text-sm">
           {e.bullets.map((b) => (
             <li>{pick(b, locale)}</li>

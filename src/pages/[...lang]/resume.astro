@@ -43,19 +43,30 @@ const experience = await getExperience();
     <h2 class="mt-16 text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.projects")}</h2>
     <ul class="mt-8 space-y-6">
       {
-        projects.map((p) => (
-          <li>
-            <p class="font-semibold">
-              {pick(p.data.title, locale)}{" "}
-              <span class="text-ink-2 text-sm font-normal tabular-nums">
-                {formatPeriod(p.data.period.from, p.data.period.to, locale)}
-              </span>
-            </p>
-            <p class="mt-1 max-w-[65ch] text-sm">{pick(p.data.summary, locale)}</p>
-            <p class="text-ink-2 mt-1 max-w-[65ch] text-sm">{pick(p.data.role.owned, locale)}</p>
-            <p class="text-ink-2 mt-1 text-sm">{p.data.links.repo ?? p.data.links.live ?? t(locale, "project.repoPrivate")}</p>
-          </li>
-        ))
+        projects.map((p) => {
+          const url = p.data.links.repo ?? p.data.links.live;
+          return (
+            <li>
+              <p class="font-semibold">
+                {pick(p.data.title, locale)}{" "}
+                <span class="text-ink-2 text-sm font-normal tabular-nums">
+                  {formatPeriod(p.data.period.from, p.data.period.to, locale)}
+                </span>
+              </p>
+              <p class="mt-1 max-w-[65ch] text-sm">{pick(p.data.summary, locale)}</p>
+              <p class="text-ink-2 mt-1 max-w-[65ch] text-sm">{pick(p.data.role.owned, locale)}</p>
+              <p class="text-ink-2 mt-1 text-sm">
+                {url ? (
+                  <a class="underline decoration-ink-2 underline-offset-4 hover:decoration-accent" href={url}>
+                    {url}
+                  </a>
+                ) : (
+                  t(locale, "project.repoPrivate")
+                )}
+              </p>
+            </li>
+          );
+        })
       }
     </ul>
 

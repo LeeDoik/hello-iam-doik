@@ -65,7 +65,7 @@ const jsonLd = {
   >
     <Hero3D client:visible />
     <div
-      class="bg-paper relative -m-6 max-w-[60ch] p-6 pr-8 shadow-[0_0_48px_32px_var(--color-paper)]"
+      class="bg-paper relative -my-16 -ml-[max(1.5rem,calc(50vw_-_22.5rem))] flex w-[100vw] flex-col justify-end self-stretch py-16 pr-8 pl-[max(1.5rem,calc(50vw_-_22.5rem))] md:w-[60vw]"
     >
       <h1 class="text-5xl font-extrabold leading-[1.05] tracking-[-0.02em] md:text-7xl">{pick(profile.name, locale)}</h1>
       <p class="mt-5 text-xl font-medium md:text-2xl">{pick(profile.tagline, locale)}</p>
@@ -90,17 +90,17 @@ const jsonLd = {
     </div>
   </section>
 
-  <section id="skills" class="py-24 md:py-32">
+  <section id="skills" class="py-16 md:py-24">
     <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.skills")}</h2>
     <SkillsByProject rows={skillRows} locale={locale} />
   </section>
 
-  <section id="experience" class="py-24 md:py-32">
+  <section id="experience" class="py-16 md:py-24">
     <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.experience")}</h2>
     <ExperienceList items={experience} locale={locale} />
   </section>
 
-  <section id="contact" class="py-24 md:py-32">
+  <section id="contact" class="py-16 md:py-24">
     <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.contact")}</h2>
     <p class="mt-6 max-w-[65ch] text-base md:text-lg">
       <a class="underline underline-offset-4 decoration-ink-2 hover:decoration-accent" href={`mailto:${profile.email}`}>{profile.email}</a>

@@ -50,7 +50,7 @@ export function QualityToggle({ labels }: Props) {
       onClick={cycle}
       disabled={reducedMotion}
       title={reducedMotion ? labels.label : undefined}
-      className="border-ink-2/80 text-ink-2 rounded-sm border px-2.5 py-1 text-sm enabled:hover:border-accent disabled:cursor-not-allowed disabled:border-dashed disabled:border-line"
+      className="border-ink-2/80 text-ink-2 inline-flex min-h-11 items-center rounded-sm border px-3 text-sm enabled:hover:border-accent disabled:cursor-not-allowed disabled:border-dashed disabled:border-line"
       aria-label={`${labels.label}: ${reducedMotion ? labels.reducedMotion : labels[q]}`}
     >
       {labels.label}: {reducedMotion ? labels.reducedMotion : labels[q]}

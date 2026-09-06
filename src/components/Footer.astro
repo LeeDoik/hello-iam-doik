@@ -20,7 +20,9 @@ const { locale, email, github, deploy } = Astro.props;
     <a class="decoration-accent underline-offset-4 hover:underline" href={`mailto:${email}`}>{email}</a>
   </div>
   <p>
-    {t(locale, "footer.deployed")} {deploy.date} ·
-    <a class="decoration-accent underline-offset-4 hover:underline" href={deploy.commitUrl}><code>{deploy.shortSha}</code></a>
+    <span>{t(locale, "footer.deployed")} {deploy.date}</span><span class="mx-1">·</span><a
+      class="decoration-accent underline-offset-4 hover:underline"
+      href={deploy.commitUrl}><code>{deploy.shortSha}</code></a
+    >
   </p>
 </footer>
