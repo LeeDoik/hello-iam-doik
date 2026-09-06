@@ -29,8 +29,8 @@ const fragment = /* glsl */ `
     float n = noise(p * 2.0 + t) * 0.6 + noise(p * 5.0 - t * 1.3) * 0.4;
     float d = distance(p, (uPointer - 0.5) * uAspect);
     float glow = smoothstep(0.6, 0.0, d) * 0.12;
-    vec3 a = vec3(0.06, 0.09, 0.16), b = vec3(0.10, 0.18, 0.38);
-    vec3 c = mix(a, b, n) + glow;
+    vec3 a = vec3(0.11, 0.10, 0.09), b = vec3(0.34, 0.28, 0.20);
+    vec3 c = mix(a, b, n) + vec3(0.85, 0.62, 0.32) * glow;
     gl_FragColor = vec4(c, 1.0);
   }
 `;

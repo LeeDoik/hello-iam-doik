@@ -9,19 +9,46 @@ import {
 } from "../lib/motion-prefs";
 
 let webglSupported: boolean | undefined;
+let webglSoftwareRenderer: boolean | undefined;
 
-function hasWebgl(): boolean {
-  if (webglSupported !== undefined) return webglSupported;
+// SwiftShader (headless Chrome/CI), llvmpipe (Mesa software GL), and other CPU
+// rasterizers report a renderer string that names the software path — real
+// GPUs never do. Treating this as a low-end signal keeps the shader off on
+// CPU renderers (see ADR-0008 amendment).
+const SOFTWARE_RENDERER_RE = /swiftshader|llvmpipe|software|mesa offscreen|microsoft basic render/i;
+
+function detectWebgl(): { webgl: boolean; softwareRenderer: boolean } {
   try {
     const c = document.createElement("canvas");
     const ctx = c.getContext("webgl2") ?? c.getContext("webgl");
-    webglSupported = Boolean(ctx);
-    (ctx as WebGLRenderingContext | null)?.getExtension("WEBGL_lose_context")?.loseContext();
-    return webglSupported;
+    const webgl = Boolean(ctx);
+    let softwareRenderer = false;
+    if (ctx) {
+      const dbg = ctx.getExtension("WEBGL_debug_renderer_info");
+      if (dbg) {
+        const renderer = String(ctx.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
+        softwareRenderer = SOFTWARE_RENDERER_RE.test(renderer);
+      }
+      ctx.getExtension("WEBGL_lose_context")?.loseContext();
+    }
+    return { webgl, softwareRenderer };
   } catch {
-    webglSupported = false;
-    return false;
+    return { webgl: false, softwareRenderer: false };
   }
+}
+
+function hasWebgl(): boolean {
+  if (webglSupported === undefined) {
+    const result = detectWebgl();
+    webglSupported = result.webgl;
+    webglSoftwareRenderer = result.softwareRenderer;
+  }
+  return webglSupported;
+}
+
+function isSoftwareRenderer(): boolean {
+  if (webglSupported === undefined) hasWebgl();
+  return webglSoftwareRenderer ?? false;
 }
 
 function readSignals() {
@@ -31,6 +58,7 @@ function readSignals() {
     hardwareConcurrency: navigator.hardwareConcurrency,
     deviceMemory: nav.deviceMemory,
     webgl: hasWebgl(),
+    softwareRenderer: isSoftwareRenderer(),
   };
 }
 
@@ -126,7 +154,7 @@ export function Hero3D() {
       ref={canvasRef}
       aria-hidden="true"
       data-quality={quality}
-      className="absolute inset-0 -z-10 h-full w-full"
+      className="absolute inset-0 -z-10 h-full w-full [@media(prefers-color-scheme:light)]:invert [@media(prefers-color-scheme:light)]:hue-rotate-180"
     />
   );
 }

@@ -33,3 +33,11 @@ Chrome DevTools → Rendering → "Emulate CSS media feature prefers-reduced-mot
 ## What I learned
 
 동적 import는 "무거운 의존성"과 "그 의존성이 필요한 조건"을 분리하는 도구다. three를 정적으로 import했다면 예산 테스트로 존재를 확인할 수는 있어도 "필요 없는 사용자는 안 받는다"는 것을 증명할 방법이 없다. `import()`가 만드는 별도 청크와, 그 청크를 참조하는 파일이 랜딩 HTML에만 있는지를 빌드 산출물에서 직접 검사하는 테스트를 짜고 나서야, 이 경계가 실제로 지켜진다는 걸 코드로 증명할 수 있었다. 또한 `reducedMotion`을 저장값보다 우선순위를 높게 둔 이유는, OS 설정이 접근성 요구(전정기관 장애 등 의학적 이유)일 수 있어서 사이트 안의 토글이 그것을 덮어써서는 안 되기 때문이다.
+
+## Amendment 2026-09-06
+
+GitHub Actions의 헤드리스 Chrome(SwiftShader 소프트웨어 WebGL)에서 Lighthouse CI를 돌리면 히어로 셰이더가 매 프레임 CPU로 렌더링되어 `/`의 Total Blocking Time이 939ms(예산 200ms 이하)까지 치솟았다. 실제 GPU에서는 영향이 없었다 — 문제는 셰이더 자체가 아니라 소프트웨어 래스터라이저에서의 실행 비용이었다.
+
+그래서 소프트웨어 WebGL 렌더러(SwiftShader, llvmpipe 등)도 저사양 신호로 취급한다: `Hero3D.tsx`의 `hasWebgl()`이 컨텍스트를 얻은 뒤 `WEBGL_debug_renderer_info` 확장으로 `UNMASKED_RENDERER_WEBGL`을 읽어 렌더러 문자열이 `swiftshader|llvmpipe|software|mesa offscreen|microsoft basic render`에 매치하면 `softwareRenderer: true`를 `decideQuality`에 전달한다. `decideQuality`는 이 신호를 WebGL 미지원 검사 바로 다음, 코어/메모리 저사양 판정보다 앞에 두고 `"off"`를 반환한다 — 단, 저장된 사용자 선택(`localStorage["hero-quality"]`)이 있으면 그대로 존중한다(토글로 명시적으로 켠 사용자의 선택을 소프트웨어 렌더러 판정이 덮어쓰지 않는다).
+
+이 변경은 CI만을 위한 것이 아니다: 가상 머신, 원격 데스크톱, GPU 드라이버가 없는 환경 등 실제 사용자도 소프트웨어 WebGL로 렌더링되는 경우가 있고, 이들도 동일하게 보호된다.

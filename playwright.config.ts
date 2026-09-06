@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: "tests/e2e",
   fullyParallel: true,
   reporter: process.env.CI ? "github" : "list",
-  use: { baseURL: "http://localhost:4321", trace: "retain-on-failure" },
+  use: { baseURL: "http://localhost:4321", trace: "retain-on-failure", colorScheme: "dark" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: "pnpm preview --host 127.0.0.1 --port 4321",

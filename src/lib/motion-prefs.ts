@@ -7,6 +7,7 @@ export type DeviceSignals = {
   hardwareConcurrency?: number | undefined;
   deviceMemory?: number | undefined;
   webgl: boolean;
+  softwareRenderer?: boolean | undefined;
 };
 
 function isQuality(x: unknown): x is Quality {
@@ -17,6 +18,7 @@ export function decideQuality(signals: DeviceSignals, stored: string | null): Qu
   if (signals.reducedMotion) return "off";
   if (isQuality(stored)) return stored;
   if (!signals.webgl) return "off";
+  if (signals.softwareRenderer) return "off";
   const lowEnd = (signals.hardwareConcurrency ?? 8) <= 4 || (signals.deviceMemory ?? 8) <= 4;
   return lowEnd ? "low" : "high";
 }

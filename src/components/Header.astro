@@ -14,14 +14,14 @@ interface Props {
 const { locale, pathname, email, github } = Astro.props;
 ---
 
-<header class="flex items-center justify-between gap-4 px-6 py-4">
-  <a href={localePath(locale, "/")} class="font-semibold">Doik</a>
-  <nav aria-label={t(locale, "nav.aria")} class="flex gap-4 text-sm">
-    <a href={localePath(locale, "/") + "#projects"}>{t(locale, "nav.projects")}</a>
-    <a href={localePath(locale, "/resume/")}>{t(locale, "nav.resume")}</a>
-    <a href={localePath(locale, "/colophon/")}>{t(locale, "nav.colophon")}</a>
-    <a href={github} rel="me">GitHub</a>
-    <a href={`mailto:${email}`}>Email</a>
+<header class="border-line flex min-h-16 items-center justify-between gap-4 border-b px-6 py-2 sm:py-0">
+  <a href={localePath(locale, "/")} class="font-semibold decoration-accent underline-offset-4 hover:underline">Doik</a>
+  <nav aria-label={t(locale, "nav.aria")} class="text-ink-2 flex flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm sm:gap-x-5">
+    <a class="decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/") + "#projects"}>{t(locale, "nav.projects")}</a>
+    <a class="decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/resume/")}>{t(locale, "nav.resume")}</a>
+    <a class="decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/colophon/")}>{t(locale, "nav.colophon")}</a>
+    <a class="decoration-accent underline-offset-4 hover:underline" href={github} rel="me">GitHub</a>
+    <a class="decoration-accent underline-offset-4 hover:underline" href={`mailto:${email}`}>Email</a>
     <QualityToggle
       client:idle
       labels={{

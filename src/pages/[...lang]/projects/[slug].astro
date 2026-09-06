@@ -41,14 +41,14 @@ const site = Astro.site?.href ?? "https://hello-iam-doik.vercel.app";
   ogImage={ogImageUrl(site, locale, project.slug)}
 >
   <article data-story-fallback={String(isFallback)}>
-    <h1 class="mt-12 text-3xl font-bold">{pick(d.title, locale)}</h1>
-    <p class="mt-1 text-sm opacity-70">{formatPeriod(d.period.from, d.period.to, locale)}</p>
-    <p class="mt-3 text-lg">{pick(d.summary, locale)}</p>
+    <h1 class="mt-20 text-4xl leading-[1.15] font-bold tracking-tight md:mt-24 md:text-5xl">{pick(d.title, locale)}</h1>
+    <p class="text-ink-2 mt-4 text-sm tabular-nums">{formatPeriod(d.period.from, d.period.to, locale)}</p>
+    <p class="mt-6 max-w-[65ch] text-base md:text-lg">{pick(d.summary, locale)}</p>
     <MetricStrip metrics={d.metrics} {locale} />
     <RoleBlock role={d.role} {locale} />
     <ScreenshotGallery screens={d.screens} {locale} />
     {isFallback && <FallbackNotice {locale} />}
-    <div class="prose mt-8 max-w-none">
+    <div class="prose mt-16">
       <Content />
     </div>
     {d.ai && <AiEvidence ai={d.ai} {locale} />}

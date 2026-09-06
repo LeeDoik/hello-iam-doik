@@ -13,27 +13,26 @@ const { metrics, locale } = Astro.props;
 
 {
   metrics.length > 0 && (
-    <dl class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4" aria-label={t(locale, "project.metrics")}>
+    <dl class="border-line mt-10 grid grid-cols-2 gap-x-8 gap-y-8 border-t pt-8 sm:grid-cols-4" aria-label={t(locale, "project.metrics")}>
       {metrics.map((m) => (
-        <div class="rounded border p-3">
-          <dt class="text-xs opacity-70">{pick(m.label, locale)}</dt>
-          <dd class="text-lg font-semibold">
-            {m.before && <span class="opacity-60">{m.before} → </span>}
-            {m.after}
-            {m.unit && <span class="text-sm"> {m.unit}</span>}
+        <div class="min-w-0">
+          <dt class="text-ink-2 text-sm">{pick(m.label, locale)}</dt>
+          <dd class="mt-2 flex flex-wrap items-baseline gap-x-2 text-3xl font-semibold tracking-[-0.01em] leading-none">
+            {m.before && <span class="text-ink-2 text-lg font-normal whitespace-nowrap tabular-nums">{m.before}</span>}
+            {m.before && <span class="text-ink-2 text-lg font-normal whitespace-nowrap">→</span>}
+            <span class="whitespace-nowrap tabular-nums">{m.after}</span>
+            {m.unit && <span class="text-ink-2 text-lg font-normal whitespace-nowrap">{m.unit}</span>}
           </dd>
-          <dd class="mt-1 text-xs opacity-70">
+          <dd class="text-ink-2 mt-3 text-sm">
             {t(locale, "project.method")}: {pick(m.method, locale)}
-            {m.evidence && (
-              <>
-                {" "}
-                ·{" "}
-                <a class="underline" href={m.evidence}>
-                  {t(locale, "project.evidence")}
-                </a>
-              </>
-            )}
           </dd>
+          {m.evidence && (
+            <dd class="mt-1 text-sm">
+              <a class="text-ink-2 underline underline-offset-4 decoration-ink-2 hover:decoration-accent" href={m.evidence}>
+                {t(locale, "project.evidence")}
+              </a>
+            </dd>
+          )}
         </div>
       ))}
     </dl>
