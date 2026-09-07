@@ -1,3 +1,5 @@
+# TODO(Doik): "[채워 주세요"/"[Fill in" 값은 화면에 나오지 않는다. getExperience()가 조직명이 자리표시인 항목은 통째로,
+# 실제 항목 안의 자리표시 불릿은 그 불릿만 걸러낸다(src/lib/placeholders.ts). 채우면 그대로 렌더된다.
 - id: education-1
   kind: education
   org: { ko: "[채워 주세요: 학교·전공]", en: "[Fill in: school, major]" }

@@ -20,7 +20,7 @@ _코드네임: 태엽새의 타이틀 배너_
 | PIXELARIOUS | 직접 만든 Godot 게임을 브라우저에서 플레이하는 1인 픽셀 아케이드 (Next.js) | 라이브 공개(https://neo-kido.vercel.app), 레포 비공개 |
 | Aetheria Online | IOCP 기반 미니 MMORPG 서버. 단일 머신에서 10,000 동접 부하 테스트 (C++) | 레포 공개, 라이브 없음(archived) |
 
-프로젝트 페이지의 수치에는 측정 방법이 붙고, 공개 레포나 보고서가 있는 경우 근거 링크도 붙는다. `content/experience.yaml`에는 `[채워 주세요]` 자리표시 5곳이 아직 남아 있고 라이브에도 그대로 보인다. 공유 전에 채워야 할 항목은 [docs/launch-checklist.md](docs/launch-checklist.md)에 있다.
+프로젝트 페이지의 수치에는 측정 방법이 붙고, 공개 레포나 보고서가 있는 경우 근거 링크도 붙는다. `content/experience.yaml`에는 `[채워 주세요]` 자리표시 5곳이 아직 남아 있다. 화면에는 걸러져 나오지 않으므로, 채우기 전까지 학력과 수강 과목 항목이 비어 있다. 공유 전에 채워야 할 항목은 [docs/launch-checklist.md](docs/launch-checklist.md)에 있다.
 
 ## 스택
 
@@ -41,7 +41,7 @@ _코드네임: 태엽새의 타이틀 배너_
 ```
 content/            프로젝트·프로필·경력·스킬 데이터 (YAML + Markdown + screens/)
 src/
-  components/       Astro 컴포넌트. 자체 클라이언트 JS는 없고, Header가 QualityToggle 아일랜드를 `client:idle`로 싣는다
+  components/       Astro 컴포넌트. 클라이언트 JS 없음
   islands/          React 아일랜드 3개
   i18n/             로케일 정의와 UI 문자열 사전
   layouts/          Base.astro (메타, hreflang, OG, JSON-LD)

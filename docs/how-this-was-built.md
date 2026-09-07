@@ -29,7 +29,7 @@
 
 ## 숨기지 않는 것
 
-- `content/experience.yaml`에는 `[채워 주세요]` 자리표시가 5곳 남아 있고, 랜딩과 `/resume/`에 그대로 렌더된다. 학교·전공, 학위, 학교 항목의 불릿 한 줄(`experience.yaml` 7행), 수상 결과, 수강 과목처럼 내가 직접 채워야 하는 항목이다. 공유 전 차단 항목으로 `docs/launch-checklist.md`에 적어 두었다.
+- `content/experience.yaml`에는 `[채워 주세요]` 자리표시가 5곳 남아 있다. 화면에는 나오지 않는다(`src/lib/placeholders.ts`가 조직명이 자리표시인 항목은 통째로, 실제 항목 안의 자리표시 불릿은 그 불릿만 걸러낸다). 그래서 채우기 전까지 학력 항목과 수강 과목 항목이 랜딩과 `/resume/`에서 비어 보인다. 학교·전공, 학위, 학교 항목의 불릿 한 줄(`experience.yaml` 9행), 수상 결과, 수강 과목처럼 내가 직접 채워야 하는 항목이다. 공유 전 차단 항목으로 `docs/launch-checklist.md`에 적어 두었다.
 - 초기 ADR(0004, 0005, 0009)의 "Try it" 예시는 당시의 샘플 프로젝트 slug를 쓴다. 본문은 고치지 않고 끝에 개정문을 붙여 현재 slug를 안내한다.
 - 태엽새는 Railway 재배포 전이라 `status: archived`이고 라이브 링크가 없다. 재배포 후 `pnpm capture heart-of-steel`로 스크린샷을 다시 찍고 상태를 바꾼다.
 - Aetheria Online의 동접·지연 수치는 localhost 측정치이며, 페이지에 그렇게 표기했다.

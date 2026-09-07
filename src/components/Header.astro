@@ -1,7 +1,6 @@
 ---
 import type { Locale } from "../i18n/locales";
 import { t } from "../i18n/ui";
-import { QualityToggle } from "../islands/QualityToggle";
 import { localePath } from "../lib/urls";
 import LanguageToggle from "./LanguageToggle.astro";
 
@@ -14,24 +13,16 @@ interface Props {
 const { locale, pathname, email, github } = Astro.props;
 ---
 
-<header class="border-line flex min-h-16 items-center justify-between gap-4 border-b px-6 py-2 sm:py-0">
-  <a href={localePath(locale, "/")} class="font-semibold decoration-accent underline-offset-4 hover:underline">Doik</a>
-  <nav aria-label={t(locale, "nav.aria")} class="text-ink-2 flex flex-wrap items-center justify-end gap-x-4 gap-y-0 text-sm sm:gap-x-5">
-    <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/") + "#projects"}>{t(locale, "nav.projects")}</a>
-    <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/resume/")}>{t(locale, "nav.resume")}</a>
-    <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/colophon/")}>{t(locale, "nav.colophon")}</a>
-    <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={github} rel="me">GitHub</a>
-    <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={`mailto:${email}`}>Email</a>
-    <QualityToggle
-      client:idle
-      labels={{
-        label: t(locale, "quality.label"),
-        high: t(locale, "quality.high"),
-        low: t(locale, "quality.low"),
-        off: t(locale, "quality.off"),
-        reducedMotion: t(locale, "quality.reducedMotion"),
-      }}
-    />
+<header class="border-line flex border-b sm:min-h-16">
+  <div class="mx-auto flex w-full max-w-3xl flex-wrap items-center gap-x-4 px-6">
+    <a href={localePath(locale, "/")} class="mr-auto inline-flex min-h-11 items-center font-semibold decoration-accent underline-offset-4 hover:underline">Doik</a>
     <LanguageToggle {locale} {pathname} />
-  </nav>
+    <nav aria-label={t(locale, "nav.aria")} class="text-ink-2 order-3 flex flex-wrap items-center gap-x-3 gap-y-0 text-sm max-sm:basis-full sm:order-2 sm:gap-x-5">
+      <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/") + "#projects"}>{t(locale, "nav.projects")}</a>
+      <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/resume/")}>{t(locale, "nav.resume")}</a>
+      <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={localePath(locale, "/colophon/")}>{t(locale, "nav.colophon")}</a>
+      <a class="inline-flex min-h-11 items-center decoration-accent underline-offset-4 hover:underline" href={github} rel="me">GitHub</a>
+      <a class="hidden min-h-11 items-center decoration-accent underline-offset-4 hover:underline sm:inline-flex" href={`mailto:${email}`}>Email</a>
+    </nav>
+  </div>
 </header>

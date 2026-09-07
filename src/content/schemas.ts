@@ -83,7 +83,8 @@ export const skillGroup = z.enum(["frontend", "ai", "backend", "tooling"]);
 export const skillSchema = (referenceProjects: () => z.ZodTypeAny) =>
   z.object({
     id: z.string().min(1),
-    name: z.string().min(1),
+    // 표시 이름. 고유명사(Next.js)는 문자열, 번역되는 이름(프롬프트 설계)은 {ko,en}.
+    name: z.union([z.string().min(1), localized]),
     group: skillGroup,
     builtWithIt: localized,
     projects: z.array(referenceProjects()).min(1),

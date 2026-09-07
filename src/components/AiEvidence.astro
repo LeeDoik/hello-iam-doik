@@ -14,6 +14,10 @@ const { ai, locale } = Astro.props;
 // aiSchema도 screenSchema와 같은 이유로 architecture 필드가 느슨하게(unknown) 추론된다.
 // 콘텐츠 레이어가 실제로 만들어 주는 값은 ImageMetadata다.
 const architecture = ai.architecture as unknown as ImageMetadata | undefined;
+const th = "border-line border-b px-2 py-2 text-left align-top whitespace-nowrap";
+const td = "border-line border-b px-2 py-2 align-top";
+// 숫자·범위·단위만 있는 값은 한 줄로 고정한다("83–100%"가 "83–"/"100%"로 쪼개지지 않게). 문장은 그대로 접는다.
+const isNumeric = (v: string) => /^[\d.,%–\-\s초ms]+$/.test(v);
 ---
 
 <section class="mt-16">
@@ -35,31 +39,35 @@ const architecture = ai.architecture as unknown as ImageMetadata | undefined;
   )}
   {
     ai.evals.length > 0 && (
-      <table class="mt-6 w-full text-sm tabular-nums">
-        <caption class="sr-only">{t(locale, "ai.evals")}</caption>
-        <thead>
-          <tr>
-            <th scope="col" class="border-line border-b px-2 py-2 text-left align-top">{t(locale, "ai.evals")}</th>
-            <th scope="col" class="border-line border-b px-2 py-2 text-left align-top">n</th>
-            <th scope="col" class="border-line border-b px-2 py-2 text-left align-top">baseline</th>
-            <th scope="col" class="border-line border-b px-2 py-2 text-left align-top">final</th>
-            <th scope="col" class="border-line border-b px-2 py-2 text-left align-top">{t(locale, "ai.judge")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ai.evals.map((e) => (
+      <div class="scroll-x -mx-6 mt-6 px-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:mx-0 sm:px-0" tabindex="0" role="region" aria-label={t(locale, "ai.evals")}>
+        {/* tabindex/role/aria-label: 가로 스크롤 영역은 키보드로도 닿아야 한다(axe scrollable-region-focusable). */}
+        {/* [overflow-wrap:normal]: html의 anywhere가 표 자동 레이아웃의 최소 너비를 글자 단위로 만들어 셀을 짓눌러 버린다. 표는 단어 단위로 재고, 넘치면 래퍼가 스크롤한다. */}
+        <table class="w-full text-sm tabular-nums [overflow-wrap:normal]">
+          <caption class="sr-only">{t(locale, "ai.evals")}</caption>
+          <thead>
             <tr>
-              <td class="border-line border-b px-2 py-2 align-top">
-                {e.name} ({e.metric})
-              </td>
-              <td class="border-line border-b px-2 py-2 align-top">{e.n}</td>
-              <td class="border-line border-b px-2 py-2 align-top">{e.baseline}</td>
-              <td class="border-line border-b px-2 py-2 align-top">{e.final}</td>
-              <td class="border-line border-b px-2 py-2 align-top">{e.judge}</td>
+              <th scope="col" class={th}>{t(locale, "ai.evals")}</th>
+              <th scope="col" class={th}>n</th>
+              <th scope="col" class={th}>baseline</th>
+              <th scope="col" class={th}>final</th>
+              <th scope="col" class={th}>{t(locale, "ai.judge")}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {ai.evals.map((e) => (
+              <tr>
+                <td class:list={[td, "whitespace-nowrap"]}>
+                  {e.name} ({e.metric})
+                </td>
+                <td class:list={[td, "whitespace-nowrap"]}>{e.n}</td>
+                <td class:list={[td, "whitespace-nowrap"]}>{e.baseline}</td>
+                <td class:list={[td, isNumeric(e.final) ? "whitespace-nowrap" : "min-w-[16rem]"]}>{e.final}</td>
+                <td class:list={[td, "whitespace-nowrap"]}>{e.judge}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     )
   }
   <p class="text-ink-2 mt-4 text-sm">

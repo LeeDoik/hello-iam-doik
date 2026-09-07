@@ -7,7 +7,7 @@
 5. (선택) `en.md`. 없으면 /en/에서 한국어 본문 + 안내문.
 6. `pnpm test` (계약 테스트) → `pnpm build` → PR.
 7. `pnpm content:status`로 누락 확인.
-8. 자리표시 목록 확인 `grep -rn '채워 주세요' content/`
+8. 자리표시 목록 확인 `grep -rn '채워 주세요' content/`. 자리표시 값은 렌더에서 걸러진다(`src/lib/placeholders.ts`).
 
 ## 지원 전 수동 체크
 

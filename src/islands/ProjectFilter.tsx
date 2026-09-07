@@ -80,7 +80,7 @@ export function ProjectFilter({ groups, cards, labels }: Props) {
               aria-checked={checked}
               data-id={o.id}
               tabIndex={checked ? 0 : -1}
-              className={`inline-flex min-h-11 items-center rounded-sm border px-3 text-sm ${checked ? "border-accent bg-accent text-accent-ink font-medium" : "border-ink-2/80 text-ink-2 hover:border-accent"}`}
+              className={`inline-flex min-h-11 items-center rounded-sm border px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${checked ? "border-accent bg-accent text-accent-ink font-medium" : "border-ink-2/80 text-ink-2 hover:border-accent"}`}
               onClick={() => {
                 setTouched(true);
                 setSelected(o.id === "__all" ? null : o.id);

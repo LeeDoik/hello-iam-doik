@@ -9,55 +9,118 @@ import { pick } from "../lib/localized";
 interface Props {
   screens: CollectionEntry<"projects">["data"]["screens"];
   locale: Locale;
+  /** false면 "화면" h2 없이 그림만 낸다(첫 화면을 요약 바로 아래에 둘 때). */
+  heading?: boolean;
+  /** 프로젝트 slug. SVG 구조도를 원문으로 찾는 데 쓴다. */
+  slug: string;
 }
-const { screens, locale } = Astro.props;
+const { screens, locale, heading = true, slug } = Astro.props;
 // content/schemas.ts의 screenSchema는 `image: ImageValidator`(반환 타입 z.ZodTypeAny)를 받는
 // 비제네릭 함수라서, content.config.ts가 astro:content의 진짜 image()를 넘겨도
 // 추론된 타입은 항상 느슨하다(src: unknown). 콘텐츠 레이어는 실제로는 ImageMetadata를 만들어 준다.
 type Screen = Omit<(typeof screens)[number], "src"> & { src: ImageMetadata };
 const typedScreens = screens as unknown as Screen[];
+// 세로(모바일) 캡처는 폰 너비(20rem)로 보여주고, 2장 이상이면 한 줄에 나란히 둔다(데스크톱 캡처 뒤에).
+const desktopScreens = typedScreens.filter((s) => s.device !== "mobile");
+const mobileScreens = typedScreens.filter((s) => s.device === "mobile");
+// SVG 구조도는 인라인으로 넣어 사이트 토큰(--color-*)을 그대로 상속시킨다. 콘텐츠 레이어의
+// ImageMetadata.src는 해시가 붙은 URL(/_astro/architecture.XXXX.svg)이라 원본은 slug + 파일명으로 찾는다.
+const rawSvgs = import.meta.glob<string>("/content/projects/*/screens/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+const inlineSvg = (s: Screen): string | undefined => {
+  if (s.src.format !== "svg") return undefined;
+  const base = (s.src.src.split("/").pop() ?? "").split("?")[0]?.split(".")[0];
+  const raw = rawSvgs[`/content/projects/${slug}/screens/${base}.svg`];
+  return raw?.replace(/^<\?xml[^>]*>\s*/, "");
+};
 ---
 
 <section class="mt-16">
-  <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "project.screens")}</h2>
+  {heading && <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "project.screens")}</h2>}
   <div class="mt-6 grid gap-8">
     {
-      typedScreens.map((s) => (
-        <figure>
-          {/* SVG는 래스터화 대상이 아니다: <Picture>에 넘기면 sharp가 UnsupportedImageFormat으로
-              빌드를 깬다(image.dangerouslyProcessSVG를 켜야 통과). 손으로 그린 구조도는 원본이
-              가장 선명하므로 변환 없이 <img>로 그대로 내보낸다. */}
-          {s.src.format === "svg" ? (
-            <img
-              src={s.src.src}
-              alt={pick(s.alt, locale)}
-              width={s.src.width}
-              height={s.src.height}
-              loading="lazy"
-              decoding="async"
-              class="border-line w-full rounded-sm border"
-            />
-          ) : (
-            <Picture
-              src={s.src}
-              alt={pick(s.alt, locale)}
-              formats={["avif", "webp"]}
-              widths={[480, 960, 1440]}
-              sizes="(max-width: 768px) 100vw, 720px"
-              class="border-line w-full rounded-sm border"
-            />
-          )}
-          <figcaption class="text-ink-2 mt-3 text-sm">
-            {s.device} · {t(locale, "project.captured")} {s.capturedAt}
-            {s.commit && (
-              <>
-                {" "}
-                @ <code>{s.commit}</code>
-              </>
+      [...desktopScreens, ...(mobileScreens.length >= 2 ? [] : mobileScreens)].map((s) => {
+        const svg = inlineSvg(s);
+        return (
+          <figure class:list={[s.device === "mobile" && "sm:max-w-[20rem]"]}>
+            {svg ? (
+              <div
+                class="border-line w-full rounded-sm border bg-paper-2 [&>svg]:h-auto [&>svg]:w-full"
+                role="img"
+                aria-label={pick(s.alt, locale)}
+                set:html={svg}
+              />
+            ) : s.src.format === "svg" ? (
+              <img
+                src={s.src.src}
+                alt={pick(s.alt, locale)}
+                width={s.src.width}
+                height={s.src.height}
+                loading="lazy"
+                decoding="async"
+                class="border-line w-full rounded-sm border"
+              />
+            ) : s.device === "mobile" ? (
+              <Picture
+                src={s.src}
+                alt={pick(s.alt, locale)}
+                formats={["avif", "webp"]}
+                widths={[320, 640, 960]}
+                sizes="(max-width: 640px) 100vw, 320px"
+                class="border-line w-full rounded-sm border"
+              />
+            ) : (
+              <Picture
+                src={s.src}
+                alt={pick(s.alt, locale)}
+                formats={["avif", "webp"]}
+                widths={[480, 960, 1440]}
+                sizes="(max-width: 768px) 100vw, 720px"
+                class="border-line w-full rounded-sm border"
+              />
             )}
-          </figcaption>
-        </figure>
-      ))
+            <figcaption class="text-ink-2 mt-3 text-sm">
+              {s.device} · {t(locale, "project.captured")} {s.capturedAt}
+              {s.commit && (
+                <>
+                  {" "}
+                  @ <code>{s.commit}</code>
+                </>
+              )}
+            </figcaption>
+          </figure>
+        );
+      })
+    }
+    {
+      mobileScreens.length >= 2 && (
+        <div class="grid gap-8 sm:grid-cols-2">
+          {mobileScreens.map((s) => (
+            <figure class="sm:max-w-[20rem]">
+              <Picture
+                src={s.src}
+                alt={pick(s.alt, locale)}
+                formats={["avif", "webp"]}
+                widths={[320, 640, 960]}
+                sizes="(max-width: 640px) 100vw, 320px"
+                class="border-line w-full rounded-sm border"
+              />
+              <figcaption class="text-ink-2 mt-3 text-sm">
+                {s.device} · {t(locale, "project.captured")} {s.capturedAt}
+                {s.commit && (
+                  <>
+                    {" "}
+                    @ <code>{s.commit}</code>
+                  </>
+                )}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )
     }
   </div>
 </section>

@@ -59,7 +59,9 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
   await p1.goto("/");
   await expect(p1.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
   expect(requestedUrls.some((u) => /hero-scene/.test(u))).toBe(false);
-  await expect(p1.getByRole("button", { name: /배경 효과/ })).toBeDisabled();
+  // reduced motion: no buttons at all, just a static note inside the hero
+  await expect(p1.locator("#hero [role=group]")).toHaveCount(0);
+  await expect(p1.locator("#hero").getByText(/배경 효과 · 끔/)).toBeVisible();
   await reduced.close();
 
   // Playwright's headless Chromium also runs on SwiftShader (software WebGL), so with no
@@ -96,23 +98,22 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
   await p2.evaluate(() => localStorage.setItem("hero-quality", "high"));
   await p2.reload();
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", /high|low/);
-  const toggle = p2.getByRole("button", { name: /배경 효과/ });
-  await expect(toggle).toHaveText(/높음|낮음|끔/);
+  const toggle = p2.locator("#hero").getByRole("group", { name: /배경 효과/ });
+  await expect(toggle.getByRole("button", { pressed: true })).toHaveText(/높음|낮음/);
+  expect(await p2.locator("header button").count()).toBe(0);
 
-  // 포인터가 제목 위에 있어도 글로우 아래에서 텍스트 대비가 유지되는지, 어두운 스크림으로 확인한다.
+  // 포인터가 제목 위에 있어도 텍스트 대비가 유지되는지: 캔버스가 본문 열 아래에서는 마스크로 투명해야 한다.
   const h1 = p2.getByRole("heading", { level: 1 });
   const h1Box = await h1.boundingBox();
   if (h1Box) {
     await p2.mouse.move(h1Box.x + h1Box.width / 2, h1Box.y + h1Box.height / 2);
     await p2.waitForTimeout(300);
     await h1.screenshot();
-    const scrimBg = await p2.evaluate(() => {
-      const heading = document.querySelector("#hero h1");
-      const scrim = heading?.parentElement;
-      return scrim ? getComputedStyle(scrim).backgroundColor : "";
+    const mask = await p2.evaluate(() => {
+      const canvas = document.querySelector("#hero canvas");
+      return canvas ? getComputedStyle(canvas).maskImage : "";
     });
-    expect(scrimBg).not.toBe("rgba(0, 0, 0, 0)");
-    expect(scrimBg).not.toBe("");
+    expect(mask).toContain("linear-gradient");
   }
 
   // 캔버스가 섹션 배경 위에 그려지는지(스택 컨텍스트) 히트테스트로 검증한다.
@@ -127,15 +128,9 @@ test("hero canvas respects reduced motion and the quality toggle", async ({ brow
     expect(tag).toBe("CANVAS");
   }
 
-  // 시작 품질은 기기 신호에 따라 high 또는 low(CI 러너는 코어 수가 적어 low)다.
-  // 그래서 고정 순서 대신 "끔"이 될 때까지 순환하며, 클릭마다 라벨이 바뀌는지 확인한다.
-  for (let i = 0; i < 3; i++) {
-    const before = await toggle.textContent();
-    if (before && /끔/.test(before)) break;
-    await toggle.click();
-    await expect(toggle).not.toHaveText(before ?? "");
-  }
-  await expect(toggle).toHaveText(/끔/);
+  // "끔"을 직접 고르면 캔버스가 꺼지고, 선택은 localStorage에 남는다.
+  await toggle.getByRole("button", { name: "끔" }).click();
+  await expect(toggle.getByRole("button", { name: "끔" })).toHaveAttribute("aria-pressed", "true");
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off");
   await p2.reload();
   await expect(p2.locator("#hero canvas")).toHaveAttribute("data-quality", "off"); // localStorage
