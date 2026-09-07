@@ -6,10 +6,12 @@ import { localeFromParam, localeStaticPaths } from "../../i18n/locales";
 import { t } from "../../i18n/ui";
 import { Hero3D } from "../../islands/Hero3D";
 import { ProjectFilter } from "../../islands/ProjectFilter";
+import { QualityToggle } from "../../islands/QualityToggle";
 import Base from "../../layouts/Base.astro";
 import { getExperience, getProfile, getProjects, getSkills } from "../../lib/content";
 import { pick } from "../../lib/localized";
 import { ogImageUrl } from "../../lib/seo";
+import { localePath } from "../../lib/urls";
 import { GROUP_UI_KEY, type SkillRow } from "../../lib/skills";
 
 export function getStaticPaths() {
@@ -22,12 +24,14 @@ const projects = await getProjects(locale);
 const experience = await getExperience();
 const skillRows: SkillRow[] = (await getSkills()).map((s) => ({
   id: s.data.id,
-  name: s.data.name,
+  name: pick(s.data.name, locale),
   group: s.data.group,
   builtWithIt: pick(s.data.builtWithIt, locale),
   projectSlugs: s.data.projects.map((p) => (p as { id: string }).id),
 }));
 const skillGroupById = new Map(skillRows.map((s) => [s.id, s.group]));
+const skillNames = new Map(skillRows.map((s) => [s.id, s.name]));
+const projectTitles = new Map(projects.map((p) => [p.slug, pick(p.data.title, locale)]));
 const cards = projects.map((p) => ({
   slug: p.slug,
   groups: [
@@ -61,41 +65,60 @@ const jsonLd = {
 >
   <section
     id="hero"
-    class="bg-paper relative isolate mx-[calc(50%_-_50vw)] flex min-h-[60dvh] items-end overflow-hidden px-[max(1.5rem,calc(50vw_-_22.5rem))] pt-16 pb-16"
+    class="hero-ground relative isolate mx-[calc(50%_-_50vw)] flex min-h-[60dvh] items-end overflow-hidden px-[max(1.5rem,calc(50vw_-_22.5rem))] pt-16 pb-16"
   >
     <Hero3D client:visible />
+    {/* 캔버스는 -z-10에서 hero-ground 위에 그려지고, 마스크로 본문 열 아래에서는 투명해진다(Hero3D). 패널은 투명. */}
     <div
-      class="bg-paper relative -ml-[max(1.5rem,calc(50vw_-_22.5rem))] flex w-[100vw] flex-col justify-end pr-8 pl-[max(1.5rem,calc(50vw_-_22.5rem))] max-md:mt-[32dvh] max-md:-mb-16 max-md:pt-8 max-md:pb-16 md:-my-16 md:w-[60vw] md:self-stretch md:py-16"
+      class="relative -ml-[max(1.5rem,calc(50vw_-_22.5rem))] flex w-[100vw] shrink-0 flex-col justify-end bg-transparent pr-6 pl-[max(1.5rem,calc(50vw_-_22.5rem))] max-md:mt-[18dvh] max-md:-mb-16 max-md:pt-8 max-md:pb-16 md:-my-16 md:w-[60vw] md:self-stretch md:py-16"
     >
       <h1 class="text-5xl font-extrabold leading-[1.05] tracking-[-0.02em] md:text-7xl">{pick(profile.name, locale)}</h1>
       <p class="mt-5 text-xl font-medium md:text-2xl">{pick(profile.tagline, locale)}</p>
       <p class="text-ink-2 mt-6 text-base md:text-lg">{pick(profile.bio, locale)}</p>
-      <a
-        class="bg-accent text-accent-ink mt-8 inline-flex h-11 items-center rounded-sm px-5 text-base font-medium"
-        href="#projects">{t(locale, "hero.cta.projects")}</a
-      >
+      <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+        <a
+          class="bg-accent text-accent-ink inline-flex h-11 items-center rounded-sm px-5 text-base font-medium hover:bg-accent/85 active:bg-accent/75"
+          href="#projects">{t(locale, "hero.cta.projects")}</a
+        >
+        <a class="underline underline-offset-4 decoration-ink-2 hover:decoration-accent" href={localePath(locale, "/resume/")}
+          >{t(locale, "nav.resume")}</a
+        >
+      </div>
+      <div class="mt-6">
+        <QualityToggle
+          client:idle
+          labels={{
+            label: t(locale, "quality.label"),
+            high: t(locale, "quality.high"),
+            low: t(locale, "quality.low"),
+            off: t(locale, "quality.off"),
+            reducedMotion: t(locale, "quality.reducedMotion"),
+          }}
+        />
+      </div>
     </div>
   </section>
 
-  <section id="projects" class="py-16 md:py-24">
+  <section id="projects" class="pt-16 md:pt-24">
     <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.projects")}</h2>
+    {/* client:idle: #stack=… 해시로 공유된 링크는 필터가 화면에 들어오기 전에도 적용돼야 한다(짧은 뷰포트에서 client:visible은 영영 hydrate되지 않는다). */}
     <ProjectFilter
-      client:visible
+      client:idle
       groups={filterGroups}
       cards={cards}
       labels={{ all: t(locale, "filter.all"), count: t(locale, "filter.count"), filterLabel: t(locale, "filter.label") }}
     />
     <div id="project-list" class="border-line mt-10 border-t">
-      {projects.map((p) => <ProjectCard project={p} locale={locale} />)}
+      {projects.map((p) => <ProjectCard project={p} locale={locale} {skillNames} />)}
     </div>
   </section>
 
-  <section id="skills" class="py-16 md:py-24">
+  <section id="skills" class="pt-16 md:pt-24">
     <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.skills")}</h2>
-    <SkillsByProject rows={skillRows} locale={locale} />
+    <SkillsByProject rows={skillRows} locale={locale} {projectTitles} />
   </section>
 
-  <section id="experience" class="py-16 md:py-24">
+  <section id="experience" class="pt-16 md:pt-24">
     <h2 class="text-2xl font-semibold tracking-tight leading-[1.25] md:text-3xl">{t(locale, "section.experience")}</h2>
     <ExperienceList items={experience} locale={locale} />
   </section>

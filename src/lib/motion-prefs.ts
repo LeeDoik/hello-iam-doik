@@ -31,10 +31,6 @@ export function frameInterval(q: Quality): number {
   return q === "off" ? Number.POSITIVE_INFINITY : q === "low" ? 33 : 16;
 }
 
-export function nextQuality(q: Quality): Quality {
-  return q === "high" ? "low" : q === "low" ? "off" : "high";
-}
-
 // Hero3D dispatches "hero-quality-settled" before QualityToggle (client:idle) can
 // subscribe. Stash the value on window so a late-mounting toggle can still read it.
 export function rememberSettled(q: Quality): void {

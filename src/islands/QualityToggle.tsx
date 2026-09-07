@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { nextQuality, QUALITY_KEY, type Quality, readSettled } from "../lib/motion-prefs";
+import { QUALITY_KEY, type Quality, readSettled } from "../lib/motion-prefs";
 
 type Props = {
   labels: { label: string; high: string; low: string; off: string; reducedMotion: string };
 };
+
+const OPTIONS: Quality[] = ["high", "low", "off"];
 
 function readStored(): Quality {
   try {
@@ -36,24 +38,40 @@ export function QualityToggle({ labels }: Props) {
     window.addEventListener("hero-quality-settled", onSettled);
     return () => window.removeEventListener("hero-quality-settled", onSettled);
   }, []);
-  function cycle() {
-    const next = nextQuality(q);
+  function choose(next: Quality) {
     setQ(next);
     try {
       localStorage.setItem(QUALITY_KEY, next);
     } catch {}
     window.dispatchEvent(new CustomEvent<Quality>("hero-quality", { detail: next }));
   }
+  if (reducedMotion) {
+    return (
+      <p className="text-ink-2 text-sm">
+        {labels.label} · {labels.off}
+        <span className="ml-2">({labels.reducedMotion})</span>
+      </p>
+    );
+  }
   return (
-    <button
-      type="button"
-      onClick={cycle}
-      disabled={reducedMotion}
-      title={reducedMotion ? labels.label : undefined}
-      className="border-ink-2/80 text-ink-2 inline-flex min-h-11 items-center rounded-sm border px-3 text-sm enabled:hover:border-accent disabled:cursor-not-allowed disabled:border-dashed disabled:border-line"
-      aria-label={`${labels.label}: ${reducedMotion ? labels.reducedMotion : labels[q]}`}
+    // biome-ignore lint/a11y/useSemanticElements: a <legend> cannot sit inline with the options inside a flex <fieldset>; the group role + label carry the same semantics
+    <div
+      role="group"
+      aria-label={labels.label}
+      className="text-ink-2 flex flex-wrap items-center gap-x-3 text-sm"
     >
-      {labels.label}: {reducedMotion ? labels.reducedMotion : labels[q]}
-    </button>
+      <span>{labels.label}</span>
+      {OPTIONS.map((k) => (
+        <button
+          key={k}
+          type="button"
+          aria-pressed={q === k}
+          onClick={() => choose(k)}
+          className="inline-flex min-h-11 items-center underline-offset-4 decoration-accent hover:underline aria-pressed:text-ink aria-pressed:underline"
+        >
+          {labels[k]}
+        </button>
+      ))}
+    </div>
   );
 }

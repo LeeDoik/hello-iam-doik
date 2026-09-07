@@ -10,8 +10,15 @@ export default defineConfig({
   build: { format: "directory", inlineStylesheets: "always" },
   // github-dark's default comment color (#6a737d on #24292e) fails WCAG AA color-contrast
   // (3.04:1, needs 4.5:1) inside ADR code fences on /colophon/. github-dark-high-contrast is
-  // Shiki's WCAG-tuned variant of the same palette family.
-  markdown: { shikiConfig: { theme: "github-dark-high-contrast" } },
+  // Shiki's WCAG-tuned variant of the same palette family. The light palette gets github-light;
+  // defaultColor: false makes Shiki emit only --shiki-dark/--shiki-light variables so global.css
+  // can pick per prefers-color-scheme and paint the block background with the paper-2 token.
+  markdown: {
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark-high-contrast" },
+      defaultColor: false,
+    },
+  },
   i18n: {
     defaultLocale: "ko",
     locales: ["ko", "en"],

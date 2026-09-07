@@ -17,42 +17,45 @@ beforeEach(() => {
   delete (window as unknown as Record<string, unknown>)[SETTLED_KEY];
 });
 
-test("cycles high → low → off → high, persists and dispatches", async () => {
+const pressed = () =>
+  screen.getAllByRole("button").find((b) => b.getAttribute("aria-pressed") === "true")?.textContent;
+
+test("offers three options, persists and dispatches the chosen one", async () => {
   const seen: string[] = [];
   window.addEventListener("hero-quality", (e) => seen.push((e as CustomEvent<string>).detail));
   render(<QualityToggle labels={labels} />);
-  const btn = screen.getByRole("button", { name: /Background effect/ });
-  expect(btn).toHaveTextContent("High");
-  await userEvent.click(btn);
-  expect(btn).toHaveTextContent("Low");
+  expect(screen.getByRole("group", { name: "Background effect" })).toBeInTheDocument();
+  expect(screen.getAllByRole("button").map((b) => b.textContent)).toEqual(["High", "Low", "Off"]);
+  expect(pressed()).toBe("High");
+  await userEvent.click(screen.getByRole("button", { name: "Low" }));
+  expect(pressed()).toBe("Low");
   expect(localStorage.getItem(QUALITY_KEY)).toBe("low");
-  await userEvent.click(btn);
-  await userEvent.click(btn);
-  expect(btn).toHaveTextContent("High");
+  await userEvent.click(screen.getByRole("button", { name: "Off" }));
+  await userEvent.click(screen.getByRole("button", { name: "High" }));
+  expect(pressed()).toBe("High");
   expect(seen).toEqual(["low", "off", "high"]);
 });
 
 test("reads the stored value on mount", () => {
   localStorage.setItem(QUALITY_KEY, "off");
   render(<QualityToggle labels={labels} />);
-  expect(screen.getByRole("button")).toHaveTextContent("Off");
+  expect(pressed()).toBe("Off");
 });
 
 test("syncs to the hero's settled quality", async () => {
   render(<QualityToggle labels={labels} />);
-  const btn = screen.getByRole("button", { name: /Background effect/ });
-  expect(btn).toHaveTextContent("High");
+  expect(pressed()).toBe("High");
   window.dispatchEvent(new CustomEvent("hero-quality-settled", { detail: "off" }));
-  await waitFor(() => expect(btn).toHaveTextContent("Off"));
+  await waitFor(() => expect(pressed()).toBe("Off"));
 });
 
 test("reads a value the hero already settled before mount", () => {
   (window as unknown as Record<string, unknown>)[SETTLED_KEY] = "low";
   render(<QualityToggle labels={labels} />);
-  expect(screen.getByRole("button")).toHaveTextContent("Low");
+  expect(pressed()).toBe("Low");
 });
 
-test("disables the toggle and shows the reduced-motion label when the OS prefers reduced motion", () => {
+test("shows a static reduced-motion note instead of buttons when the OS prefers reduced motion", () => {
   const matchMedia = (query: string) =>
     ({
       matches: query.includes("prefers-reduced-motion"),
@@ -63,9 +66,10 @@ test("disables the toggle and shows the reduced-motion label when the OS prefers
   window.matchMedia = matchMedia as typeof window.matchMedia;
   try {
     render(<QualityToggle labels={labels} />);
-    const btn = screen.getByRole("button");
-    expect(btn).toBeDisabled();
-    expect(btn).toHaveTextContent(labels.reducedMotion);
+    expect(screen.queryByRole("button")).toBeNull();
+    const note = screen.getByText(labels.label, { exact: false });
+    expect(note).toHaveTextContent("Background effect · Off");
+    expect(note).toHaveTextContent(labels.reducedMotion);
   } finally {
     // @ts-expect-error jsdom does not define matchMedia by default; restore that.
     delete window.matchMedia;

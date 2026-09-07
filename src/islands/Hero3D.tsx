@@ -162,7 +162,7 @@ export function Hero3D() {
       ref={canvasRef}
       aria-hidden="true"
       data-quality={quality}
-      className="absolute inset-0 -z-10 h-full w-full [@media(prefers-color-scheme:light)]:invert [@media(prefers-color-scheme:light)]:hue-rotate-180"
+      className="absolute inset-0 -z-10 h-full w-full opacity-0 transition-opacity duration-700 data-[quality=high]:opacity-100 data-[quality=low]:opacity-100 max-md:[mask-image:linear-gradient(to_bottom,black_4rem,transparent_calc(4rem_+_18dvh))] md:[mask-image:linear-gradient(to_right,transparent_calc(50vw_-_22.5rem_+_30rem),black_calc(50vw_-_22.5rem_+_42rem)),linear-gradient(to_bottom,black_70%,transparent)] md:[mask-composite:intersect]"
     />
   );
 }

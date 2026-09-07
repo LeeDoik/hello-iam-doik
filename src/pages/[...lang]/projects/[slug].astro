@@ -44,9 +44,11 @@ const site = Astro.site?.href ?? "https://hello-iam-doik.vercel.app";
     <h1 class="mt-20 text-4xl leading-[1.15] font-bold tracking-tight md:mt-24 md:text-5xl">{pick(d.title, locale)}</h1>
     <p class="text-ink-2 mt-4 text-sm tabular-nums">{formatPeriod(d.period.from, d.period.to, locale)}</p>
     <p class="mt-6 max-w-[65ch] text-base md:text-lg">{pick(d.summary, locale)}</p>
+    {/* 첫 화면(증거)을 요약 바로 아래에, 그다음 지표. 나머지 화면은 "화면" 제목 아래에. */}
+    <ScreenshotGallery screens={d.screens.slice(0, 1)} heading={false} {locale} slug={project.slug} />
     <MetricStrip metrics={d.metrics} {locale} />
+    {d.screens.length > 1 && <ScreenshotGallery screens={d.screens.slice(1)} {locale} slug={project.slug} />}
     <RoleBlock role={d.role} {locale} />
-    <ScreenshotGallery screens={d.screens} {locale} />
     {isFallback && <FallbackNotice {locale} />}
     <div class="prose mt-16">
       <Content />

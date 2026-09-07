@@ -2,57 +2,60 @@
   <title>Server architecture: one IOCP queue feeds socket, timer and DB completions to the workers</title>
   <defs>
     <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 12 6 L 0 12 z" fill="#94a3b8" />
+      <path d="M 0 0 L 12 6 L 0 12 z" />
     </marker>
   </defs>
+  <!-- Colours come from the site tokens (src/styles/global.css) so the diagram follows dark/light. -->
   <style>
-    .bg { fill: #0f172a; }
-    .box { fill: #1e293b; stroke: #94a3b8; stroke-width: 2; }
-    .t { fill: #f8fafc; font-family: system-ui, sans-serif; font-size: 28px; text-anchor: middle; }
-    .t-lg { fill: #f8fafc; font-family: system-ui, sans-serif; font-size: 36px; text-anchor: middle; }
-    .t-md { fill: #f8fafc; font-family: system-ui, sans-serif; font-size: 30px; text-anchor: middle; }
-    .a { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+    .bg { fill: var(--color-paper-2, #f0eee9); }
+    .box { fill: var(--color-paper, #f8f6f2); stroke: var(--color-ink-2, #6f6a62); stroke-width: 2; }
+    text { fill: var(--color-ink, #2a2622); font-family: "Pretendard Variable", Pretendard, system-ui, sans-serif; text-anchor: middle; }
+    .t { font-size: 28px; }
+    .t-lg { font-size: 36px; }
+    .t-md { font-size: 30px; }
+    .edge { stroke: var(--color-ink-2, #6f6a62); stroke-width: 2; fill: none; marker-end: url(#arrow); }
+    marker path { stroke: var(--color-ink-2, #6f6a62); fill: var(--color-ink-2, #6f6a62); }
   </style>
   <rect class="bg" x="0" y="0" width="1440" height="900" />
 
-  <rect class="box" x="60" y="45" width="413" height="130" rx="8" />
+  <rect class="box" x="60" y="45" width="413" height="130" rx="4" />
   <text class="t" x="266.5" y="102.8">Socket I/O<tspan x="266.5" y="136.8">(WSARecv / WSASend)</tspan></text>
 
-  <rect class="box" x="513" y="45" width="413" height="130" rx="8" />
+  <rect class="box" x="513" y="45" width="413" height="130" rx="4" />
   <text class="t" x="719.5" y="102.8">Timer<tspan x="719.5" y="136.8">(8-shard min-heap)</tspan></text>
 
-  <rect class="box" x="966" y="45" width="413" height="130" rx="8" />
+  <rect class="box" x="966" y="45" width="413" height="130" rx="4" />
   <text class="t" x="1172.5" y="85.8">DB worker<tspan x="1172.5" y="119.8">(MSSQL ODBC ·</tspan><tspan x="1172.5" y="153.8">JSON fallback)</tspan></text>
 
-  <line class="a" x1="266.5" y1="175" x2="266.5" y2="233" />
-  <line class="a" x1="719.5" y1="175" x2="719.5" y2="233" />
-  <line class="a" x1="1172.5" y1="175" x2="1172.5" y2="233" />
+  <line class="edge" x1="266.5" y1="175" x2="266.5" y2="233" />
+  <line class="edge" x1="719.5" y1="175" x2="719.5" y2="233" />
+  <line class="edge" x1="1172.5" y1="175" x2="1172.5" y2="233" />
 
-  <rect class="box" x="60" y="235" width="1319" height="100" rx="8" />
+  <rect class="box" x="60" y="235" width="1319" height="100" rx="4" />
   <text class="t-lg" x="719.5" y="297.6">IOCP completion queue</text>
 
-  <line class="a" x1="719.5" y1="335" x2="719.5" y2="393" />
+  <line class="edge" x1="719.5" y1="335" x2="719.5" y2="393" />
 
-  <rect class="box" x="360" y="395" width="720" height="100" rx="8" />
+  <rect class="box" x="360" y="395" width="720" height="100" rx="4" />
   <text class="t-lg" x="719.5" y="457.6">Worker threads × N</text>
 
-  <path class="a" d="M 719.5 495 V 525 H 266.5 V 553" />
-  <line class="a" x1="719.5" y1="495" x2="719.5" y2="553" />
-  <path class="a" d="M 719.5 495 V 525 H 1172.5 V 553" />
+  <path class="edge" d="M 719.5 495 V 525 H 266.5 V 553" />
+  <line class="edge" x1="719.5" y1="495" x2="719.5" y2="553" />
+  <path class="edge" d="M 719.5 495 V 525 H 1172.5 V 553" />
 
-  <rect class="box" x="60" y="555" width="413" height="160" rx="8" />
+  <rect class="box" x="60" y="555" width="413" height="160" rx="4" />
   <text class="t" x="266.5" y="627.8">Sector view<tspan x="266.5" y="661.8">(9 cells)</tspan></text>
 
-  <rect class="box" x="513" y="555" width="413" height="160" rx="8" />
+  <rect class="box" x="513" y="555" width="413" height="160" rx="4" />
   <text class="t" x="719.5" y="610.8">Lazy NPC AI<tspan x="719.5" y="644.8">(Lua VM per worker,</tspan><tspan x="719.5" y="678.8">200,000 NPCs)</tspan></text>
 
-  <rect class="box" x="966" y="555" width="413" height="160" rx="8" />
+  <rect class="box" x="966" y="555" width="413" height="160" rx="4" />
   <text class="t" x="1172.5" y="627.8">Send coalescing<tspan x="1172.5" y="661.8">+ TCP_NODELAY</tspan></text>
 
-  <line class="a" x1="266.5" y1="715" x2="266.5" y2="773" />
-  <line class="a" x1="719.5" y1="715" x2="719.5" y2="773" />
-  <line class="a" x1="1172.5" y1="715" x2="1172.5" y2="773" />
+  <line class="edge" x1="266.5" y1="715" x2="266.5" y2="773" />
+  <line class="edge" x1="719.5" y1="715" x2="719.5" y2="773" />
+  <line class="edge" x1="1172.5" y1="715" x2="1172.5" y2="773" />
 
-  <rect class="box" x="60" y="775" width="1319" height="90" rx="8" />
+  <rect class="box" x="60" y="775" width="1319" height="90" rx="4" />
   <text class="t-md" x="719.5" y="830.5">Clients ≤ 10,000 CCU · ~20 ms move RTT (localhost)</text>
 </svg>

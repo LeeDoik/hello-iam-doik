@@ -58,6 +58,11 @@ html {
 }
 
 @layer base {
+  html {
+    /* 한글은 어절 단위로만 줄을 바꾼다(keep-all). 긴 URL·식별자는 anywhere가 마지막 수단으로 끊는다. */
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
   body {
     /* overflow-x-clip: 히어로가 mx-[calc(50%_-_50vw)]로 100vw를 쓰므로 클래식 스크롤바 환경에서 가로 스크롤을 막는다. */
     @apply bg-paper text-ink min-h-dvh overflow-x-clip;
@@ -76,7 +81,7 @@ html {
     @apply max-w-[65ch];
   }
   .prose h1 {
-    @apply mt-8 text-3xl leading-[1.2] font-bold tracking-tight md:text-4xl;
+    @apply mt-8 text-4xl leading-[1.15] font-bold tracking-tight md:text-5xl;
   }
   .prose h2 {
     @apply mt-12 text-2xl leading-[1.25] font-semibold tracking-tight md:text-3xl;
@@ -101,13 +106,76 @@ html {
   }
   .prose pre {
     @apply bg-paper-2 border-line mt-4 overflow-x-auto rounded-sm border p-4 text-sm;
+    /* 셸 스니펫이 폰에서 잘리지 않고 끝까지 읽히게 접는다. 복사해도 줄바꿈 문자는 들어가지 않는다. */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  /* Shiki는 토큰 색을 --shiki-dark/--shiki-light 변수로만 내보낸다(defaultColor: false). 여기서 팔레트별로 고른다. */
+  .astro-code,
+  .astro-code span {
+    color: var(--shiki-dark);
+  }
+  @media (prefers-color-scheme: light) {
+    .astro-code,
+    .astro-code span {
+      color: var(--shiki-light);
+    }
+  }
+  .prose pre.astro-code {
+    /* Shiki가 테마 배경을 인라인 style로 쓰므로, 사이트 토큰으로 되돌리려면 !important가 필요하다. */
+    /* biome-ignore lint/complexity/noImportantStyles: overrides Shiki's inline theme background */
+    background-color: var(--color-paper-2) !important;
+  }
+  /* 본문 인라인 코드(.prose 안팎 모두 main 아래다). pre 안의 code는 pre 규칙을 따른다. */
+  main code:not(pre code) {
+    @apply bg-paper-2 border-line rounded-sm border px-1 py-0.5 text-[0.9em];
+  }
+  /* 가로 스크롤 표: 잘린 쪽에 그림자가 생겨 옆으로 넘길 수 있음을 알린다(background-attachment: local 트릭). */
+  .scroll-x,
+  .prose table {
+    overflow-x: auto;
+    background:
+      linear-gradient(to right, var(--color-paper) 40%, transparent) 0 0,
+      linear-gradient(to left, var(--color-paper) 40%, transparent) 100% 0,
+      linear-gradient(to right, color-mix(in oklch, var(--color-ink) 35%, transparent), transparent)
+      0 0,
+      linear-gradient(to left, color-mix(in oklch, var(--color-ink) 35%, transparent), transparent)
+      100% 0;
+    background-repeat: no-repeat;
+    background-size:
+      3rem 100%,
+      3rem 100%,
+      1.25rem 100%,
+      1.25rem 100%;
+    background-attachment: local, local, scroll, scroll;
   }
   .prose table {
-    @apply mt-4 w-full text-sm;
+    @apply mt-4 block w-full text-sm;
+    /* html의 overflow-wrap: anywhere는 표 자동 레이아웃의 최소 너비를 글자 단위로 만들어 셀을 짓누른다. 표는 단어 단위로. */
+    overflow-wrap: normal;
   }
   .prose th,
   .prose td {
     @apply border-line border-b px-2 py-2 text-left align-top;
+  }
+  .prose th {
+    @apply whitespace-nowrap;
+  }
+  .prose td code {
+    @apply whitespace-nowrap;
+  }
+  /* 히어로 바탕: 캔버스가 꺼져 있어도 빈 종이가 아니라, 오른쪽 위로 accent가 12% 섞인 따뜻한 빛이 있다.
+     캔버스(-z-10)는 isolate 안에서 이 배경 위에 그려진다. */
+  .hero-ground {
+    /* 아래쪽은 paper로 녹여 다음 섹션과의 경계에 선이 생기지 않게 한다. */
+    background:
+      linear-gradient(to bottom, transparent 55%, var(--color-paper)),
+      radial-gradient(
+        70% 90% at 78% 40%,
+        color-mix(in oklch, var(--color-accent) 12%, var(--color-paper)) 0%,
+        var(--color-paper-2) 45%,
+        var(--color-paper) 100%
+      );
   }
 }
 
