@@ -1,6 +1,7 @@
 import { type CollectionEntry, getCollection, getEntry } from "astro:content";
 import type { ExperienceData, ProfileData, ProjectData } from "../content/schemas";
 import type { Locale } from "../i18n/locales";
+import { withoutPlaceholders } from "./placeholders";
 import { localePath } from "./urls";
 
 export type ProjectView = { slug: string; data: ProjectData; href: string };
@@ -52,9 +53,9 @@ export async function getSkills(): Promise<CollectionEntry<"skills">[]> {
 
 export async function getExperience(): Promise<ExperienceData[]> {
   const entries = await getCollection("experience");
-  return entries
-    .map((e) => e.data)
-    .sort((a, b) => (a.from < b.from ? 1 : a.from > b.from ? -1 : 0));
+  return withoutPlaceholders(entries.map((e) => e.data)).sort((a, b) =>
+    a.from < b.from ? 1 : a.from > b.from ? -1 : 0,
+  );
 }
 
 export async function getAdrs(): Promise<CollectionEntry<"adrs">[]> {
