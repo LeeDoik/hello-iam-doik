@@ -4,7 +4,7 @@
 
 ## (A) 공유 전 차단 항목
 
-1. `grep -rn '채워 주세요' content/`를 실행한다. `content/experience.yaml`의 자리표시 5곳(학교·전공, 학위/졸업예정, 학교 항목의 불릿 한 줄(7행), 수상 결과, 게임 서버 프로그래밍 과목·학교)이 나온다. ko와 짝인 en 값(`[Fill in ...]`)도 같이 채운다.
+1. `grep -rn '채워 주세요' content/`를 실행한다. `content/experience.yaml`의 자리표시 5곳(학교·전공, 학위/졸업예정, 학교 항목의 불릿 한 줄(9행), 수상 결과, 게임 서버 프로그래밍 과목·학교)이 나온다. ko와 짝인 en 값(`[Fill in ...]`)도 같이 채운다. 자리표시는 화면에서 걸러지므로 채우기 전까지는 학력과 수강 과목 항목이 아예 보이지 않는다.
 2. `pnpm test && pnpm build`로 계약 테스트와 스키마를 통과시킨 뒤 `pnpm preview`로 `/`, `/resume/`, `/en/resume/`에서 자리표시가 사라졌는지 눈으로 본다. 경력 목록은 랜딩과 이력서 두 곳에 렌더된다.
 3. 태엽새(heart-of-steel)를 Railway에 다시 배포한다. 배포 주소가 바뀌었으면 `content/projects/heart-of-steel/capture.yaml`의 `base`를 새 주소로 고친다.
 4. `pnpm capture heart-of-steel`을 실행한다. 출력된 screens YAML을 `content/projects/heart-of-steel/meta.yaml`의 `screens`에 반영하고 alt는 직접 쓴다. 기존 `03-banner@desktop.png`와 `02-prison-puzzle@desktop.png`는 남겨 두어도 된다(README 배너가 `03-banner@desktop.png`를 쓴다).
