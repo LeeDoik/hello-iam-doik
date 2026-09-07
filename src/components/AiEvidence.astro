@@ -39,8 +39,8 @@ const isNumeric = (v: string) => /^[\d.,%–\-\s초ms]+$/.test(v);
   )}
   {
     ai.evals.length > 0 && (
-      {/* 가로 스크롤 영역은 키보드로도 닿아야 한다(axe scrollable-region-focusable). */}
       <div class="scroll-x -mx-6 mt-6 px-6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:mx-0 sm:px-0" tabindex="0" role="region" aria-label={t(locale, "ai.evals")}>
+        {/* tabindex/role/aria-label: 가로 스크롤 영역은 키보드로도 닿아야 한다(axe scrollable-region-focusable). */}
         {/* [overflow-wrap:normal]: html의 anywhere가 표 자동 레이아웃의 최소 너비를 글자 단위로 만들어 셀을 짓눌러 버린다. 표는 단어 단위로 재고, 넘치면 래퍼가 스크롤한다. */}
         <table class="w-full text-sm tabular-nums [overflow-wrap:normal]">
           <caption class="sr-only">{t(locale, "ai.evals")}</caption>
